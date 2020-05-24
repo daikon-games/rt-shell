@@ -1,5 +1,3 @@
-#macro version "1.0.0"
-
 isOpen = false;
 
 shellSurface = surface_create(width, height);
@@ -35,11 +33,11 @@ function keyboardCheckDelay(input) {
 	}
 	delayFrame = (delayFrame + 1) % delayFrames;
 	if (delayFrame == 0) {
-		delayFrames = 10;
+		delayFrames = 5;
 	}
 	if (keyboard_check_pressed(input)) {
 		delayFrame = 0;
-		delayFrames = 50;
+		delayFrames = 30;
 		return true;
 	} else {
 		if (keyboard_check(input) && delayFrame == 0) {
@@ -47,4 +45,26 @@ function keyboardCheckDelay(input) {
 		}
 	}
 	return false;
+}
+
+// Graciously borrowed from here: https://www.reddit.com/r/gamemaker/comments/3zxota/splitting_strings/
+function string_split(input, delimiter) {
+	var slot = 0;
+	var splits; //array to hold all splits
+	var str2 = ""; //var to hold the current split we're working on building
+
+	var i;
+	for (i = 1; i < (string_length(input)+1); i++) {
+	    var currStr = string_copy(input, i, 1);
+	    if (currStr == delimiter) {
+	        splits[slot] = str2; //add this split to the array of all splits
+	        slot++;
+	        str2 = "";
+	    } else {
+	        str2 = str2 + currStr;
+	        splits[slot] = str2;
+	    }
+	}
+
+	return splits;
 }

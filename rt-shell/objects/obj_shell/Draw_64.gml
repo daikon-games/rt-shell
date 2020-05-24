@@ -13,11 +13,11 @@ surface_set_target(shellSurface);
 	
 	// Draw whatever text has been entered so far
 	draw_set_color(c_white);
-	draw_text(8 + string_width(prompt), height - lineHeight, consoleString);
+	draw_text(10 + string_width(prompt), height - lineHeight, consoleString);
 	
 	// Draw a flashing text prompt
 	if (delayFrames > 1 || current_time % 1000 < 600) {
-		draw_text(8 + string_width(prompt) + string_width(string_copy(consoleString + " ", 1, cursorPos - 1)) - 3, height - lineHeight, "|");
+		draw_text(10 + string_width(prompt) + string_width(string_copy(consoleString + " ", 1, cursorPos - 1)) - 3, height - lineHeight, "|");
 	}
 	
 	// Draw some lines of previous output
@@ -29,9 +29,9 @@ surface_set_target(shellSurface);
 		var yOffset = height - (outputSize - i + 2) * lineHeight;
 		if (string_char_at(outputStr, 1) == ">") {
 			draw_text(6, yOffset, prompt);
-			draw_text(8 + xOffset, yOffset, string_delete(outputStr, 1, 1));
+			draw_text(10 + xOffset, yOffset, string_delete(outputStr, 1, 1));
 		} else {
-			draw_text(8 + xOffset, yOffset, outputStr);
+			draw_text(10 + xOffset, yOffset, outputStr);
 		}
 	}
 	draw_set_alpha(consoleAlpha);

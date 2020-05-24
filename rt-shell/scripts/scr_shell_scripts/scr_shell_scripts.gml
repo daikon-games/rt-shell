@@ -29,5 +29,5 @@ function sh_set_bg_vspeed(args) {
 }
 
 function sh_version() {
-	return version;
+	return "1.0.0";
 }

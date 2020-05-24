@@ -4,7 +4,6 @@
     {"id":{"name":"scr_shell_scripts","path":"scripts/scr_shell_scripts/scr_shell_scripts.yy",},"order":1,},
     {"id":{"name":"font_console","path":"fonts/font_console/font_console.yy",},"order":0,},
     {"id":{"name":"obj_test_room","path":"objects/obj_test_room/obj_test_room.yy",},"order":1,},
-    {"id":{"name":"scr_utilities","path":"scripts/scr_utilities/scr_utilities.yy",},"order":0,},
     {"id":{"name":"spr_daikon_tile","path":"sprites/spr_daikon_tile/spr_daikon_tile.yy",},"order":0,},
     {"id":{"name":"room_test","path":"rooms/room_test/room_test.yy",},"order":0,},
   ],
