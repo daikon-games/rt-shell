@@ -1,3 +1,5 @@
+version = "1.0.0";
+
 isOpen = false;
 
 shellSurface = surface_create(width, height);
@@ -9,6 +11,12 @@ savedConsoleString = "";
 historyPos = 0;
 history = ds_list_create();
 output = ds_list_create();
+
+// If another instance of rt-shell already exists, destroy ourself
+// Must do after initializing surface and lists so our clean-up step succeeds 
+if (instance_number(obj_shell) > 1) {
+	instance_destroy();
+}
 
 function keyComboPressed() {
 	for (var i = 0; i < array_length(modifierKeys); i++) {

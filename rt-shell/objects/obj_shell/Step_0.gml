@@ -1,5 +1,7 @@
 if (!surface_exists(shellSurface)) {
 	shellSurface = surface_create(width, height);
+} else if (surface_get_width(shellSurface) != width || surface_get_height(shellSurface) != height) {
+	shellSurface = surface_create(width, height);
 }
 
 if (!isOpen) {

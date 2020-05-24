@@ -12,7 +12,7 @@ surface_set_target(shellSurface);
 	draw_text(6, height - lineHeight, prompt);
 	
 	// Draw whatever text has been entered so far
-	draw_set_color(c_white);
+	draw_set_color(fontColor);
 	draw_text(10 + string_width(prompt), height - lineHeight, consoleString);
 	
 	// Draw a flashing text prompt

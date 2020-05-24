@@ -29,5 +29,17 @@ function sh_set_bg_vspeed(args) {
 }
 
 function sh_version() {
-	return "1.0.0";
+	return obj_shell.version;
+}
+
+function sh_test_duplicate_spawn() {
+	instance_create_layer(0, 0, "Instances", obj_shell);
+}
+
+function sh_set_shell_width(args) {
+	obj_shell.width = args[1];
+}
+
+function sh_set_shell_height(args) {
+	obj_shell.height = args[1];
 }
