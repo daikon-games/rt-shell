@@ -28,22 +28,22 @@ The following variables on the `obj_shell` object can be customized. They are de
 
 rt-shell will execute any global scripts whose names start with `sh_`. You can see the example scripts included with the test project in [`scr_shell_scripts.gml`](rt-shell/scripts/scr_shell_scripts/scr_shell_scripts.gml).
 
-Let's write a simple "Hello World" script together. We first need a place to create the function, so create a Script object in your project. The name doesn't matter, but we can call it `scr_shell_scripts` as I have done in the test project.
+Let's write a simple "Hello World" script together. We first need a place to create the function, so create a Script asset in your project. The name of this asset isn't important, but we can call it `scr_shell_scripts` as I have done in the test project.
 
-Now let's write our function, we want it to take an argument as input, and print "Hello [argument]!" to the console. Like so:
+Now let's write our function! We want it to take an argument as input, and print "Hello [argument]!" to the console. Like so:
 
 ![A "Hello World" example](images/helloworld-example.png)
 
 Our function needs to start with `sh_`, so let's call it `sh_helloworld`. As you can see in the example screenshot above, you do not include the `sh_` when calling the function.
 
-rt-shell functions take an array called `args` as an argument, and any arguments passed to the function at the console are present in this array in GML. `args[0]` is always the name of the function, as in typical shell programming, and `args[1]` and onwards are the real arguments passed in.
+rt-shell functions take an array called `args` as an argument, and any arguments passed to the function at the console are present in this array in GML. `args[0]` always contains the name of the function, as in typical shell programming, and `args[1]` and onwards are the real arguments passed in.
 
 rt-shell functions can optionally return a string, and if they do that string will be printed to the console.
 
 With all that said, here's our final hello world function:
 
 ```
-function sh_helloworld(args) {
+function sh_helloworld (args) {
 	return "Hello " + args[1] + "!";
 }
 ```
