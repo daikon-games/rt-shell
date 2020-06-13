@@ -45,22 +45,29 @@ if (!isOpen) {
 		cursorPos = string_length(consoleString) + 1;
 	} else if (keyboard_check_pressed(vk_enter)) {
 		var args = string_split(consoleString, " ");
-		var script = asset_get_index("sh_" + args[0]);
-		if (script > -1) {
-			var response = script_execute(script, args);
-			ds_list_add(history, consoleString);
-			ds_list_add(output, ">" + consoleString);
-			if (response != 0) {
-				ds_list_add(output, string(response));
+		if (array_length(args) > 0) {
+			var script = asset_get_index("sh_" + args[0]);
+			if (script > -1) {
+				var response = script_execute(script, args);
+				ds_list_add(history, consoleString);
+				ds_list_add(output, ">" + consoleString);
+				if (response != 0) {
+					ds_list_add(output, string(response));
+				}
+				historyPos = ds_list_size(history);
+				consoleString = "";
+				savedConsoleString = "";
+				cursorPos = 1;
+			} else {
+				ds_list_add(output, ">" + consoleString);
+				ds_list_add(output, "No such command: " + consoleString);
+				ds_list_add(history, consoleString);
+				consoleString = "";
+				savedConsoleString = "";
+				cursorPos = 1;
 			}
-			historyPos = ds_list_size(history);
-			consoleString = "";
-			savedConsoleString = "";
-			cursorPos = 1;
 		} else {
-			ds_list_add(output, ">" + consoleString);
-			ds_list_add(output, "No such command: " + consoleString);
-			ds_list_add(history, consoleString);
+			ds_list_add(output, ">");
 			consoleString = "";
 			savedConsoleString = "";
 			cursorPos = 1;
