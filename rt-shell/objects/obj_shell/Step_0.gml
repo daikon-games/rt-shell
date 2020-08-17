@@ -20,7 +20,7 @@ if (!isOpen) {
 	} else if (keyboard_string != "") {
 		var t = keyboard_string;
 		consoleString = string_insert(t, consoleString, cursorPos);
-		cursorPos += 1;
+		cursorPos += string_length(t);
 		keyboard_string = "";
 	} else if (keyboardCheckDelay(vk_left)) { 
 		cursorPos = max(1, cursorPos - 1);
