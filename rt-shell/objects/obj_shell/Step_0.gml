@@ -10,6 +10,8 @@ if (!isOpen) {
 		keyboard_string = "";
 	}
 } else {
+	var prevConsoleString = consoleString;
+	
 	if (keyboard_check_pressed(vk_escape)) {
 		isOpen = false;
 	} else if (keyboardCheckDelay(vk_backspace)) {
@@ -24,8 +26,14 @@ if (!isOpen) {
 		keyboard_string = "";
 	} else if (keyboardCheckDelay(vk_left)) { 
 		cursorPos = max(1, cursorPos - 1);
-	} else if (keyboardCheckDelay(vk_right)) { 
-		cursorPos = min(string_length(consoleString) + 1, cursorPos + 1);
+	} else if (keyboardCheckDelay(vk_right)) {
+		if (cursorPos == string_length(consoleString) + 1 &&
+			ds_list_size(filteredFunctions) != 0) {
+			consoleString = filteredFunctions[| suggestionIndex];
+			cursorPos = string_length(consoleString) + 1;
+		} else {
+			cursorPos = min(string_length(consoleString) + 1, cursorPos + 1);
+		}
 	} else if (keyboard_check_pressed(vk_up)) {
 		if (historyPos == ds_list_size(history)) {
 			savedConsoleString = consoleString;
@@ -72,5 +80,20 @@ if (!isOpen) {
 			savedConsoleString = "";
 			cursorPos = 1;
 		}
+	} else if (keyboard_check_pressed(vk_tab)) {
+		// Auto-complete up to the common prefix of our suggestions
+		var uncompleted = consoleString;
+		consoleString = findCommonPrefix();
+		cursorPos = string_length(consoleString) + 1;
+		// If we're already autocompleted as far as we can go, rotate through suggestions
+		if (uncompleted == consoleString) {
+			suggestionIndex = (suggestionIndex + 1) % ds_list_size(filteredFunctions);
+		}
+	}
+	
+	if (consoleString != prevConsoleString) {
+		// If the text at the prompt has changed, update the list of possible
+		// autocomplete suggestions
+		updateFilteredFunctions(consoleString);
 	}
 }
