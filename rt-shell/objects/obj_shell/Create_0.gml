@@ -1,5 +1,3 @@
-version = "1.0.0";
-
 isOpen = false;
 
 shellSurface = surface_create(width, height);
