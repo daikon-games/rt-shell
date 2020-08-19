@@ -10,6 +10,8 @@ function sh_get_bgspeed() {
 	return "hspeed: " + string(bgHspeed) + ", vspeed: " + string(bgVspeed);
 }
 
+// If you want a method to take arguments at the command line, pass in an args object here
+// args[0] will always be the function name, args[1] and onwards will be your actual arguments
 function sh_set_bg_hspeed(args) {
 	var newHspeed = args[1];
 	try {
@@ -28,6 +30,17 @@ function sh_set_bg_vspeed(args) {
 	}
 }
 
+// Here is an example of a shell script that takes multiple command line arguments
+// See how I've assigned args[1], args[2], and args[3] into local variables for easier use
+function sh_set_bg_color(args) {
+	var red = args[1];
+	var green = args[2];
+	var blue = args[3];
+	
+	var backgroundId = layer_background_get_id(layer_get_id("Background"));
+	layer_background_blend(backgroundId, make_color_rgb(red, green, blue));
+}
+
 function sh_test_duplicate_spawn() {
 	instance_create_layer(0, 0, "Instances", obj_shell);
 }
@@ -43,13 +56,4 @@ function sh_set_shell_height(args) {
 function sh_say_greeting(args) {
 	var whomToGreet = args[1];
 	return "Hello " + whomToGreet + "!";
-}
-
-function sh_set_bg_color(args) {
-	var red = args[1];
-	var green = args[2];
-	var blue = args[3];
-	
-	var backgroundId = layer_background_get_id(layer_get_id("Background"));
-	layer_background_blend(backgroundId, make_color_rgb(red, green, blue));
 }
