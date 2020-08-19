@@ -20,6 +20,15 @@ surface_set_target(shellSurface);
 		draw_text(10 + string_width(prompt) + string_width(string_copy(consoleString + " ", 1, cursorPos - 1)) - 3, height - lineHeight, "|");
 	}
 	
+	// Draw an autocomplete suggestion
+	if (ds_list_size(filteredFunctions) != 0) {
+		draw_set_alpha(consoleAlpha/2);
+		var ff = filteredFunctions[| suggestionIndex];
+		var suggestion = string_copy(ff, string_length(consoleString) + 1, string_length(ff) - string_length(consoleString));
+		draw_text(10 + string_width(prompt) + string_width(consoleString), height - lineHeight, suggestion);
+		draw_set_alpha(consoleAlpha);
+	}
+	
 	// Draw some lines of previous output
 	draw_set_alpha(consoleAlpha/2);
 	var outputSize = ds_list_size(output);

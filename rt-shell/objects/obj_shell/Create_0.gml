@@ -12,10 +12,63 @@ historyPos = 0;
 history = ds_list_create();
 output = ds_list_create();
 
+filteredFunctions = ds_list_create();
+suggestionIndex = 0;
+
 // If another instance of rt-shell already exists, destroy ourself
 // Must do after initializing surface and lists so our clean-up step succeeds 
 if (instance_number(obj_shell) > 1) {
 	instance_destroy();
+}
+
+// Create a list of shell functions in the global namespace to
+// filter for autocompletion
+autocompleteFunctions = [];
+var globalVariables = variable_instance_get_names(global);
+for (var i = 0; i < array_length(globalVariables); i++) {
+	// Only looking for variables that start with sh_
+	if (string_pos("sh_", string_lower(globalVariables[i])) == 1) {
+		// Strip off the sh_ when we store them in our array
+		autocompleteFunctions[array_length(autocompleteFunctions)] = string_delete(globalVariables[i], 1, 3);
+	}
+}
+
+// Update the list of functions prefixed by the user's current input
+// for use in autocompletion
+function updateFilteredFunctions(userInput) {
+	ds_list_clear(filteredFunctions);
+	for (var i = 0; i < array_length(autocompleteFunctions); i++) {
+		if (string_pos(userInput, autocompleteFunctions[i]) == 1) {
+			ds_list_add(filteredFunctions, autocompleteFunctions[i]);
+		}
+	}
+	ds_list_sort(filteredFunctions, true);
+	suggestionIndex = 0;
+}
+
+// Find the prefix string that the list of suggestions has in common
+// used to update the consoleString when user is tab-completing
+function findCommonPrefix() {
+	if (ds_list_size(filteredFunctions) == 0) {
+		return "";
+	} else if (ds_list_size(filteredFunctions) == 1) {
+		return filteredFunctions[| 0];
+	}
+	
+	var first = filteredFunctions[| 0];
+	var last = filteredFunctions[| ds_list_size(filteredFunctions) - 1];
+		
+	var result = "";
+	// string_char_at is 1-indexed.... sigh
+	for (var i = 1; i < string_length(first) + 1; i++) {
+		if (string_char_at(first, i) == string_char_at(last, i)) {
+			result += string_char_at(first, i);
+		} else {
+			break;
+		}
+	}
+	
+	return result;
 }
 
 function keyComboPressed() {
