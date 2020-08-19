@@ -81,13 +81,15 @@ if (!isOpen) {
 			cursorPos = 1;
 		}
 	} else if (keyboard_check_pressed(vk_tab)) {
-		// Auto-complete up to the common prefix of our suggestions
-		var uncompleted = consoleString;
-		consoleString = findCommonPrefix();
-		cursorPos = string_length(consoleString) + 1;
-		// If we're already autocompleted as far as we can go, rotate through suggestions
-		if (uncompleted == consoleString) {
-			suggestionIndex = (suggestionIndex + 1) % ds_list_size(filteredFunctions);
+		if (ds_list_size(filteredFunctions) != 0) {
+			// Auto-complete up to the common prefix of our suggestions
+			var uncompleted = consoleString;
+			consoleString = findCommonPrefix();
+			cursorPos = string_length(consoleString) + 1;
+			// If we're already autocompleted as far as we can go, rotate through suggestions
+			if (uncompleted == consoleString) {
+				suggestionIndex = (suggestionIndex + 1) % ds_list_size(filteredFunctions);
+			}
 		}
 	}
 	
