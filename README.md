@@ -16,13 +16,17 @@ The following variables on the `obj_shell` object can be customized. They are de
 | `width`  | The width, in GUI pixels, of the shell | 500 |
 | `height` | The height, in GUI pixels, of the shell | 96 |
 | `prompt` | A character or string to print as a command prompt | $ |
-| `promptColor` | The font color to draw the prompt, as a GML expression | `c_red` |
+| `promptColor` | The font color to draw the prompt, as a GML expression | `make_color_rgb(237, 0, 54)` |
 | `openKey` | The key that opens the console, in combination with the `modifierKeys` if any. Must be a valid character that can be decoded with [`ord()`](https://docs2.yoyogames.com/source/_build/3_scripting/4_gml_reference/strings/ord.html) (typically the capital letters) | C |
 | `modifierKeys` | A multi-select of special keys. All the selected keys must be pressed in combination with `openKey` to open the console | `vk_control`, `vk_shift` |
 | `consoleColor` | The background color of the console itself, as a GML expression | `c_black` |
 | `consoleAlpha` | The opacity of the console itself, 0.0 being fully transparent and 1.0 being fully opaque | 0.9 |
-| `consoleFont` | The GML font resource to draw all the console text with. The default is included with the package, and uses the Microsoft "Consolas" font | `font_console` |
-| `fontColor` | The font color to draw all console text with, as a GML expression | `c_white` |
+| `consoleFont` | The GML font resource to draw all the console text with. The default is included with the package, and uses the Raph Levien's "Inconsolata" font | `font_console` |
+| `fontColor` | The font color to draw all console text with, as a GML expression | `make_color_rgb(255, 242, 245)` |
+| `fontColorDark` | The font color to draw suggestions and history with, as a GML expression | `make_color_rgb(140, 118, 123)` |
+| `screenAnchorPoint` | The location on the screen to anchor the console to, as a string. Possible values are `"top"` or `"bottom"`. | `"bottom"` |
+
+You can see examples of various customizations on the [Theme Gallery](THEMING.md) page!
 
 ## Writing Your Own Shell Scripts
 

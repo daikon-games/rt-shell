@@ -22,28 +22,27 @@ surface_set_target(shellSurface);
 	
 	// Draw an autocomplete suggestion
 	if (ds_list_size(filteredFunctions) != 0) {
-		draw_set_alpha(consoleAlpha/2);
+		draw_set_color(fontColorDark);
 		var ff = filteredFunctions[| suggestionIndex];
 		var suggestion = string_copy(ff, string_length(consoleString) + 1, string_length(ff) - string_length(consoleString));
 		draw_text(10 + string_width(prompt) + string_width(consoleString), height - lineHeight, suggestion);
-		draw_set_alpha(consoleAlpha);
 	}
 	
 	// Draw some lines of previous output
-	draw_set_alpha(consoleAlpha/2);
 	var outputSize = ds_list_size(output);
 	for (var i = outputSize; i > 0; i--) {
 		var outputStr = ds_list_find_value(output, i - 1);
 		var xOffset = string_width(prompt);
 		var yOffset = height - (outputSize - i + 2) * lineHeight;
 		if (string_char_at(outputStr, 1) == ">") {
+			draw_set_color(fontColorDark);
 			draw_text(6, yOffset, prompt);
 			draw_text(10 + xOffset, yOffset, string_delete(outputStr, 1, 1));
 		} else {
+			draw_set_color(fontColor);
 			draw_text(10 + xOffset, yOffset, outputStr);
 		}
 	}
-	draw_set_alpha(consoleAlpha);
 	draw_set_alpha(1);
 surface_reset_target();
 
