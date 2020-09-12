@@ -38,6 +38,10 @@
     {"varType":0,"value":"0.9","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"consoleAlpha","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":5,"value":"font_console","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"consoleFont","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":4,"value":"c_white","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"fontColor","tags":[],"resourceType":"GMObjectProperty",},
+    {"varType":6,"value":"\"bottom\"","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[
+        "\"top\"",
+        "\"bottom\"",
+      ],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"screenAnchorPoint","tags":[],"resourceType":"GMObjectProperty",},
   ],
   "overriddenProperties": [],
   "parent": {

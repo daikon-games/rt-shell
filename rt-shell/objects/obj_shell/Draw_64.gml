@@ -48,5 +48,10 @@ surface_set_target(shellSurface);
 surface_reset_target();
 
 if (isOpen) {
-	draw_surface(shellSurface, (display_get_gui_width() - width) / 2, (display_get_gui_height() - height - 4));
+	var yPos = 0;
+	switch (screenAnchorPoint) {
+	case "top": yPos = 4; break;
+	case "bottom": yPos = (display_get_gui_height() - height - 4); break;
+	}
+	draw_surface(shellSurface, (display_get_gui_width() - width) / 2, yPos);
 }

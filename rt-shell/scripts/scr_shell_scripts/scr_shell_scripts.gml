@@ -53,6 +53,15 @@ function sh_set_shell_height(args) {
 	obj_shell.height = args[1];
 }
 
+function sh_set_shell_anchor(args) {
+	var newAnchor = args[1];
+	if (newAnchor == "top" || newAnchor == "bottom") {
+		obj_shell.screenAnchorPoint = newAnchor;
+	} else {
+		return "Invalid anchor point. Possible values: [top, bottom]";
+	}
+}
+
 function sh_say_greeting(args) {
 	var whomToGreet = args[1];
 	return "Hello " + whomToGreet + "!";
