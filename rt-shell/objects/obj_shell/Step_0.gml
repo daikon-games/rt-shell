@@ -8,12 +8,18 @@ if (!isOpen) {
 	if (self.keyComboPressed()) {
 		isOpen = true;
 		keyboard_string = "";
+		if (!is_undefined(openFunction)) {
+			openFunction();
+		}
 	}
 } else {
 	var prevConsoleString = consoleString;
 	
 	if (keyboard_check_pressed(vk_escape)) {
 		isOpen = false;
+		if (!is_undefined(closeFunction)) {
+			closeFunction();
+		}
 	} else if (self.keyboardCheckDelay(vk_backspace)) {
 		consoleString = string_delete(consoleString, cursorPos - 1, 1);
 		cursorPos = max(1, cursorPos - 1);

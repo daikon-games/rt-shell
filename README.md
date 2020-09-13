@@ -7,26 +7,36 @@ Integrating rt-shell into your project is simple: just [download the latest rele
 
 The `obj_shell` object is a persistent object, so you only need to include or create it once, though it is smart enough to automatically handle excess instances. The default way to open the shell is `Ctrl + Shift + C`, and it can be closed by pressing `Esc`.
 
-## Customization
+## Configuring rt-shell
 
-The following variables on the `obj_shell` object can be customized. They are defined on the object's `Variable Definitions` panel in the IDE, so you can change them on the object itself, an instance of the object in the room editor, or at any point after that programatically.
+The following variables on the `obj_shell` object can be configured. They are defined on the object's `Variable Definitions` panel in the IDE. It is recommended that you instantiate `obj_shell` programatically and then set these parameters on the created instance via code. This way you can upgrade to a newer version of rt-shell without having to re-configure your shell object!
+
+### Appearance Configuration
 
 | variable | definition | default |
 |----------|------------|---------|
 | `width`  | The width, in GUI pixels, of the shell | 500 |
 | `height` | The height, in GUI pixels, of the shell | 96 |
+| `screenAnchorPoint` | The location on the screen to anchor the console to, as a string. Possible values are `"top"` or `"bottom"`. | `"bottom"` |
 | `prompt` | A character or string to print as a command prompt | $ |
 | `promptColor` | The font color to draw the prompt, as a GML expression | `make_color_rgb(237, 0, 54)` |
-| `openKey` | The key that opens the console, in combination with the `modifierKeys` if any. Must be a valid character that can be decoded with [`ord()`](https://docs2.yoyogames.com/source/_build/3_scripting/4_gml_reference/strings/ord.html) (typically the capital letters) | C |
-| `modifierKeys` | A multi-select of special keys. All the selected keys must be pressed in combination with `openKey` to open the console | `vk_control`, `vk_shift` |
 | `consoleColor` | The background color of the console itself, as a GML expression | `c_black` |
 | `consoleAlpha` | The opacity of the console itself, 0.0 being fully transparent and 1.0 being fully opaque | 0.9 |
 | `consoleFont` | The GML font resource to draw all the console text with. The default is included with the package, and uses the Raph Levien's "Inconsolata" font | `font_console` |
 | `fontColor` | The font color to draw all console text with, as a GML expression | `make_color_rgb(255, 242, 245)` |
-| `fontColorDark` | The font color to draw suggestions and history with, as a GML expression | `make_color_rgb(140, 118, 123)` |
-| `screenAnchorPoint` | The location on the screen to anchor the console to, as a string. Possible values are `"top"` or `"bottom"`. | `"bottom"` |
+| `fontColorSecondary` | The font color to draw suggestions and history with, as a GML expression | `make_color_rgb(140, 118, 123)` |
 
-You can see examples of various customizations on the [Theme Gallery](THEMING.md) page!
+You can see examples of various ways to customize the shell's appearance on the [Theme Gallery](THEMING.md) page!
+
+### Other Configuration
+
+| variable | definition | default |
+|----------|------------|---------|
+| `openKey` | The key that opens the console, in combination with the `modifierKeys` if any. Must be a letter A-Z or a numeral 0-9 (see  [`ord()`](https://manual.yoyogames.com/index.htm#t=GameMaker_Language%2FGML_Reference%2FStrings%2Ford.htm)) | C |
+| `modifierKeys` | A multi-select of special keys. All the selected keys must be pressed in combination with `openKey` to open the console | `vk_control`, `vk_shift` |
+| `openFunction` | A reference to a function that will be executed every time the shell is opened. Could be used to pause the game when the shell opens, for example | `undefined` |
+| `closeFunction` | A reference to a function that will be executed every time the shell is closed. Could be used to unpause the game when the shell closes, for example | `undefined` |
+
 
 ## Writing Your Own Shell Scripts
 

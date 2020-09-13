@@ -22,7 +22,7 @@ surface_set_target(shellSurface);
 	
 	// Draw an autocomplete suggestion
 	if (ds_list_size(filteredFunctions) != 0) {
-		draw_set_color(fontColorDark);
+		draw_set_color(fontColorSecondary);
 		var ff = filteredFunctions[| suggestionIndex];
 		var suggestion = string_copy(ff, string_length(consoleString) + 1, string_length(ff) - string_length(consoleString));
 		draw_text(10 + string_width(prompt) + string_width(consoleString), height - lineHeight, suggestion);
@@ -35,7 +35,7 @@ surface_set_target(shellSurface);
 		var xOffset = string_width(prompt);
 		var yOffset = height - (outputSize - i + 2) * lineHeight;
 		if (string_char_at(outputStr, 1) == ">") {
-			draw_set_color(fontColorDark);
+			draw_set_color(fontColorSecondary);
 			draw_text(6, yOffset, prompt);
 			draw_text(10 + xOffset, yOffset, string_delete(outputStr, 1, 1));
 		} else {
