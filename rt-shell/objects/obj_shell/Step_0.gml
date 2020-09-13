@@ -5,7 +5,7 @@ if (!surface_exists(shellSurface)) {
 }
 
 if (!isOpen) {
-	if (keyComboPressed()) {
+	if (self.keyComboPressed()) {
 		isOpen = true;
 		keyboard_string = "";
 	}
@@ -14,19 +14,19 @@ if (!isOpen) {
 	
 	if (keyboard_check_pressed(vk_escape)) {
 		isOpen = false;
-	} else if (keyboardCheckDelay(vk_backspace)) {
+	} else if (self.keyboardCheckDelay(vk_backspace)) {
 		consoleString = string_delete(consoleString, cursorPos - 1, 1);
 		cursorPos = max(1, cursorPos - 1);
-	} else if (keyboardCheckDelay(vk_delete)) {
+	} else if (self.keyboardCheckDelay(vk_delete)) {
 		consoleString = string_delete(consoleString, cursorPos, 1);
 	} else if (keyboard_string != "") {
 		var t = keyboard_string;
 		consoleString = string_insert(t, consoleString, cursorPos);
 		cursorPos += string_length(t);
 		keyboard_string = "";
-	} else if (keyboardCheckDelay(vk_left)) { 
+	} else if (self.keyboardCheckDelay(vk_left)) { 
 		cursorPos = max(1, cursorPos - 1);
-	} else if (keyboardCheckDelay(vk_right)) {
+	} else if (self.keyboardCheckDelay(vk_right)) {
 		if (cursorPos == string_length(consoleString) + 1 &&
 			ds_list_size(filteredFunctions) != 0) {
 			consoleString = filteredFunctions[| suggestionIndex];
@@ -52,7 +52,7 @@ if (!isOpen) {
 		}
 		cursorPos = string_length(consoleString) + 1;
 	} else if (keyboard_check_pressed(vk_enter)) {
-		var args = string_split(consoleString, " ");
+		var args = self.string_split(consoleString, " ");
 		if (array_length(args) > 0) {
 			var script = asset_get_index("sh_" + args[0]);
 			if (script > -1) {
@@ -84,7 +84,7 @@ if (!isOpen) {
 		if (ds_list_size(filteredFunctions) != 0) {
 			// Auto-complete up to the common prefix of our suggestions
 			var uncompleted = consoleString;
-			consoleString = findCommonPrefix();
+			consoleString = self.findCommonPrefix();
 			cursorPos = string_length(consoleString) + 1;
 			// If we're already autocompleted as far as we can go, rotate through suggestions
 			if (uncompleted == consoleString) {
@@ -96,6 +96,6 @@ if (!isOpen) {
 	if (consoleString != prevConsoleString) {
 		// If the text at the prompt has changed, update the list of possible
 		// autocomplete suggestions
-		updateFilteredFunctions(consoleString);
+		self.updateFilteredFunctions(consoleString);
 	}
 }
