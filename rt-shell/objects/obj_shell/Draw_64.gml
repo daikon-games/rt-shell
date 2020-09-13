@@ -2,7 +2,7 @@ surface_set_target(shellSurface);
 	draw_clear_alpha(c_black, 0.0);
 	draw_set_color(consoleColor);
 	draw_set_alpha(consoleAlpha);
-	draw_roundrect_ext(0, 0, width, height, 12, 12, false);
+	draw_roundrect_ext(0, 0, width, height, cornerRadius, cornerRadius, false);
 	
 	draw_set_font(consoleFont);
 	var lineHeight = string_height(prompt);
@@ -49,8 +49,8 @@ surface_reset_target();
 if (isOpen) {
 	var yPos = 0;
 	switch (screenAnchorPoint) {
-	case "top": yPos = 4; break;
-	case "bottom": yPos = (display_get_gui_height() - height - 4); break;
+	case "top": yPos = anchorMargin; break;
+	case "bottom": yPos = (display_get_gui_height() - height - anchorMargin); break;
 	}
 	draw_surface(shellSurface, (display_get_gui_width() - width) / 2, yPos);
 }

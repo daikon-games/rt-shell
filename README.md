@@ -18,6 +18,7 @@ The following variables on the `obj_shell` object can be configured. They are de
 | `width`  | The width, in GUI pixels, of the shell | 500 |
 | `height` | The height, in GUI pixels, of the shell | 96 |
 | `screenAnchorPoint` | The location on the screen to anchor the console to, as a string. Possible values are `"top"` or `"bottom"`. | `"bottom"` |
+| `anchorMargin` | The number of pixels away from the anchor point to draw the shell. In practice, the margin from the top or bottom of the screen, depending on how you have set `screenAnchorPoint` | 4
 | `prompt` | A character or string to print as a command prompt | $ |
 | `promptColor` | The font color to draw the prompt, as a GML expression | `make_color_rgb(237, 0, 54)` |
 | `consoleColor` | The background color of the console itself, as a GML expression | `c_black` |
@@ -25,6 +26,7 @@ The following variables on the `obj_shell` object can be configured. They are de
 | `consoleFont` | The GML font resource to draw all the console text with. The default is included with the package, and uses the Raph Levien's "Inconsolata" font | `font_console` |
 | `fontColor` | The font color to draw all console text with, as a GML expression | `make_color_rgb(255, 242, 245)` |
 | `fontColorSecondary` | The font color to draw suggestions and history with, as a GML expression | `make_color_rgb(140, 118, 123)` |
+| `cornerRadius` | The radius in pixels to round the corners of the shell. A value of 0 would result in perfectly squared corners | 12 |
 
 You can see examples of various ways to customize the shell's appearance on the [Theme Gallery](THEMING.md) page!
 
