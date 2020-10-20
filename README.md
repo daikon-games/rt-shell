@@ -1,11 +1,41 @@
 # rt-shell
+![banner graphic](images/banner.png)
+
 rt-shell, or **r**un-**t**ime **shell** an easy-to-use, customizable, and extensible cheat/debug console for GameMaker Studio 2.3+.
 
 ## Setup
 
 Integrating rt-shell into your project is simple: just [download the latest release](https://github.com/daikon-games/rt-shell/releases), and then in GameMaker Studio click on the **Tools** menu and select **Import Local Package**. Choose the `.yymps` file you downloaded, and import all assets.
 
+Alternatively you can install rt-shell from the [Game Maker Marketplace](https://marketplace.yoyogames.com/assets/9485/rt-shell).
+
 The `obj_shell` object is a persistent object, so you only need to include or create it once, though it is smart enough to automatically handle excess instances. The default way to open the shell is `Ctrl + Shift + C`, and it can be closed by pressing `Esc`.
+
+## Writing Your Own Shell Scripts
+
+rt-shell will execute any global scripts whose names start with `sh_`. You can see the example scripts included with the test project in [`scr_shell_scripts.gml`](rt-shell/scripts/scr_shell_scripts/scr_shell_scripts.gml).
+
+Let's write a simple "Hello World" script together. We first need a place to create the function, so create a Script asset in your project. The name of this asset isn't important, but we can call it `scr_shell_scripts` as I have done in the test project.
+
+Now let's write our function! We want it to take an argument as input, and print "Hello [argument]!" to the console. Like so:
+
+![A "Hello World" example](images/helloworld-example.png)
+
+Our function needs to start with `sh_`, so let's call it `sh_helloworld`. As you can see in the example screenshot above, you do not include the `sh_` when calling the function.
+
+rt-shell functions take an array called `args` as an argument, and any arguments passed to the function at the console are present in this array in GML. `args[0]` always contains the name of the function, as in typical shell programming, and `args[1]` and onwards are the real arguments passed in.
+
+rt-shell functions can optionally return a string, and if they do that string will be printed to the console.
+
+With all that said, here's our final hello world function:
+
+```
+function sh_helloworld (args) {
+	return "Hello " + args[1] + "!";
+}
+```
+
+Simple, right? With that function in place, you can call `helloworld` from the shell as you saw in the screenshot above. I'm sure you can think of all sorts of scripts that would come in handy for debugging and testing your game. How about a script that set's the player's max health, or money counter? A script that spawns an enemy or a treasure item? Experiment and have fun, happy developing!
 
 ## Configuring rt-shell
 
@@ -38,30 +68,3 @@ You can see examples of various ways to customize the shell's appearance on the 
 | `modifierKeys` | A multi-select of special keys. All the selected keys must be pressed in combination with `openKey` to open the console | `vk_control`, `vk_shift` |
 | `openFunction` | A reference to a function that will be executed every time the shell is opened. Could be used to pause the game when the shell opens, for example | `undefined` |
 | `closeFunction` | A reference to a function that will be executed every time the shell is closed. Could be used to unpause the game when the shell closes, for example | `undefined` |
-
-
-## Writing Your Own Shell Scripts
-
-rt-shell will execute any global scripts whose names start with `sh_`. You can see the example scripts included with the test project in [`scr_shell_scripts.gml`](rt-shell/scripts/scr_shell_scripts/scr_shell_scripts.gml).
-
-Let's write a simple "Hello World" script together. We first need a place to create the function, so create a Script asset in your project. The name of this asset isn't important, but we can call it `scr_shell_scripts` as I have done in the test project.
-
-Now let's write our function! We want it to take an argument as input, and print "Hello [argument]!" to the console. Like so:
-
-![A "Hello World" example](images/helloworld-example.png)
-
-Our function needs to start with `sh_`, so let's call it `sh_helloworld`. As you can see in the example screenshot above, you do not include the `sh_` when calling the function.
-
-rt-shell functions take an array called `args` as an argument, and any arguments passed to the function at the console are present in this array in GML. `args[0]` always contains the name of the function, as in typical shell programming, and `args[1]` and onwards are the real arguments passed in.
-
-rt-shell functions can optionally return a string, and if they do that string will be printed to the console.
-
-With all that said, here's our final hello world function:
-
-```
-function sh_helloworld (args) {
-	return "Hello " + args[1] + "!";
-}
-```
-
-Simple, right? With that function in place, you can call `helloworld` from the shell as you saw in the screenshot above. I'm sure you can think of all sorts of scripts that would come in handy for debugging and testing your game. How about a script that set's the player's max health, or money counter? A script that spawns an enemy or a treasure item? Experiment and have fun, and most importantly happy developing!
