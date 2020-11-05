@@ -30,10 +30,12 @@ surface_set_target(shellSurface);
 	
 	// Draw some lines of previous output
 	var outputSize = ds_list_size(output);
+	var xOffset = string_width(prompt);
+	var yOffset = height - (1) * lineHeight;
 	for (var i = outputSize; i > 0; i--) {
 		var outputStr = ds_list_find_value(output, i - 1);
-		var xOffset = string_width(prompt);
-		var yOffset = height - (outputSize - i + 2) * lineHeight;
+		var lineHeight = string_height(outputStr);
+		yOffset -= lineHeight;
 		if (string_char_at(outputStr, 1) == ">") {
 			draw_set_color(fontColorSecondary);
 			draw_text(6, yOffset, prompt);
