@@ -4,18 +4,27 @@
 // 
 // If a method returns a string value, it will be print to the shell output
 
-function sh_help() { // this doesn't fit into the standard shell
+function sh_help() {
 	return (
 		"List of available commands:"+
-		"get_bgspeed                - returns current background speed\n"+
-		"set_bg_hspeed <hspeed>     - sets background hspeed\n"+
-		"set_bg_vspeed <vspeed>     - sets background vspeed\n"+
-		"set_bg_color <red> <green> <blue> - sets background color\n"+
-		"test_duplicate_spawn       - creates a second instance of obj_shell\n"+
-		"say_greeting <toWhom>      - says hello to <toWhom>\n"+
-		"theme_rtshell_*            - a bunch of functions that change shell's presence\n"+
-		"set_shell_width <width>    - sets the shell's width\n"+
-		"set_shell_height <height>  - sets the shell's width"
+		"get_bgspeed\n" +
+		"   returns current background speed\n" +
+		"set_bg_hspeed <hspeed>\n" +
+		"   sets background hspeed\n" +
+		"set_bg_vspeed <vspeed>\n" +
+		"   sets background vspeed\n" +
+		"set_bg_color <red> <green> <blue>\n" +
+		"   sets background color\n" +
+		"test_duplicate_spawn\n" +
+		"   creates a second instance of obj_shell\n" +
+		"say_greeting <toWhom>\n" +
+		"   says hello to <toWhom>\n" +
+		"theme_rtshell_*\n" +
+		"   functions which change the shell appearance\n" +
+		"set_shell_width <width>\n" +
+		"   sets the shell's width in pixels\n" +
+		"set_shell_height <height>\n" +
+		"   sets the shell's height in pixels"
 	)
 }
 
