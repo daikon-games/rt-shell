@@ -24,7 +24,9 @@ function sh_help() {
 		"set_shell_width <width>\n" +
 		"   sets the shell's width in pixels\n" +
 		"set_shell_height <height>\n" +
-		"   sets the shell's height in pixels"
+		"   sets the shell's height in pixels\n" +
+		"close\n" +
+		"   closes the shell"
 	)
 }
 
@@ -89,6 +91,10 @@ function sh_set_shell_anchor(args) {
 function sh_say_greeting(args) {
 	var whomToGreet = args[1];
 	return "Hello " + whomToGreet + "!";
+}
+
+function sh_close() {
+	obj_shell.close();
 }
 
 function sh_theme_rtshell_dark() {

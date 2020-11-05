@@ -19,6 +19,25 @@ if (instance_number(obj_shell) > 1) {
 	instance_destroy();
 }
 
+/// @function open
+/// Opens the shell
+function open() {
+	isOpen = true;
+	keyboard_string = "";
+	if (!is_undefined(openFunction)) {
+		openFunction();
+	}
+}
+
+/// @function close
+/// Closes the shell
+function close() {
+	isOpen = false;
+	if (!is_undefined(closeFunction)) {
+		closeFunction();
+	}
+}
+
 // Create a list of shell functions in the global namespace to
 // filter for autocompletion
 autocompleteFunctions = [];
