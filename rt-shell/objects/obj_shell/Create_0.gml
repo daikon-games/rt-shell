@@ -7,10 +7,10 @@ consoleString = "";
 savedConsoleString = "";
 
 historyPos = 0;
-history = ds_list_create();
-output = ds_list_create();
+history = [];
+output = [];
 
-filteredFunctions = ds_list_create();
+filteredFunctions = [];
 suggestionIndex = 0;
 
 // If another instance of rt-shell already exists, destroy ourself
@@ -53,27 +53,29 @@ for (var i = 0; i < array_length(globalVariables); i++) {
 // Update the list of functions prefixed by the user's current input
 // for use in autocompletion
 function updateFilteredFunctions(userInput) {
-	ds_list_clear(filteredFunctions);
+	array_resize(filteredFunctions, 0);
 	for (var i = 0; i < array_length(autocompleteFunctions); i++) {
 		if (string_pos(userInput, autocompleteFunctions[i]) == 1) {
-			ds_list_add(filteredFunctions, autocompleteFunctions[i]);
+			array_push(filteredFunctions, autocompleteFunctions[i]);
 		}
 	}
-	ds_list_sort(filteredFunctions, true);
+	array_sort(filteredFunctions, true);
 	suggestionIndex = 0;
 }
+
+window_get_width()
 
 // Find the prefix string that the list of suggestions has in common
 // used to update the consoleString when user is tab-completing
 function findCommonPrefix() {
-	if (ds_list_size(filteredFunctions) == 0) {
+	if (array_length(filteredFunctions) == 0) {
 		return "";
-	} else if (ds_list_size(filteredFunctions) == 1) {
-		return filteredFunctions[| 0];
+	} else if (array_length(filteredFunctions) == 1) {
+		return filteredFunctions[0];
 	}
 	
-	var first = filteredFunctions[| 0];
-	var last = filteredFunctions[| ds_list_size(filteredFunctions) - 1];
+	var first = filteredFunctions[0];
+	var last = filteredFunctions[array_length(filteredFunctions) - 1];
 		
 	var result = "";
 	// string_char_at is 1-indexed.... sigh
