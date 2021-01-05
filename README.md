@@ -47,7 +47,8 @@ The following variables on the `obj_shell` object can be configured. They are de
 |----------|------------|---------|
 | `width`  | The width, in GUI pixels, of the shell | 500 |
 | `height` | The height, in GUI pixels, of the shell | 96 |
-| `screenAnchorPoint` | The location on the screen to anchor the console to, as a string. Possible values are `"top"` or `"bottom"`. | `"bottom"` |
+| `screenAnchorPointV` | The vertical location on the screen to anchor the console to, as a string. Possible values are `"top"`, `"middle"`, or `"bottom"`. | `"bottom"` |
+| `screenAnchorPointH` | The horizontal location on the screen to anchor the console to, as a string. Possible values are `"left"`, `"center"`, or `"right"`. | `"center"` |
 | `anchorMargin` | The number of pixels away from the anchor point to draw the shell. In practice, the margin from the top or bottom of the screen, depending on how you have set `screenAnchorPoint` | 4
 | `prompt` | A character or string to print as a command prompt | $ |
 | `promptColor` | The font color to draw the prompt, as a GML expression | `make_color_rgb(237, 0, 54)` |
@@ -57,6 +58,8 @@ The following variables on the `obj_shell` object can be configured. They are de
 | `fontColor` | The font color to draw all console text with, as a GML expression | `make_color_rgb(255, 242, 245)` |
 | `fontColorSecondary` | The font color to draw suggestions and history with, as a GML expression | `make_color_rgb(140, 118, 123)` |
 | `cornerRadius` | The radius in pixels to round the corners of the shell. A value of 0 would result in perfectly squared corners | 12 |
+| `scrollBarWidth` | The width in pixels of the scrollbar. | 5 |
+| `autocompleteBackgroundColor` | The background color of the autocompletion box, as a GML expression | `c_black` |
 
 You can see examples of various ways to customize the shell's appearance on the [Theme Gallery](THEMING.md) page!
 
@@ -64,7 +67,11 @@ You can see examples of various ways to customize the shell's appearance on the 
 
 | variable | definition | default |
 |----------|------------|---------|
-| `openKey` | The key that opens the console, in combination with the `modifierKeys` if any. Must be a letter A-Z or a numeral 0-9 (see  [`ord()`](https://manual.yoyogames.com/index.htm#t=GameMaker_Language%2FGML_Reference%2FStrings%2Ford.htm)) | C |
-| `modifierKeys` | A multi-select of special keys. All the selected keys must be pressed in combination with `openKey` to open the console | `vk_control`, `vk_shift` |
+| `openKey` | The key that opens the console, in combination with the `modifierKeys` if any. In the form of an expression. | `ord("C")` |
+| `openModifierKeys` | A multi-select of special keys for use with `openKey`. All the selected keys must be pressed in combination with `openKey` to open the console | `vk_control`, `vk_shift` |
 | `openFunction` | A reference to a function that will be executed every time the shell is opened. Could be used to pause the game when the shell opens, for example | `undefined` |
 | `closeFunction` | A reference to a function that will be executed every time the shell is closed. Could be used to unpause the game when the shell closes, for example | `undefined` |
+| `enableAutoComplete` | Whether or not to use the new autocompletion box. Marking this false will only provide in-line completion suggestions. | `true` |
+| `confirmAutocompleteKey` | The key for confirming the currently selected autocomplete suggestion, in combination with the `confirmAutocompleteModifierKeys` if any. In the form of an expression. | `vk_space` |
+| `confirmAutocompleteModifierKeys` | A multi-select of special keys for use with `confirmAutocompleteKey`. All the selected keys must be pressed in combination with `confirmAutocompleteKey` to fill the suggestion. | `vk_shift` |
+| `cycleAutocompleteKey` | The key for cycling through suggestions for autocompletion. In the form of an expression. | `vk_tab` |

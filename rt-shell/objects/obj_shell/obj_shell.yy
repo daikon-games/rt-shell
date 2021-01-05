@@ -46,6 +46,7 @@
     {"varType":4,"value":"make_color_rgb(140, 118, 123)","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"fontColorSecondary","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":0,"value":"12","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"cornerRadius","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":1,"value":"5","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"scrollbarWidth","tags":[],"resourceType":"GMObjectProperty",},
+    {"varType":4,"value":"c_black","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"autocompleteBackgroundColor","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":4,"value":"ord(\"C\")","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"openKey","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":6,"value":"vk_control, vk_shift","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[
         "vk_control",
@@ -56,14 +57,13 @@
     {"varType":4,"value":"undefined","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"closeFunction","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":3,"value":"True","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"enableAutocomplete","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":1,"value":"5","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"autocompleteMaxLines","tags":[],"resourceType":"GMObjectProperty",},
+    {"varType":4,"value":"vk_space","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"confirmAutocompleteKey","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":6,"value":"vk_shift","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[
         "vk_control",
         "vk_shift",
         "vk_alt",
       ],"multiselect":true,"filters":[],"resourceVersion":"1.0","name":"confirmAutocompleteModifierKeys","tags":[],"resourceType":"GMObjectProperty",},
-    {"varType":4,"value":"vk_space","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"confirmAutocompleteKey","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":4,"value":"vk_tab","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"cycleAutocompleteKey","tags":[],"resourceType":"GMObjectProperty",},
-    {"varType":4,"value":"c_black","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"autocompleteBackgroundColor","tags":[],"resourceType":"GMObjectProperty",},
   ],
   "overriddenProperties": [],
   "parent": {
