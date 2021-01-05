@@ -1,10 +1,14 @@
 isOpen = false;
+isAutocompleteOpen = false;
 
-shellSurface = surface_create(width, height);
+shellSurface = noone;
+shellOriginX = 0;
+shellOriginY = 0;
 
 cursorPos = 1;
 consoleString = "";
 savedConsoleString = "";
+scrollPosition = 0;
 
 historyPos = 0;
 history = [];
@@ -12,14 +16,19 @@ output = [];
 
 filteredFunctions = [];
 suggestionIndex = 0;
+autocompleteMaxWidth = 0;
+autocompleteScrollPosition = 0;
+autocompleteOriginX = 0;
+autocompleteOriginY = 0;
+mousePreviousX = mouse_x;
+mousePreviousY = mouse_y;
 
 // If another instance of rt-shell already exists, destroy ourself
-// Must do after initializing surface and lists so our clean-up step succeeds 
+// Must do after initializing surface and lists so our clean-up step succeeds
 if (instance_number(obj_shell) > 1) {
 	instance_destroy();
 }
 
-/// @function open
 /// Opens the shell
 function open() {
 	isOpen = true;
@@ -29,13 +38,17 @@ function open() {
 	}
 }
 
-/// @function close
 /// Closes the shell
 function close() {
 	isOpen = false;
 	if (!is_undefined(closeFunction)) {
 		closeFunction();
 	}
+}
+
+/// Closes autocomplete
+function close_autocomplete() {
+	array_resize(filteredFunctions, 0);
 }
 
 // Create a list of shell functions in the global namespace to
@@ -54,16 +67,16 @@ for (var i = 0; i < array_length(globalVariables); i++) {
 // for use in autocompletion
 function updateFilteredFunctions(userInput) {
 	array_resize(filteredFunctions, 0);
+	autocompleteMaxWidth = 0;
 	for (var i = 0; i < array_length(autocompleteFunctions); i++) {
 		if (string_pos(userInput, autocompleteFunctions[i]) == 1) {
 			array_push(filteredFunctions, autocompleteFunctions[i]);
+			autocompleteMaxWidth = max(autocompleteMaxWidth, string_width(autocompleteFunctions[i]));
 		}
 	}
 	array_sort(filteredFunctions, true);
 	suggestionIndex = 0;
 }
-
-window_get_width()
 
 // Find the prefix string that the list of suggestions has in common
 // used to update the consoleString when user is tab-completing
@@ -90,13 +103,13 @@ function findCommonPrefix() {
 	return result;
 }
 
-function keyComboPressed() {
-	for (var i = 0; i < array_length(modifierKeys); i++) {
-		if (!keyboard_check(modifierKeys[i])) {
+function keyComboPressed(modifier_array, key) {
+	for (var i = 0; i < array_length(modifier_array); i++) {
+		if (!keyboard_check(modifier_array[i])) {
 			return false;
 		}
 	}
-	if (keyboard_check_pressed(ord(string_upper(openKey)))) {
+	if (keyboard_check_pressed(key)) {
 		return true;
 	}
 }
@@ -125,6 +138,56 @@ function keyboardCheckDelay(input) {
 		}
 	}
 	return false;
+}
+
+// Clears the console
+function clear() {
+	array_resize(output, 0);
+}
+
+// Recalculates origin, mainly for changing themes and intializing
+function recalculate_origin() {
+	var screenCenterX = display_get_gui_width() / 2;
+	var screenCenterY = display_get_gui_height() / 2;
+	var halfWidth = width / 2;
+	var halfHeight = height / 2;
+	
+	switch (screenAnchorPointH) {
+		case "left":
+			shellOriginX = anchorMargin - 1;
+			break;
+		case "center":
+			shellOriginX = screenCenterX - halfWidth - 1;
+			break;
+		case "right":
+			shellOriginX = display_get_gui_width() - width - anchorMargin - 1;
+			break;
+	}
+	
+	switch (screenAnchorPointV) {
+		case "top":
+			shellOriginY = anchorMargin - 1;
+			break;
+		case "middle":
+			shellOriginY = screenCenterY - halfHeight - 1;
+			break;
+		case "bottom":
+			shellOriginY = display_get_gui_height() - height - anchorMargin - 1;
+			break;
+	}
+}
+
+// Recalculates the scroll offset/position based on the suggestion index within the autocomplete list
+function calculate_scroll_from_suggestion_index() {
+	if (suggestionIndex == 0)  {
+		autocompleteScrollPosition = 0;
+	} else {
+		if (suggestionIndex >= autocompleteScrollPosition + autocompleteMaxLines) {
+			autocompleteScrollPosition = max(0, suggestionIndex - autocompleteMaxLines + 1);
+		} else if (suggestionIndex < autocompleteScrollPosition) {
+			autocompleteScrollPosition = autocompleteScrollPosition - suggestionIndex;
+		}
+	}
 }
 
 // Graciously borrowed from here: https://www.reddit.com/r/gamemaker/comments/3zxota/splitting_strings/
