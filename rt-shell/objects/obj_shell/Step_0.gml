@@ -1,5 +1,5 @@
 if (!isOpen) {
-	if (self.keyComboPressed(openModifierKeys, openKey)) {
+	if (self.keyComboPressed(openModifiers, openKey)) {
 		self.open();
 	}
 } else {
@@ -31,34 +31,23 @@ if (!isOpen) {
 		} else {
 			cursorPos = min(string_length(consoleString) + 1, cursorPos + 1);
 		}
-	} else if (keyboard_check_pressed(vk_up)) {
-		if (isAutocompleteOpen) {
-			suggestionIndex = (suggestionIndex + array_length(filteredFunctions) - 1) % array_length(filteredFunctions);
-			self.calculate_scroll_from_suggestion_index()
-		} else {
-			self.close_autocomplete();
-			if (historyPos == array_length(history)) {
-				savedConsoleString = consoleString;
-			}
-			historyPos = max(0, historyPos - 1);
-			if (array_length(history) != 0) {
-				consoleString = array_get(history, historyPos);
-				cursorPos = string_length(consoleString) + 1;
-			}
+	} else if (self.keyComboPressed(historyUpModifiers, historyUpKey)) {
+		if (historyPos == array_length(history)) {
+			savedConsoleString = consoleString;
 		}
-	} else if (keyboard_check_pressed(vk_down)) {
-		if (isAutocompleteOpen) {
-			suggestionIndex = (suggestionIndex + 1) % array_length(filteredFunctions);
-			self.calculate_scroll_from_suggestion_index()
-		} else {
-			historyPos = min(array_length(history), historyPos + 1);
-			if (historyPos == array_length(history)) {
-				consoleString = savedConsoleString;
-			} else {
-				consoleString = array_get(history, historyPos);
-			}
+		historyPos = max(0, historyPos - 1);
+		if (array_length(history) != 0) {
+			consoleString = array_get(history, historyPos);
 			cursorPos = string_length(consoleString) + 1;
 		}
+	} else if (self.keyComboPressed(historyDownModifiers, historyDownKey)) {
+		historyPos = min(array_length(history), historyPos + 1);
+		if (historyPos == array_length(history)) {
+			consoleString = savedConsoleString;
+		} else {
+			consoleString = array_get(history, historyPos);
+		}
+		cursorPos = string_length(consoleString) + 1;
 	} else if (keyboard_check_pressed(vk_enter)) {
 		if (isAutocompleteOpen) {
 			consoleString = filteredFunctions[suggestionIndex];
@@ -96,7 +85,8 @@ if (!isOpen) {
 				cursorPos = 1;
 			}
 		}
-	} else if (keyboard_check_pressed(cycleAutocompleteKey)) {
+		scrollPosition = 0;
+	} else if (self.keyComboPressed(cycleSuggestionsModifiers, cycleSuggestionsKey)) {
 		if (array_length(filteredFunctions) != 0) {
 			// Auto-complete up to the common prefix of our suggestions
 			var uncompleted = consoleString;
@@ -109,6 +99,11 @@ if (!isOpen) {
 					self.calculate_scroll_from_suggestion_index()
 				}
 			}
+		}
+	} else if (self.keyComboPressed(cycleSuggestionsReverseModifiers, cycleSuggestionsReverseKey)) {
+		suggestionIndex = (suggestionIndex + array_length(filteredFunctions) - 1) % array_length(filteredFunctions);
+		if (isAutocompleteOpen) {
+			self.calculate_scroll_from_suggestion_index()
 		}
 	}
 	

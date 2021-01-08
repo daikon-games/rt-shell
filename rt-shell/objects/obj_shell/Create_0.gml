@@ -116,7 +116,14 @@ function keyComboPressed(modifier_array, key) {
 			return false;
 		}
 	}
+
 	if (keyboard_check_pressed(key)) {
+		if (array_length(modifier_array) == 0) {
+			if (keyboard_check(vk_shift) or keyboard_check(vk_control) or keyboard_check(vk_alt)) {
+				return false;
+			}
+		}
+		
 		return true;
 	}
 }

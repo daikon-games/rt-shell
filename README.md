@@ -68,8 +68,15 @@ You can see examples of various ways to customize the shell's appearance on the 
 | variable | definition | default |
 |----------|------------|---------|
 | `openKey` | The key that opens the console, in combination with the `modifierKeys` if any. In the form of an expression. | `ord("C")` |
-| `openModifierKeys` | A multi-select of special keys for use with `openKey`. All the selected keys must be pressed in combination with `openKey` to open the console | `vk_control`, `vk_shift` |
+| `openModifiers` | A multi-select of special keys for use with `openKey`. All the selected keys must be pressed in combination with `openKey` to open the console | `vk_control`, `vk_shift` |
 | `openFunction` | A reference to a function that will be executed every time the shell is opened. Could be used to pause the game when the shell opens, for example | `undefined` |
 | `closeFunction` | A reference to a function that will be executed every time the shell is closed. Could be used to unpause the game when the shell closes, for example | `undefined` |
 | `enableAutoComplete` | Whether or not to use the new autocompletion box. Marking this false will only provide in-line completion suggestions. | `true` |
-| `cycleAutocompleteKey` | The key for cycling through suggestions for autocompletion. In the form of an expression. | `vk_tab` |
+| `cycleSuggestionsKey` | The key for cycling through suggestions for autocompletion. In the form of an expression. | `vk_tab` |
+| `cycleSuggestionsModifiers` | A multi-select of special keys for use with `cycleSuggestionsKey`. All the selected keys must be pressed in combination with `cycleSuggestionsKey` to cycle the suggestions. | `None` |
+| `cycleSuggestionsReverseKey` | The key for cycling through suggestions for autocompletion in reverse order. In the form of an expression. | `vk_tab` |
+| `cycleSuggestionsReverseModifiers` | A multi-select of special keys for use with `cycleSuggestionsReverseKey`. All the selected keys must be pressed in combination with `cycleSuggestionsReverseKey` to cycle the suggestions in reverse. | `vk_shift` |
+| `historyUpKey` | The key for cycling up through the command history. In the form of an expression. | `vk_up` |
+| `historyUpModifiers` | A multi-select of special keys for use with `historyUpKey`. All the selected keys must be pressed in combination with `historyUpKey` to cycle the history up. | `None` |
+| `historyDownKey` | The key for cycling down through the command history. In the form of an expression. | `vk_down` |
+| `historyDownModifiers` | A multi-select of special keys for use with `historyUpKey`. All the selected keys must be pressed in combination with `historyUpKey` to cycle the history down. | `None` |

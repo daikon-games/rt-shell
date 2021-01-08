@@ -19,7 +19,7 @@ function sh_help() {
 		"   creates a second instance of obj_shell\n" +
 		"say_greeting <toWhom>\n" +
 		"   says hello to <toWhom>\n" +
-		"shell_theme_rtshell_*\n" +
+		"theme_rtshell_*\n" +
 		"   functions which change the shell appearance\n" +
 		"shell_set_width <width>\n" +
 		"   sets the shell's width in pixels\n" +
@@ -76,4 +76,70 @@ function sh_test_duplicate_spawn() {
 function sh_say_greeting(args) {
 	var whomToGreet = args[1];
 	return "Hello " + whomToGreet + "!";
+}
+
+function sh_theme_rtshell_dark() {
+	obj_shell.consoleAlpha = 0.9;
+	obj_shell.consoleColor = c_black;
+	obj_shell.fontColor = make_color_rgb(255, 242, 245);
+	obj_shell.fontColorSecondary = make_color_rgb(140, 118, 123);
+	obj_shell.cornerRadius = 12;
+	obj_shell.anchorMargin = 4;
+	obj_shell.promptColor = make_color_rgb(237, 0, 54);
+	obj_shell.prompt = "$";
+}
+
+function sh_theme_rtshell_light() {
+	obj_shell.consoleAlpha = 0.9;
+	obj_shell.consoleColor = make_color_rgb(235, 235, 235);
+	obj_shell.fontColor = make_color_rgb(40, 40, 45);
+	obj_shell.fontColorSecondary = make_color_rgb(120, 120, 128);
+	obj_shell.cornerRadius = 12;
+	obj_shell.anchorMargin = 4;
+	obj_shell.promptColor = make_color_rgb(29, 29, 196);
+	obj_shell.prompt = "$";
+}
+
+function sh_theme_ocean_blue() {
+	obj_shell.consoleAlpha = 1;
+	obj_shell.consoleColor = make_color_rgb(29, 31, 33);
+	obj_shell.fontColor = make_color_rgb(197, 200, 198);
+	obj_shell.fontColorSecondary = make_color_rgb(116, 127, 140);
+	obj_shell.cornerRadius = 0;
+	obj_shell.anchorMargin = 0;
+	obj_shell.promptColor = make_color_rgb(57, 113, 237);
+	obj_shell.prompt = "%";
+}
+
+function sh_theme_dracula() {
+	obj_shell.consoleAlpha = 1;
+	obj_shell.consoleColor = make_color_rgb(40, 42, 54);
+	obj_shell.fontColor = make_color_rgb(248, 248, 242);
+	obj_shell.fontColorSecondary = make_color_rgb(98, 114, 164);
+	obj_shell.cornerRadius = 8;
+	obj_shell.anchorMargin = 4;
+	obj_shell.promptColor = make_color_rgb(80, 250, 123);
+	obj_shell.prompt = "->";
+}
+
+function sh_theme_solarized_light() {
+	obj_shell.consoleAlpha = 1;
+	obj_shell.consoleColor = make_color_rgb(253, 246, 227);
+	obj_shell.fontColor = make_color_rgb(101, 123, 131);
+	obj_shell.fontColorSecondary = make_color_rgb(147, 161, 161);
+	obj_shell.cornerRadius = 2;
+	obj_shell.anchorMargin = 4;
+	obj_shell.promptColor = make_color_rgb(42, 161, 152);
+	obj_shell.prompt = "~";
+}
+
+function sh_theme_solarized_dark() {
+	obj_shell.consoleAlpha = 1;
+	obj_shell.consoleColor = make_color_rgb(0, 43, 54);
+	obj_shell.fontColor = make_color_rgb(131, 148, 150);
+	obj_shell.fontColorSecondary = make_color_rgb(88, 110, 117);
+	obj_shell.cornerRadius = 2;
+	obj_shell.anchorMargin = 4;
+	obj_shell.promptColor = make_color_rgb(42, 161, 152);
+	obj_shell.prompt = "~";
 }
