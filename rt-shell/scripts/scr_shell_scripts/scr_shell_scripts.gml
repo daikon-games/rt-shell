@@ -26,8 +26,8 @@ function sh_help() {
 		"shell_shell_height <height>\n" +
 		"   sets the shell's height in pixels\n" +
 		"close\n" +
-		"   closes the shell" +
-		"clear\n" +
+		"   closes the shell\n" +
+		"clear <\"all\">\n" +
 		"   clears the shell"
 	)
 }

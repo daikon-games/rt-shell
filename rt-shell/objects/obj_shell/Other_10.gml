@@ -1,8 +1,17 @@
 /// @description Init Native Scripts
 
 /// @desc Clears the console
-variable_global_set("sh_clear", function() {
-	array_resize(output, 0);
+variable_global_set("sh_clear", function(args) {
+	if (array_length(args) > 1 and args[1] == "all") {
+		array_resize(output, 0);
+		return "";
+	} else {
+		var _newLinesCount = floor(height / string_height(prompt)) - 1;
+		repeat(_newLinesCount) {
+			array_push(output, "\n");
+		}
+		return "";
+	}
 });
 
 /// @desc closes the console
@@ -12,33 +21,59 @@ variable_global_set("sh_close", function() {
 
 /// @desc updates the console's width
 variable_global_set("sh_shell_set_width", function(args) {
-	width = args[1];
+	if (array_length(args) > 1) {
+		if (string_digits(args[1]) != "") {
+			width = real(string_digits(args[1]));
+			recalculate_shell_properties();
+		} else {
+			return "Invalid argument: " + args[1];
+		}
+	} else {
+		return "No argument provided.";
+	}
 });
 
 /// @desc updates the console's height
 variable_global_set("sh_shell_set_height", function(args) {
-	height = args[1];
+	if (array_length(args) > 1) {
+		if (string_digits(args[1]) != "") {
+			height = real(string_digits(args[1]));
+			recalculate_shell_properties();
+		} else {
+			return "Invalid argument: " + args[1];
+		}
+	} else {
+		return "No argument provided.";
+	}
 });
 
 /// @desc updates the vertical anchor point
 variable_global_set("sh_shell_set_anchor_v", function(args) {
-	var newAnchor = args[1];
-	if (newAnchor == "top" || newAnchor == "middle" || newAnchor == "bottom") {
-		screenAnchorPointV = newAnchor;
-		recalculate_origin();
+	if (array_length(args) > 1) {
+		var newAnchor = args[1];
+		if (newAnchor == "top" || newAnchor == "middle" || newAnchor == "bottom") {
+			screenAnchorPointV = newAnchor;
+			recalculate_shell_properties();
+		} else {
+			return "Invalid anchor point.\nPossible values: [top, middle, bottom]";
+		}
 	} else {
-		return "Invalid anchor point.\nPossible values: [top, middle, bottom]";
+		return "No argument provided.";
 	}
 });
 
 /// @desc updates the horizontal anchor point
 variable_global_set("sh_shell_set_anchor_h", function(args) {
-	var newAnchor = args[1];
-	if (newAnchor == "left" || newAnchor == "center" || newAnchor == "right") {
-		screenAnchorPointH = newAnchor;
-		recalculate_origin();
+	if (array_length(args) > 1) {
+		var newAnchor = args[1];
+		if (newAnchor == "left" || newAnchor == "center" || newAnchor == "right") {
+			screenAnchorPointH = newAnchor;
+			recalculate_shell_properties();
+		} else {
+			return "Invalid anchor point.\nPossible values: [left, center, right]";
+		}
 	} else {
-		return "Invalid anchor point.\nPossible values: [left, center, right]";
+		return "No argument provided.";
 	}
 });
 
@@ -53,7 +88,7 @@ variable_global_set("sh_shell_theme_rtshell_dark", function(args) {
 	anchorMargin = 4;
 	promptColor = make_color_rgb(237, 0, 54);
 	prompt = "$";
-	recalculate_origin();
+	recalculate_shell_properties();
 });
 
 variable_global_set("sh_shell_theme_rtshell_light", function() {
@@ -66,7 +101,7 @@ variable_global_set("sh_shell_theme_rtshell_light", function() {
 	anchorMargin = 4;
 	promptColor = make_color_rgb(29, 29, 196);
 	prompt = "$";
-	recalculate_origin();
+	recalculate_shell_properties();
 });
 
 variable_global_set("sh_shell_theme_ocean_blue", function() {
@@ -79,7 +114,7 @@ variable_global_set("sh_shell_theme_ocean_blue", function() {
 	anchorMargin = 0;
 	promptColor = make_color_rgb(57, 113, 237);
 	prompt = "%";
-	recalculate_origin();
+	recalculate_shell_properties();
 });
 
 variable_global_set("sh_shell_theme_dracula", function() {
@@ -92,7 +127,7 @@ variable_global_set("sh_shell_theme_dracula", function() {
 	anchorMargin = 4;
 	promptColor = make_color_rgb(80, 250, 123);
 	prompt = "->";
-	recalculate_origin();
+	recalculate_shell_properties();
 });
 
 variable_global_set("sh_shell_theme_solarized_light", function() {
@@ -105,7 +140,7 @@ variable_global_set("sh_shell_theme_solarized_light", function() {
 	anchorMargin = 4;
 	promptColor = make_color_rgb(42, 161, 152);
 	prompt = "~";
-	recalculate_origin();
+	recalculate_shell_properties();
 });
 
 variable_global_set("sh_shell_theme_solarized_dark", function() {
@@ -118,5 +153,5 @@ variable_global_set("sh_shell_theme_solarized_dark", function() {
 	anchorMargin = 4;
 	promptColor = make_color_rgb(42, 161, 152);
 	prompt = "~";
-	recalculate_origin();
+	recalculate_shell_properties();
 });

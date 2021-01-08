@@ -1,10 +1,7 @@
 if (isOpen) {
 	if (!surface_exists(shellSurface)) {
 		shellSurface = surface_create(display_get_gui_width(), display_get_gui_height());
-		recalculate_origin();
-		// Resize width if larger than gui
-		if (width > display_get_gui_width()) { width = display_get_gui_width() - anchorMargin * 2; }
-		if (height > display_get_gui_height()) { height = display_get_gui_height() - anchorMargin * 2; }
+		recalculate_shell_properties();
 	} else if (surface_get_width(shellSurface) != display_get_gui_width() or surface_get_height(shellSurface) != display_get_gui_height()) {
 		surface_resize(shellSurface, display_get_gui_width(), display_get_gui_height());
 	}

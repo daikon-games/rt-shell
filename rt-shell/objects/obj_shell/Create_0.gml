@@ -148,7 +148,7 @@ function keyboardCheckDelay(input) {
 }
 
 // Recalculates origin, mainly for changing themes and intializing
-function recalculate_origin() {
+function recalculate_shell_properties() {
 	var screenCenterX = display_get_gui_width() / 2;
 	var screenCenterY = display_get_gui_height() / 2;
 	var halfWidth = width / 2;
@@ -177,6 +177,10 @@ function recalculate_origin() {
 			shellOriginY = display_get_gui_height() - height - anchorMargin - 1;
 			break;
 	}
+	
+	// Resize width if larger than gui
+	if (width > display_get_gui_width()) { width = display_get_gui_width() - anchorMargin * 2; }
+	if (height > display_get_gui_height()) { height = display_get_gui_height() - anchorMargin * 2; }
 }
 
 // Recalculates the scroll offset/position based on the suggestion index within the autocomplete list

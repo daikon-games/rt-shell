@@ -62,7 +62,7 @@ if (!isOpen) {
 	} else if (keyboard_check_pressed(vk_enter)) {
 		if (isAutocompleteOpen) {
 			consoleString = filteredFunctions[suggestionIndex];
-			cursorPos = string_length(consoleString) + 1;	
+			cursorPos = string_length(consoleString) + 1;
 		} else {
 			var args = self.string_split(consoleString, " ");
 			if (array_length(args) > 0) {
@@ -70,11 +70,12 @@ if (!isOpen) {
 				if (script != undefined) {
 					var response = script_execute(asset_get_index(script_get_name(script)), args);
 					array_push(history, consoleString);
-					array_push(output, ">" + consoleString);
+					if (response != "") { array_push(output, ">" + consoleString); }
 					if (response != 0) {
 						var newLineSplit = self.string_split(response, "\n");
 						array_copy(output, array_length(output), newLineSplit, 0, array_length(newLineSplit));
 					}
+					
 					historyPos = array_length(history);
 					consoleString = "";
 					savedConsoleString = "";
