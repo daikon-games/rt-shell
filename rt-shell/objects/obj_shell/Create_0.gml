@@ -1,3 +1,4 @@
+/// @description Init
 isOpen = false;
 isAutocompleteOpen = false;
 
@@ -22,6 +23,9 @@ autocompleteOriginX = 0;
 autocompleteOriginY = 0;
 mousePreviousX = mouse_x;
 mousePreviousY = mouse_y;
+
+// Init native shell scripts
+event_user(0);
 
 // If another instance of rt-shell already exists, destroy ourself
 // Must do after initializing surface and lists so our clean-up step succeeds
@@ -59,9 +63,12 @@ for (var i = 0; i < array_length(globalVariables); i++) {
 	// Only looking for variables that start with sh_
 	if (string_pos("sh_", string_lower(globalVariables[i])) == 1) {
 		// Strip off the sh_ when we store them in our array
-		autocompleteFunctions[array_length(autocompleteFunctions)] = string_delete(globalVariables[i], 1, 3);
+		array_push(autocompleteFunctions, string_delete(globalVariables[i], 1, 3));
 	}
 }
+// Add native shell scripts to functions list
+//array_push(autocompleteFunctions, 
+
 
 // Update the list of functions prefixed by the user's current input
 // for use in autocompletion
@@ -138,11 +145,6 @@ function keyboardCheckDelay(input) {
 		}
 	}
 	return false;
-}
-
-// Clears the console
-function clear() {
-	array_resize(output, 0);
 }
 
 // Recalculates origin, mainly for changing themes and intializing

@@ -66,9 +66,9 @@ if (!isOpen) {
 		} else {
 			var args = self.string_split(consoleString, " ");
 			if (array_length(args) > 0) {
-				var script = asset_get_index("sh_" + args[0]);
-				if (script > -1) {
-					var response = script_execute(script, args);
+				var script = variable_global_get("sh_" + args[0]);
+				if (script != undefined) {
+					var response = script_execute(asset_get_index(script_get_name(script)), args);
 					array_push(history, consoleString);
 					array_push(output, ">" + consoleString);
 					if (response != 0) {
