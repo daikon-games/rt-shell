@@ -72,6 +72,4 @@ You can see examples of various ways to customize the shell's appearance on the 
 | `openFunction` | A reference to a function that will be executed every time the shell is opened. Could be used to pause the game when the shell opens, for example | `undefined` |
 | `closeFunction` | A reference to a function that will be executed every time the shell is closed. Could be used to unpause the game when the shell closes, for example | `undefined` |
 | `enableAutoComplete` | Whether or not to use the new autocompletion box. Marking this false will only provide in-line completion suggestions. | `true` |
-| `confirmAutocompleteKey` | The key for confirming the currently selected autocomplete suggestion, in combination with the `confirmAutocompleteModifierKeys` if any. In the form of an expression. | `vk_space` |
-| `confirmAutocompleteModifierKeys` | A multi-select of special keys for use with `confirmAutocompleteKey`. All the selected keys must be pressed in combination with `confirmAutocompleteKey` to fill the suggestion. | `vk_shift` |
 | `cycleAutocompleteKey` | The key for cycling through suggestions for autocompletion. In the form of an expression. | `vk_tab` |

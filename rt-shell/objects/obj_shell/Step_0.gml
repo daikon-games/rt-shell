@@ -16,9 +16,6 @@ if (!isOpen) {
 		cursorPos = max(1, cursorPos - 1);
 	} else if (self.keyboardCheckDelay(vk_delete)) {
 		consoleString = string_delete(consoleString, cursorPos, 1);
-	} else if (isAutocompleteOpen and self.keyComboPressed(confirmAutocompleteModifierKeys, confirmAutocompleteKey)) {
-		consoleString = filteredFunctions[suggestionIndex];
-		cursorPos = string_length(consoleString) + 1;
 	} else if (keyboard_string != "") {
 		var t = keyboard_string;
 		consoleString = string_insert(t, consoleString, cursorPos);
@@ -63,35 +60,40 @@ if (!isOpen) {
 			cursorPos = string_length(consoleString) + 1;
 		}
 	} else if (keyboard_check_pressed(vk_enter)) {
-		var args = self.string_split(consoleString, " ");
-		if (array_length(args) > 0) {
-			var script = asset_get_index("sh_" + args[0]);
-			if (script > -1) {
-				var response = script_execute(script, args);
-				array_push(history, consoleString);
-				array_push(output, ">" + consoleString);
-				if (response != 0) {
-					var newLineSplit = self.string_split(response, "\n");
-					array_copy(output, array_length(output), newLineSplit, 0, array_length(newLineSplit));
+		if (isAutocompleteOpen) {
+			consoleString = filteredFunctions[suggestionIndex];
+			cursorPos = string_length(consoleString) + 1;	
+		} else {
+			var args = self.string_split(consoleString, " ");
+			if (array_length(args) > 0) {
+				var script = asset_get_index("sh_" + args[0]);
+				if (script > -1) {
+					var response = script_execute(script, args);
+					array_push(history, consoleString);
+					array_push(output, ">" + consoleString);
+					if (response != 0) {
+						var newLineSplit = self.string_split(response, "\n");
+						array_copy(output, array_length(output), newLineSplit, 0, array_length(newLineSplit));
+					}
+					historyPos = array_length(history);
+					consoleString = "";
+					savedConsoleString = "";
+					cursorPos = 1;
+				} else {
+					array_push(output, ">" + consoleString);
+					array_push(output, "No such command: " + consoleString);
+					array_push(history, consoleString);
+					historyPos = array_length(history);
+					consoleString = "";
+					savedConsoleString = "";
+					cursorPos = 1;
 				}
-				historyPos = array_length(history);
-				consoleString = "";
-				savedConsoleString = "";
-				cursorPos = 1;
 			} else {
-				array_push(output, ">" + consoleString);
-				array_push(output, "No such command: " + consoleString);
-				array_push(history, consoleString);
-				historyPos = array_length(history);
+				array_push(output, ">");
 				consoleString = "";
 				savedConsoleString = "";
 				cursorPos = 1;
 			}
-		} else {
-			array_push(output, ">");
-			consoleString = "";
-			savedConsoleString = "";
-			cursorPos = 1;
 		}
 	} else if (keyboard_check_pressed(cycleAutocompleteKey)) {
 		if (array_length(filteredFunctions) != 0) {
