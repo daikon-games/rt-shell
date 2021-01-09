@@ -1,4 +1,4 @@
-/// @description Init Native Scripts
+/// @description Initialize Native Scripts
 
 /// @desc Clears the console
 variable_global_set("sh_clear", function(args) {

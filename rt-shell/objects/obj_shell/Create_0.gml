@@ -1,4 +1,3 @@
-/// @description Init
 isOpen = false;
 isAutocompleteOpen = false;
 
@@ -24,7 +23,7 @@ autocompleteOriginY = 0;
 mousePreviousX = mouse_x;
 mousePreviousY = mouse_y;
 
-// Init native shell scripts
+// Initialize native shell scripts
 event_user(0);
 
 // If another instance of rt-shell already exists, destroy ourself
@@ -66,9 +65,6 @@ for (var i = 0; i < array_length(globalVariables); i++) {
 		array_push(autocompleteFunctions, string_delete(globalVariables[i], 1, 3));
 	}
 }
-// Add native shell scripts to functions list
-//array_push(autocompleteFunctions, 
-
 
 // Update the list of functions prefixed by the user's current input
 // for use in autocompletion
