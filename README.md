@@ -49,10 +49,10 @@ function sh_create_balloon (args) {
 }
 ```
 
-Also, you have set balloon types (`normal`, `animal_dog`, `animal_snake`) and set colors (`pink`, `blue`, `brown`, `green`) that the balloon can be. The way to define these as argument hints and autocompletion suggestions would be to create a function prefixed with `hint_` that returns a struct. This function would look like this:
+Also, you have set balloon types (`normal`, `animal_dog`, `animal_snake`) and set colors (`pink`, `blue`, `brown`, `green`) that the balloon can be. The way to define these as argument hints and autocompletion suggestions would be to create a function prefixed with `meta_` that returns a struct. This function would look like this:
 
 ```gml
-function hint_create_balloon() {
+function meta_create_balloon() {
 	return {
 		arguments: ["x", "y", "type", "color"],
 		suggestions: [
@@ -67,7 +67,7 @@ function hint_create_balloon() {
 
 rt-shell will then find this function and execute it to grab and store its data. Some things to keep in mind:
 
-1. The function names must match after the `sh_` and `hint_` prefixes.
+1. The function names must match after the `sh_` and `meta_` prefixes.
 2. The index of `arguments` corresponds to the index of `suggestions`.
 3. The struct format must match exactly as show above.
 4. If suggestions aren't needed for an argument (like for `x` or `y` above), just input a blank array `[]`.

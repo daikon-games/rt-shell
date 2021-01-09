@@ -68,8 +68,8 @@ for (var i = 0; i < array_length(globalVariables); i++) {
 	}
 	
 	// Only looking for variables that start with hint_
-	if (string_pos("hint_", string_lower(globalVariables[i])) == 1) {
-		// Strip off the sh_ when we store them in our data struct
+	if (string_pos("meta_", string_lower(globalVariables[i])) == 1) {
+		// Strip off the meta_ when we store them in our data struct
 		var name = string_delete(globalVariables[i], 1, 5);
 		functionData[$ name] = variable_instance_get(global, globalVariables[i])();
 	}

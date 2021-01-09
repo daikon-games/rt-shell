@@ -39,11 +39,11 @@ function sh_create_balloon (args) {
 	//balloonAnimal.color = args[4];
 }
 
-// hint_* functions must follow this return output
+// meta_* functions must follow this return output
 // "arguments" is for showing the arguments in your input string
 // "suggestions" is for showing you autocomplete suggestions for each argument
 // The index of "suggestions" corresponds to the argument number
-function hint_create_balloon() {
+function meta_create_balloon() {
 	return {
 		arguments: ["x", "y", "type", "color"],
 		suggestions: [
