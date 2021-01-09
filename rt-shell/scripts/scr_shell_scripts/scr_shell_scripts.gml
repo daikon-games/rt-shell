@@ -21,12 +21,14 @@ function sh_help() {
 		"   says hello to <toWhom>\n" +
 		"theme_rtshell_*\n" +
 		"   functions which change the shell appearance\n" +
-		"set_shell_width <width>\n" +
+		"shell_set_width <width>\n" +
 		"   sets the shell's width in pixels\n" +
-		"set_shell_height <height>\n" +
+		"shell_shell_height <height>\n" +
 		"   sets the shell's height in pixels\n" +
 		"close\n" +
-		"   closes the shell"
+		"   closes the shell\n" +
+		"clear <\"all\">\n" +
+		"   clears the shell"
 	)
 }
 
@@ -71,30 +73,9 @@ function sh_test_duplicate_spawn() {
 	instance_create_layer(0, 0, "Instances", obj_shell);
 }
 
-function sh_set_shell_width(args) {
-	obj_shell.width = args[1];
-}
-
-function sh_set_shell_height(args) {
-	obj_shell.height = args[1];
-}
-
-function sh_set_shell_anchor(args) {
-	var newAnchor = args[1];
-	if (newAnchor == "top" || newAnchor == "bottom") {
-		obj_shell.screenAnchorPoint = newAnchor;
-	} else {
-		return "Invalid anchor point. Possible values: [top, bottom]";
-	}
-}
-
 function sh_say_greeting(args) {
 	var whomToGreet = args[1];
 	return "Hello " + whomToGreet + "!";
-}
-
-function sh_close() {
-	obj_shell.close();
 }
 
 function sh_theme_rtshell_dark() {
