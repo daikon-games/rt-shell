@@ -80,3 +80,5 @@ You can see examples of various ways to customize the shell's appearance on the 
 | `historyUpModifiers` | A multi-select of special keys for use with `historyUpKey`. All the selected keys must be pressed in combination with `historyUpKey` to cycle the history up. | `None` |
 | `historyDownKey` | The key for cycling down through the command history. In the form of an expression. | `vk_down` |
 | `historyDownModifiers` | A multi-select of special keys for use with `historyUpKey`. All the selected keys must be pressed in combination with `historyUpKey` to cycle the history down. | `None` |
+| `keyRepeatInitialDelay` | The amount of time in frames to wait after pressing and holding a key before it begins to repeat. | 25 |
+| `keyRepeatDelay` | The amount of time in frames to wait between each repeat of a held key. | 4 |

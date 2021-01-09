@@ -82,6 +82,8 @@
         "vk_shift",
         "vk_alt",
       ],"multiselect":true,"filters":[],"resourceVersion":"1.0","name":"historyDownModifiers","tags":[],"resourceType":"GMObjectProperty",},
+    {"varType":0,"value":"25","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"keyRepeatInitialDelay","tags":[],"resourceType":"GMObjectProperty",},
+    {"varType":0,"value":"4","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"keyRepeatDelay","tags":[],"resourceType":"GMObjectProperty",},
   ],
   "overriddenProperties": [],
   "parent": {
