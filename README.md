@@ -29,13 +29,56 @@ rt-shell functions can optionally return a string, and if they do that string wi
 
 With all that said, here's our final hello world function:
 
-```
+```gml
 function sh_helloworld (args) {
 	return "Hello " + args[1] + "!";
 }
 ```
 
 Simple, right? With that function in place, you can call `helloworld` from the shell as you saw in the screenshot above. I'm sure you can think of all sorts of scripts that would come in handy for debugging and testing your game. How about a script that set's the player's max health, or money counter? A script that spawns an enemy or a treasure item? Experiment and have fun, happy developing!
+
+## Argument Hints and Autocompletion Suggestions
+
+rt-shell provides a system where you can establish argument hints and autocompletion suggestions for your own shell scripts. These are established much the same way as scripts prefixed with `sh_`. Let's say for example, you have an `sh_create_balloon` shell script. This script takes four arguments, `x`, `y`, `type` and `color`. The script might look something like this:
+
+```gml
+function sh_create_balloon (args) {
+	var balloonAnimal = instance_create_layer(args[1], args[2], "balloon_layer", obj_balloon);
+	balloonAnimal.type = args[3];
+	balloonAnimal.color = args[4];
+}
+```
+
+Also, you have set balloon types (`normal`, `animal_dog`, `animal_snake`) and set colors (`pink`, `blue`, `brown`, `green`) that the balloon can be. The way to define these as argument hints and autocompletion suggestions would be to create a function prefixed with `hint_` that returns a struct. This function would look like this:
+
+```gml
+function hint_create_balloon() {
+	return {
+		arguments: ["x", "y", "type", "color"],
+		suggestions: [
+			[],
+			[],
+			["dog", "snake", "monkey"],
+			["pink", "blue", "brown", "green"]
+		]
+	}
+}
+```
+
+rt-shell will then find this function and execute it to grab and store its data. Some things to keep in mind:
+
+1. The function names must match after the `sh_` and `hint_` prefixes.
+2. The index of `arguments` corresponds to the index of `suggestions`.
+3. The struct format must match exactly as show above.
+4. If suggestions aren't needed for an argument (like for `x` or `y` above), just input a blank array `[]`.
+
+When you go to type your script into the shell your argument hints will show up like so:
+
+![argument hints](images/argument_hints.png)
+
+and so will your autocompletion suggestions:
+
+![suggestions](images/suggestions.png)
 
 ## Configuring rt-shell
 

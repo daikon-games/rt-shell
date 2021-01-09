@@ -25,8 +25,8 @@ if (!isOpen) {
 		cursorPos = max(1, cursorPos - 1);
 	} else if (self.keyboardCheckDelay(vk_right)) {
 		if (cursorPos == string_length(consoleString) + 1 &&
-			array_length(filteredFunctions) != 0) {
-			consoleString = filteredFunctions[suggestionIndex];
+			array_length(filteredSuggestions) != 0) {
+			consoleString = filteredSuggestions[suggestionIndex];
 			cursorPos = string_length(consoleString) + 1;
 		} else {
 			cursorPos = min(string_length(consoleString) + 1, cursorPos + 1);
@@ -50,8 +50,7 @@ if (!isOpen) {
 		cursorPos = string_length(consoleString) + 1;
 	} else if (keyboard_check_pressed(vk_enter)) {
 		if (isAutocompleteOpen) {
-			consoleString = filteredFunctions[suggestionIndex];
-			cursorPos = string_length(consoleString) + 1;
+			self.confirmCurrentSuggestion();
 		} else {
 			var args = self.string_split(consoleString, " ");
 			if (array_length(args) > 0) {
@@ -87,21 +86,21 @@ if (!isOpen) {
 		}
 		scrollPosition = 0;
 	} else if (self.keyComboPressed(cycleSuggestionsModifiers, cycleSuggestionsKey)) {
-		if (array_length(filteredFunctions) != 0) {
+		if (array_length(filteredSuggestions) != 0) {
 			// Auto-complete up to the common prefix of our suggestions
 			var uncompleted = consoleString;
 			consoleString = self.findCommonPrefix();
 			cursorPos = string_length(consoleString) + 1;
 			// If we're already autocompleted as far as we can go, rotate through suggestions
 			if (uncompleted == consoleString) {
-				suggestionIndex = (suggestionIndex + 1) % array_length(filteredFunctions);
+				suggestionIndex = (suggestionIndex + 1) % array_length(filteredSuggestions);
 				if (isAutocompleteOpen) {
 					self.calculate_scroll_from_suggestion_index()
 				}
 			}
 		}
 	} else if (self.keyComboPressed(cycleSuggestionsReverseModifiers, cycleSuggestionsReverseKey)) {
-		suggestionIndex = (suggestionIndex + array_length(filteredFunctions) - 1) % array_length(filteredFunctions);
+		suggestionIndex = (suggestionIndex + array_length(filteredSuggestions) - 1) % array_length(filteredSuggestions);
 		if (isAutocompleteOpen) {
 			self.calculate_scroll_from_suggestion_index()
 		}
@@ -112,11 +111,11 @@ if (!isOpen) {
 		var x1 = autocompleteOriginX;
 		var y1 = autocompleteOriginY;
 		var x2 = x1 + autocompleteMaxWidth + font_get_size(consoleFont);
-		var y2 = y1 + (string_height(prompt) * min(array_length(filteredFunctions), autocompleteMaxLines));
+		var y2 = y1 + (string_height(prompt) * min(array_length(filteredSuggestions), autocompleteMaxLines));
 		if (point_in_rectangle(mouse_x, mouse_y, x1, y1, x2, y2)) {
 			if (mouse_wheel_down()) {
 				autocompleteScrollPosition++;
-				autocompleteScrollPosition = clamp(array_length(filteredFunctions) - autocompleteMaxLines, 0, autocompleteScrollPosition);
+				autocompleteScrollPosition = clamp(array_length(filteredSuggestions) - autocompleteMaxLines, 0, autocompleteScrollPosition);
 			}
 			if (mouse_wheel_up()) {
 				autocompleteScrollPosition--;
@@ -144,7 +143,7 @@ if (!isOpen) {
 	if (consoleString != prevConsoleString) {
 		// If the text at the prompt has changed, update the list of possible
 		// autocomplete suggestions
-		self.updateFilteredFunctions(consoleString);
+		self.updateFilteredSuggestions();
 		autocompleteScrollPosition = 0;
 	}
 }

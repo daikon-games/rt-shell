@@ -14,6 +14,14 @@ variable_global_set("sh_clear", function(args) {
 		return "";
 	}
 });
+variable_global_set("hint_clear", function() {
+	return {
+		arguments: ["<all>"],
+		suggestions: [
+			["all"]
+		]
+	}
+});
 
 /// @desc closes the console
 variable_global_set("sh_close", function() {

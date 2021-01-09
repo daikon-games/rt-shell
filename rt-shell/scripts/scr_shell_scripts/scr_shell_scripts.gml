@@ -32,6 +32,29 @@ function sh_help() {
 	)
 }
 
+// Just for example
+function sh_create_balloon (args) {
+	//var balloonAnimal = instance_create_layer(args[1], args[2], "balloon_layer", obj_balloon_animal);
+	//balloonAnimal.type = args[3];
+	//balloonAnimal.color = args[4];
+}
+
+// hint_* functions must follow this return output
+// "arguments" is for showing the arguments in your input string
+// "suggestions" is for showing you autocomplete suggestions for each argument
+// The index of "suggestions" corresponds to the argument number
+function hint_create_balloon() {
+	return {
+		arguments: ["x", "y", "type", "color"],
+		suggestions: [
+			[],
+			[],
+			["dog", "snake", "monkey"],
+			["pink", "blue", "brown", "green"]
+		]
+	}
+}
+
 function sh_get_bgspeed() {
 	var bgHspeed = obj_test_room.bgHspeed;
 	var bgVspeed = obj_test_room.bgVspeed;
