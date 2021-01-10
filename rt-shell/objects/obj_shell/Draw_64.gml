@@ -70,19 +70,47 @@ if (isOpen) {
 			draw_roundrect_ext(x1, y1, x2, y2, cornerRadius, cornerRadius, false);
 		}
 		
-		// Draw autocomplete
-		if (array_length(filteredFunctions) != 0 and consoleString != filteredFunctions[0]) {
-			// Draw tab suggestion
-			draw_set_color(fontColorSecondary);
-			var ff = filteredFunctions[suggestionIndex];
-			var suggestion = string_copy(ff, string_length(consoleString) + 1, string_length(ff) - string_length(consoleString));
-			draw_text(shellOriginX + textXOffset + lineWidth + string_width(consoleString), shellOriginY + height - lineHeight, suggestion);
+		// Draw current suggestion & argument hints
+		if (array_length(inputArray) > 0) {
+			var ff = (array_length(filteredSuggestions) > 0 and string_count(" ", consoleString) == 0) ? filteredSuggestions[suggestionIndex] : inputArray[0];
+			var data = functionData[$ ff];
+			var spaceCount = string_count(" ", consoleString);
 			
+			var suggestion = spaceCount == 0 ? ff : "";
+			if (data != undefined) {
+				var args = "";
+				if (array_length(filteredSuggestions) > 0 and spaceCount > 0) {
+					if (array_length(inputArray) > spaceCount) {
+						args += string_copy(filteredSuggestions[suggestionIndex], string_length(inputArray[array_length(inputArray) - 1]) + 1, string_length(filteredSuggestions[suggestionIndex]));
+					} else {
+						args += filteredSuggestions[suggestionIndex];
+					}
+				}
+				for (var i = spaceCount; i < array_length(data[$ "arguments"]); i++) {
+					args += " ";
+					args += data.arguments[i];
+					
+				}
+				suggestion += args;
+				if (spaceCount == 0) {
+					suggestion = string_copy(suggestion, string_length(consoleString) + 1, string_length(suggestion) - string_length(consoleString));
+				}
+			} else {
+				suggestion = string_copy(ff, string_length(consoleString) + 1, string_length(ff) - string_length(consoleString));
+			}
+
+			draw_set_color(fontColorSecondary);
+			draw_text(shellOriginX + textXOffset + lineWidth + string_width(consoleString), shellOriginY + height - lineHeight, suggestion);
+		}
+		
+		// Draw autocomplete box
+		if (array_length(filteredSuggestions) > 0) {
 			if (enableAutocomplete and autocompleteMaxLines > 0) {
 				isAutocompleteOpen = true;
-				var suggestionsAmount = min(autocompleteMaxLines, array_length(filteredFunctions));
+				var suggestionsAmount = min(autocompleteMaxLines, array_length(filteredSuggestions));
 				
-				var x1 = shellOriginX + textXOffset + (font_get_size(consoleFont) / 2);
+				var suggestionOffsetX = string_width(string_copy(consoleString, 1, string_last_pos(" ", consoleString)));
+				var x1 = shellOriginX + textXOffset + (font_get_size(consoleFont) / 2) + suggestionOffsetX;
 				var y1 = (screenAnchorPointV == "bottom") ? shellOriginY + height - (lineHeight * 1.5) - (suggestionsAmount * lineHeight) : shellOriginY + height;
 				var x2 = x1 + autocompleteMaxWidth + font_get_size(consoleFont);
 				var y2 = (screenAnchorPointV == "bottom") ? shellOriginY + height - (lineHeight * 1.5) : y1 + (suggestionsAmount * lineHeight);
@@ -97,11 +125,11 @@ if (isOpen) {
 				draw_rectangle(x1, y1, x2, y2, true);
 				
 				// Draw autocomplete scrollbar
-				if (suggestionsAmount < array_length(filteredFunctions)) {
+				if (suggestionsAmount < array_length(filteredSuggestions)) {
 					draw_rectangle(x2 - (scrollbarWidth / 2), y1, x2, y2, false);
 					var scrollbarTotalHeight = y2 - y1;
-					var scrollbarHeight = (suggestionsAmount / array_length(filteredFunctions)) * scrollbarTotalHeight;
-					var scrollbarProgress = (array_length(filteredFunctions) - autocompleteScrollPosition) / array_length(filteredFunctions);
+					var scrollbarHeight = (suggestionsAmount / array_length(filteredSuggestions)) * scrollbarTotalHeight;
+					var scrollbarProgress = (array_length(filteredSuggestions) - autocompleteScrollPosition) / array_length(filteredSuggestions);
 					var yScroll1 = y1 + (scrollbarTotalHeight * (1 - scrollbarProgress)) + 1;
 					var yScroll2 = yScroll1 + scrollbarHeight - 1;
 				
@@ -111,7 +139,7 @@ if (isOpen) {
 				
 				// Draw autocomplete suggestions
 				draw_set_color(fontColor);
-				for (var i = 0; i < array_length(filteredFunctions); i++) {
+				for (var i = 0; i < array_length(filteredSuggestions); i++) {
 					if (i < suggestionsAmount) {
 						// Enable mouse detection
 						if (point_in_rectangle(mouse_x - 1, mouse_y - 1, x1, y1 + (i * lineHeight), x2, y1 + (i * lineHeight) + lineHeight - 1)) {
@@ -122,9 +150,10 @@ if (isOpen) {
 							}
 							if (mouse_check_button_pressed(mb_left)) {
 								if (suggestionIndex == i + autocompleteScrollPosition) {
-									consoleString = filteredFunctions[suggestionIndex];
-									cursorPos = string_length(consoleString) + 1;
-									self.updateFilteredFunctions(consoleString);
+									//consoleString = filteredSuggestions[suggestionIndex];
+									//cursorPos = string_length(consoleString) + 1;
+									self.confirmCurrentSuggestion();
+									self.updateFilteredSuggestions();
 									break;
 								} else {
 									suggestionIndex = i + autocompleteScrollPosition;
@@ -138,7 +167,7 @@ if (isOpen) {
 							draw_set_color(fontColorSecondary);
 						}
 						
-						draw_text(x1 + (lineWidth / 2), y1 + (i * lineHeight), filteredFunctions[i + autocompleteScrollPosition]);
+						draw_text(x1 + (lineWidth / 2), y1 + (i * lineHeight), filteredSuggestions[i + autocompleteScrollPosition]);
 					}
 				}
 			}
