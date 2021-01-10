@@ -67,7 +67,7 @@ for (var i = 0; i < array_length(globalVariables); i++) {
 		array_push(autocompleteFunctions, string_delete(string_lower(globalVariables[i]), 1, 3));
 	}
 	
-	// Only looking for variables that start with hint_
+	// Only looking for variables that start with meta_
 	if (string_pos("meta_", string_lower(globalVariables[i])) == 1) {
 		// Strip off the meta_ when we store them in our data struct
 		var name = string_delete(globalVariables[i], 1, 5);

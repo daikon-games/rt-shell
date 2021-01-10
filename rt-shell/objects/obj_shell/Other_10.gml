@@ -14,7 +14,7 @@ variable_global_set("sh_clear", function(args) {
 		return "";
 	}
 });
-variable_global_set("hint_clear", function() {
+variable_global_set("meta_clear", function() {
 	return {
 		arguments: ["<all>"],
 		suggestions: [
