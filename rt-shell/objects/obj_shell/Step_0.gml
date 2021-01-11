@@ -59,13 +59,15 @@ if (!isOpen) {
 			cursorPos = string_length(consoleString) + 1;
 		}
 	} else if (self.keyComboPressed(historyDownModifiers, historyDownKey)) {
-		historyPos = min(array_length(history), historyPos + 1);
-		if (historyPos == array_length(history)) {
-			consoleString = savedConsoleString;
-		} else {
-			consoleString = array_get(history, historyPos);
+		if (historyPos < array_length(history)) {
+			historyPos = min(array_length(history), historyPos + 1);
+			if (historyPos == array_length(history)) {
+				consoleString = savedConsoleString;
+			} else {
+				consoleString = array_get(history, historyPos);
+			}
+			cursorPos = string_length(consoleString) + 1;
 		}
-		cursorPos = string_length(consoleString) + 1;
 	} else if (keyboard_check_pressed(vk_enter)) {
 		if (isAutocompleteOpen) {
 			self.confirmCurrentSuggestion();
