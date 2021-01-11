@@ -91,8 +91,7 @@ if (!isOpen) {
 					array_push(history, consoleString);
 					if (response != "") { array_push(output, ">" + consoleString); }
 					if (response != 0) {
-						var newLineSplit = self.string_split(response, "\n");
-						array_copy(output, array_length(output), newLineSplit, 0, array_length(newLineSplit));
+						array_push(output, response);
 					}
 					
 					historyPos = array_length(history);
