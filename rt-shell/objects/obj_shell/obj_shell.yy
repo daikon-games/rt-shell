@@ -38,6 +38,7 @@
         "\"right\"",
       ],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"screenAnchorPointH","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":0,"value":"4","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"anchorMargin","tags":[],"resourceType":"GMObjectProperty",},
+    {"varType":0,"value":"6","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"consolePadding","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":2,"value":"$","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"prompt","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":4,"value":"make_color_rgb(237, 0, 54)","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"promptColor","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":4,"value":"c_black","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"consoleColor","tags":[],"resourceType":"GMObjectProperty",},
@@ -84,6 +85,7 @@
       ],"multiselect":true,"filters":[],"resourceVersion":"1.0","name":"historyDownModifiers","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":0,"value":"25","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"keyRepeatInitialDelay","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":0,"value":"4","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"keyRepeatDelay","tags":[],"resourceType":"GMObjectProperty",},
+    {"varType":0,"value":"12","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"scrollSpeed","tags":[],"resourceType":"GMObjectProperty",},
   ],
   "overriddenProperties": [],
   "parent": {

@@ -4,34 +4,6 @@
 // 
 // If a method returns a string value, it will be print to the shell output
 
-function sh_help() {
-	return (
-		"List of available commands:"+
-		"get_bgspeed\n" +
-		"   returns current background speed\n" +
-		"set_bg_hspeed <hspeed>\n" +
-		"   sets background hspeed\n" +
-		"set_bg_vspeed <vspeed>\n" +
-		"   sets background vspeed\n" +
-		"set_bg_color <red> <green> <blue>\n" +
-		"   sets background color\n" +
-		"test_duplicate_spawn\n" +
-		"   creates a second instance of obj_shell\n" +
-		"say_greeting <toWhom>\n" +
-		"   says hello to <toWhom>\n" +
-		"theme_rtshell_*\n" +
-		"   functions which change the shell appearance\n" +
-		"shell_set_width <width>\n" +
-		"   sets the shell's width in pixels\n" +
-		"shell_shell_height <height>\n" +
-		"   sets the shell's height in pixels\n" +
-		"close\n" +
-		"   closes the shell\n" +
-		"clear <\"all\">\n" +
-		"   clears the shell"
-	)
-}
-
 // Just for example
 function sh_create_balloon (args) {
 	//var balloonAnimal = instance_create_layer(args[1], args[2], "balloon_layer", obj_balloon_animal);

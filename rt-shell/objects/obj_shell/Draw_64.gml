@@ -1,73 +1,64 @@
 if (isOpen) {
+	draw_set_font(consoleFont);
+	// pre-calculate one "em" of height
+	var lineHeight = string_height("M");
+	
 	if (!surface_exists(shellSurface)) {
 		shellSurface = surface_create(display_get_gui_width(), display_get_gui_height());
 		recalculate_shell_properties();
-	} else if (surface_get_width(shellSurface) != display_get_gui_width() or surface_get_height(shellSurface) != display_get_gui_height()) {
+	} else if (surface_get_width(shellSurface) != display_get_gui_width() || surface_get_height(shellSurface) != display_get_gui_height()) {
 		surface_resize(shellSurface, display_get_gui_width(), display_get_gui_height());
 	}
+	var outputHeight = 0;
+	for (var i = 0; i < array_length(output); i++) {
+		outputHeight += string_height_ext(output[i], -1, visibleWidth);
+	}
+	var scrollSurfaceHeight = max(outputHeight + lineHeight, visibleHeight);
+	if (!surface_exists(scrollSurface)) {
+		scrollSurface = surface_create(display_get_gui_width(), scrollSurfaceHeight);
+	} else {
+		surface_resize(scrollSurface, display_get_gui_width(), scrollSurfaceHeight);
+	}
 	
-	var lineHeight = string_height(prompt);
-	var lineWidth = string_width(prompt);
+	var promptXOffset = consolePadding + string_width(prompt) + anchorMargin;
 	
-	var textXOffset = 10 + anchorMargin;
-	
-	surface_set_target(shellSurface);
-		// Draw shell background
+	surface_set_target(scrollSurface);
 		draw_clear_alpha(c_black, 0.0);
-		draw_set_alpha(consoleAlpha);
-		draw_set_color(consoleColor);
-		draw_roundrect_ext(shellOriginX, shellOriginY, shellOriginX + width, shellOriginY + height, cornerRadius, cornerRadius, false);
-	
-		draw_set_font(consoleFont);
+		var yOffset = 0;
+		
+		// Add some blank space if our output is too short so things appear to come from 
+		// the bottom of the panel
+		if (outputHeight < visibleHeight - lineHeight) {
+			yOffset += visibleHeight - outputHeight - lineHeight;
+		}
+		
+		// Draw output history
+		for (var i = 0; i < array_length(output); i++) {
+			var outputStr = output[i];
+			if (string_char_at(outputStr, 1) == ">") {
+				draw_set_color(fontColorSecondary);
+				draw_text(shellOriginX + consolePadding, yOffset, prompt);
+				draw_text_ext(shellOriginX + promptXOffset, yOffset, string_delete(outputStr, 1, 1), -1, visibleWidth - promptXOffset);
+			} else {
+				draw_set_color(fontColor);
+				draw_text_ext(shellOriginX + promptXOffset, yOffset, outputStr, -1, visibleWidth - promptXOffset);
+			}
+			yOffset += string_height_ext(outputStr, -1, visibleWidth - promptXOffset);
+		}
 		
 		// Draw our command prompt
 		draw_set_color(promptColor);
-		draw_text(shellOriginX + 6, shellOriginY + height - lineHeight, prompt);
+		draw_text(shellOriginX + consolePadding, yOffset, prompt);
 	
 		// Draw whatever text has been entered so far
 		draw_set_color(fontColor);
-		draw_text(shellOriginX + textXOffset + lineWidth, shellOriginY + height - lineHeight, consoleString);
-	
-		// Draw some lines of previous output
-		var outputSize = min(array_length(output), (height - lineHeight) div lineHeight);
-		var outputOffset = array_length(output) - outputSize;
-		var xOffset = lineWidth;
-		var yOffset = height - (1) * lineHeight;
+		draw_text(shellOriginX + promptXOffset, yOffset, consoleString);
 		
-		scrollPosition = clamp(scrollPosition, 0, array_length(output) - outputSize);
-		for (var i = outputSize - scrollPosition; i > -scrollPosition; i--) {
-			var outputStr = array_get(output, i + outputOffset - 1);
-			var lineHeight = string_height(outputStr);
-			yOffset -= lineHeight;
-			if (string_char_at(outputStr, 1) == ">") {
-				draw_set_color(fontColorSecondary);
-				draw_text(shellOriginX + 6, shellOriginY + yOffset, prompt);
-				draw_text(shellOriginX + textXOffset + xOffset, shellOriginY + yOffset, string_delete(outputStr, 1, 1));
-			} else {
-				draw_set_color(fontColor);
-				draw_text(shellOriginX + textXOffset + xOffset, shellOriginY + yOffset, outputStr);
-			}
-		}
-		
-		// Draw scrollbar
-		if (array_length(output) > outputSize) {
-			var x1 = shellOriginX + width - anchorMargin - scrollbarWidth;
-			var y1 = shellOriginY + anchorMargin;
-			var x2 = x1 + scrollbarWidth;
-			var y2 = shellOriginY + height - anchorMargin;
-			
-			draw_set_color(fontColorSecondary);
-			draw_roundrect_ext(x1, y1, x2, y2, cornerRadius, cornerRadius, false);
-			
-			var scrollbarTotalHeight = y2 - y1;
-			var scrollbarHeight = (outputSize / array_length(output)) * scrollbarTotalHeight;
-			var scrollbarProgress = (array_length(output) - scrollPosition) / (array_length(output));
-			
-			y1 = y1 + ((scrollbarTotalHeight * scrollbarProgress) - scrollbarHeight);
-			y2 = y1 + scrollbarHeight;
-			
-			draw_set_color(fontColor);
-			draw_roundrect_ext(x1, y1, x2, y2, cornerRadius, cornerRadius, false);
+		// Draw a flashing text prompt
+		if (delayFrames > 1 || current_time % 1000 < 600) {
+			draw_text(shellOriginX + promptXOffset + string_width(string_copy(consoleString + " ", 1, cursorPos - 1)) - 3, yOffset, "|");
+		} else if (keyboard_check(vk_anykey)) {
+			draw_text(shellOriginX + promptXOffset + string_width(string_copy(consoleString + " ", 1, cursorPos - 1)) - 3, yOffset, "|");
 		}
 		
 		// Draw current suggestion & argument hints
@@ -100,7 +91,42 @@ if (isOpen) {
 			}
 
 			draw_set_color(fontColorSecondary);
-			draw_text(shellOriginX + textXOffset + lineWidth + string_width(consoleString), shellOriginY + height - lineHeight, suggestion);
+			draw_text(shellOriginX + promptXOffset + string_width(consoleString), yOffset, suggestion);
+		}		
+	surface_reset_target();
+	
+	surface_set_target(shellSurface);
+		// Draw shell background
+		draw_clear_alpha(c_black, 0.0);
+		draw_set_alpha(consoleAlpha);
+		draw_set_color(consoleColor);
+		draw_roundrect_ext(shellOriginX, shellOriginY, shellOriginX + width, shellOriginY + height, cornerRadius, cornerRadius, false);
+		
+		// Draw the scroll surface
+		draw_surface_part(scrollSurface, 0, scrollPosition, display_get_gui_width(), visibleHeight, 0, shellOriginY + consolePadding);
+		
+		// Draw scrollbar
+		if (surface_get_height(scrollSurface) > height - (2 * consolePadding)) {
+			var x1 = shellOriginX + width - anchorMargin - scrollbarWidth;
+			var y1 = shellOriginY + anchorMargin;
+			var x2 = x1 + scrollbarWidth;
+			var y2 = shellOriginY + height - anchorMargin;
+			
+			draw_set_color(fontColorSecondary);
+			draw_rectangle(x1, y1, x2, y2, false);
+			
+			var scrollbarHeight = 2 + (visibleHeight/surface_get_height(scrollSurface)) * visibleHeight;
+			var scrollbarProgress = 0;
+			if (surface_get_height(scrollSurface) > visibleHeight) {
+				scrollbarProgress = scrollPosition / (surface_get_height(scrollSurface) - visibleHeight);
+			}
+			var scrollbarPosition = (visibleHeight - scrollbarHeight) * scrollbarProgress;
+			
+			y1 = y1 + scrollbarPosition;
+			y2 = y1 + scrollbarHeight;
+			
+			draw_set_color(fontColor);
+			draw_rectangle(x1, y1, x2, y2, false);
 		}
 		
 		// Draw autocomplete box
@@ -110,7 +136,7 @@ if (isOpen) {
 				var suggestionsAmount = min(autocompleteMaxLines, array_length(filteredSuggestions));
 				
 				var suggestionOffsetX = string_width(string_copy(consoleString, 1, string_last_pos(" ", consoleString)));
-				var x1 = shellOriginX + textXOffset + (font_get_size(consoleFont) / 2) + suggestionOffsetX;
+				var x1 = shellOriginX + promptXOffset - consolePadding + suggestionOffsetX;
 				var y1 = (screenAnchorPointV == "bottom") ? shellOriginY + height - (lineHeight * 1.5) - (suggestionsAmount * lineHeight) : shellOriginY + height;
 				var x2 = x1 + autocompleteMaxWidth + font_get_size(consoleFont);
 				var y2 = (screenAnchorPointV == "bottom") ? shellOriginY + height - (lineHeight * 1.5) : y1 + (suggestionsAmount * lineHeight);
@@ -167,21 +193,13 @@ if (isOpen) {
 							draw_set_color(fontColorSecondary);
 						}
 						
-						draw_text(x1 + (lineWidth / 2), y1 + (i * lineHeight), filteredSuggestions[i + autocompleteScrollPosition]);
+						draw_text(x1 + consolePadding, y1 + (i * lineHeight), filteredSuggestions[i + autocompleteScrollPosition]);
 					}
 				}
 			}
 		} else {
 			isAutocompleteOpen = false;
 			autocompleteScrollPosition = 0;
-		}
-		
-		// Draw a flashing text prompt
-		draw_set_color(fontColor);
-		if (delayFrames > 1 || current_time % 1000 < 600) {
-			draw_text(shellOriginX + textXOffset + lineWidth + string_width(string_copy(consoleString + " ", 1, cursorPos - 1)) - 3, shellOriginY + height - lineHeight, "|");
-		} else if (keyboard_check(vk_anykey)) {
-			draw_text(shellOriginX + textXOffset + lineWidth + string_width(string_copy(consoleString + " ", 1, cursorPos - 1)) - 3, shellOriginY + height - lineHeight, "|");
 		}
 		
 		draw_set_color(c_white);

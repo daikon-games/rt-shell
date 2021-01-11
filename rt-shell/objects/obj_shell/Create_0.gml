@@ -2,13 +2,17 @@ isOpen = false;
 isAutocompleteOpen = false;
 
 shellSurface = noone;
+scrollSurface = noone;
 shellOriginX = 0;
 shellOriginY = 0;
+visibleWidth = 0;
+visibleHeight = 0;
 
 cursorPos = 1;
 consoleString = "";
 savedConsoleString = "";
 scrollPosition = 0;
+commandSubmitted = false; // Need to update scroll position one frame after a command is submitted
 
 historyPos = 0;
 history = [];
@@ -23,6 +27,8 @@ autocompleteOriginX = 0;
 autocompleteOriginY = 0;
 mousePreviousX = mouse_x;
 mousePreviousY = mouse_y;
+
+shellPropertiesHash = "";
 
 // Initialize native shell scripts
 event_user(0);
@@ -57,15 +63,17 @@ function close_autocomplete() {
 
 // Create a list of shell functions in the global namespace to
 // filter for autocompletion
-autocompleteFunctions = [];
+availableFunctions = [];
 functionData = {};
 var globalVariables = variable_instance_get_names(global);
 for (var i = 0; i < array_length(globalVariables); i++) {
 	// Only looking for variables that start with sh_
 	if (string_pos("sh_", string_lower(globalVariables[i])) == 1) {
 		// Strip off the sh_ when we store them in our array
-		array_push(autocompleteFunctions, string_delete(string_lower(globalVariables[i]), 1, 3));
+		array_push(availableFunctions, string_delete(string_lower(globalVariables[i]), 1, 3));
 	}
+	// Sort available functions list alphabetically for help command
+	array_sort(availableFunctions, true);
 	
 	// Only looking for variables that start with meta_
 	if (string_pos("meta_", string_lower(globalVariables[i])) == 1) {
@@ -90,10 +98,10 @@ function updateFilteredSuggestions() {
 	// Parse through functions
 	var spaceCount = string_count(" ", inputString);
 	if (spaceCount == 0) {
-		for (var i = 0; i < array_length(autocompleteFunctions); i++) {
-			if (string_pos(inputString, autocompleteFunctions[i]) == 1 and inputString != autocompleteFunctions[i]) {
-				array_push(filteredSuggestions, autocompleteFunctions[i]);
-				autocompleteMaxWidth = max(autocompleteMaxWidth, string_width(autocompleteFunctions[i]));
+		for (var i = 0; i < array_length(availableFunctions); i++) {
+			if (string_pos(inputString, availableFunctions[i]) == 1 and inputString != availableFunctions[i]) {
+				array_push(filteredSuggestions, availableFunctions[i]);
+				autocompleteMaxWidth = max(autocompleteMaxWidth, string_width(availableFunctions[i]));
 			}
 		}
 	} else {
@@ -195,6 +203,14 @@ function keyboardCheckDelay(input) {
 	return false;
 }
 
+// Calculates a hash of the configurable variables that would cause shell properties to 
+// need recalculation if they changed
+function shell_properties_hash() {
+	return md5_string_unicode(string(width) + "~" + string(height) + "~" + string(anchorMargin) 
+			+ "~" + string(consolePadding) + "~" + string(scrollbarWidth) + "~" + 
+			string(screenAnchorPointH) + "~" + string(screenAnchorPointV));
+}
+
 // Recalculates origin, mainly for changing themes and intializing
 function recalculate_shell_properties() {
 	var screenCenterX = display_get_gui_width() / 2;
@@ -229,6 +245,13 @@ function recalculate_shell_properties() {
 	// Resize width if larger than gui
 	if (width > display_get_gui_width()) { width = display_get_gui_width() - anchorMargin * 2; }
 	if (height > display_get_gui_height()) { height = display_get_gui_height() - anchorMargin * 2; }
+	
+	// Calculate the width of the visible text area, taking into account all margins
+	visibleWidth = width - (2 * anchorMargin) - scrollbarWidth - (2 * consolePadding);
+	visibleHeight = height - anchorMargin - consolePadding;
+	
+	// Save a hash of the shell properties, so we can detect if we need to recalculate
+	shellPropertiesHash = shell_properties_hash();
 }
 
 // Recalculates the scroll offset/position based on the suggestion index within the autocomplete list
@@ -275,4 +298,17 @@ function string_split(input, delimiter) {
 	}
 
 	return splits;
+}
+
+/*
+ * Returns true if the array contains any instances that match the provided element
+ * otherwise returns false
+ */
+function array_contains(array, element) {
+	for (var i = 0; i < array_length(array); i++) {
+		if (array[i] == element) {
+			return true;
+		}
+	}
+	return false;
 }

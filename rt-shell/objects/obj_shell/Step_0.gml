@@ -4,6 +4,19 @@ if (!isOpen) {
 	}
 } else {
 	var prevConsoleString = consoleString;
+	var maxScrollPosition = max(0, surface_get_height(scrollSurface) - visibleHeight);
+	
+	// Detect if a command was sent last frame, 
+	// update scroll position now that output is printed
+	if (commandSubmitted) {
+		scrollPosition = maxScrollPosition;
+		commandSubmitted = false;
+	}
+	
+	// Recalculate shell properties if certain variables have changed
+	if (shell_properties_hash() != shellPropertiesHash) {
+		recalculate_shell_properties();
+	}
 	
 	if (keyboard_check_pressed(vk_escape)) {
 		if (isAutocompleteOpen) {
@@ -14,15 +27,19 @@ if (!isOpen) {
 	} else if (self.keyboardCheckDelay(vk_backspace)) {
 		consoleString = string_delete(consoleString, cursorPos - 1, 1);
 		cursorPos = max(1, cursorPos - 1);
+		scrollPosition = maxScrollPosition;
 	} else if (self.keyboardCheckDelay(vk_delete)) {
 		consoleString = string_delete(consoleString, cursorPos, 1);
+		scrollPosition = maxScrollPosition;
 	} else if (keyboard_string != "") {
 		var t = keyboard_string;
 		consoleString = string_insert(t, consoleString, cursorPos);
 		cursorPos += string_length(t);
 		keyboard_string = "";
+		scrollPosition = maxScrollPosition;
 	} else if (self.keyboardCheckDelay(vk_left)) { 
 		cursorPos = max(1, cursorPos - 1);
+		scrollPosition = maxScrollPosition;
 	} else if (self.keyboardCheckDelay(vk_right)) {
 		if (cursorPos == string_length(consoleString) + 1 &&
 			array_length(filteredSuggestions) != 0) {
@@ -31,6 +48,7 @@ if (!isOpen) {
 		} else {
 			cursorPos = min(string_length(consoleString) + 1, cursorPos + 1);
 		}
+		scrollPosition = maxScrollPosition;
 	} else if (self.keyComboPressed(historyUpModifiers, historyUpKey)) {
 		if (historyPos == array_length(history)) {
 			savedConsoleString = consoleString;
@@ -84,7 +102,7 @@ if (!isOpen) {
 				cursorPos = 1;
 			}
 		}
-		scrollPosition = 0;
+		commandSubmitted = true;
 	} else if (self.keyComboPressed(cycleSuggestionsModifiers, cycleSuggestionsKey)) {
 		if (array_length(filteredSuggestions) != 0) {
 			// Auto-complete up to the common prefix of our suggestions
@@ -123,22 +141,23 @@ if (!isOpen) {
 			}
 		} else if (point_in_rectangle(mouse_x, mouse_y, shellOriginX, shellOriginY, shellOriginX + width, shellOriginY + height)) {
 			if (mouse_wheel_down()) {
-				scrollPosition--;
+				scrollPosition += scrollSpeed;
 			}
 			if (mouse_wheel_up()) {
-				scrollPosition++;
+				scrollPosition -= scrollSpeed;
 			}
 		}
 	} else {
 		if (point_in_rectangle(mouse_x, mouse_y, shellOriginX, shellOriginY, shellOriginX + width, shellOriginY + height)) {
 			if (mouse_wheel_down()) {
-				scrollPosition--;
+				scrollPosition += scrollSpeed;
 			}
 			if (mouse_wheel_up()) {
-				scrollPosition++;
+				scrollPosition -= scrollSpeed;
 			}
 		}
 	}
+	scrollPosition = clamp(scrollPosition, 0, maxScrollPosition);
 	
 	if (consoleString != prevConsoleString) {
 		// If the text at the prompt has changed, update the list of possible
