@@ -76,7 +76,18 @@ if (!isOpen) {
 			if (array_length(args) > 0) {
 				var script = variable_global_get("sh_" + args[0]);
 				if (script != undefined) {
-					var response = script_execute(asset_get_index(script_get_name(script)), args);
+					var response;
+					try {
+						response = script_execute(asset_get_index(script_get_name(script)), args);
+					} catch (_exception) {
+						response = "-- ERROR: see debug output for details --";
+						show_debug_message("---- ERROR executing rt-shell command [" + args[0] + "] ----");
+						show_debug_message(_exception.message);
+						show_debug_message(_exception.longMessage);
+						show_debug_message(_exception.script);
+						show_debug_message(_exception.stacktrace);
+						show_debug_message("----------------------------");
+					}
 					array_push(history, consoleString);
 					if (response != "") { array_push(output, ">" + consoleString); }
 					if (response != 0) {

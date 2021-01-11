@@ -117,6 +117,10 @@ function sh_test_duplicate_spawn() {
 	instance_create_layer(0, 0, "Instances", obj_shell);
 }
 
+function sh_test_error_handling() {
+	return undefined.property;
+}
+
 function sh_theme_rtshell_dark() {
 	obj_shell.consoleAlpha = 0.9;
 	obj_shell.consoleColor = c_black;
