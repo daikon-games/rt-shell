@@ -32,6 +32,11 @@ function sh_get_bgspeed() {
 	var bgVspeed = obj_test_room.bgVspeed;
 	return "hspeed: " + string(bgHspeed) + ", vspeed: " + string(bgVspeed);
 }
+function meta_get_bgspeed() {
+	return {
+		description: "gets the speed of the background image"
+	}
+}
 
 // If you want a method to take arguments at the command line, pass in an args object here
 // args[0] will always be the function name, args[1] and onwards will be your actual arguments
@@ -43,6 +48,15 @@ function sh_set_bg_hspeed(args) {
 		return e.message;
 	}
 }
+function meta_set_bg_hspeed() {
+	return {
+		description: "set the horizontal speed of the background",
+		arguments: ["speed"],
+		argumentDescriptions: [
+			"The desired horizontal speed."
+		]
+	}
+}
 
 function sh_set_bg_vspeed(args) {
 	var newVspeed = args[1];
@@ -50,6 +64,15 @@ function sh_set_bg_vspeed(args) {
 		obj_test_room.bgVspeed = real(newVspeed);
 	} catch (e) {
 		return e.message;
+	}
+}
+function meta_set_bg_vspeed() {
+	return {
+		description: "set the vertical speed of the background",
+		arguments: ["speed"],
+		argumentDescriptions: [
+			"The desired vertical speed."
+		]
 	}
 }
 
@@ -64,13 +87,34 @@ function sh_set_bg_color(args) {
 	layer_background_blend(backgroundId, make_color_rgb(red, green, blue));
 }
 
-function sh_test_duplicate_spawn() {
-	instance_create_layer(0, 0, "Instances", obj_shell);
+function meta_set_bg_color() {
+	return {
+		description: "set the color of the background",
+		arguments: ["red", "green", "blue"],
+		argumentDescriptions: [
+			"red value from 0 to 255",
+			"green value from 0 to 255",
+			"blue value from 0 to 255"
+		]
+	}
 }
 
 function sh_say_greeting(args) {
 	var whomToGreet = args[1];
 	return "Hello " + whomToGreet + "!";
+}
+function meta_say_greeting() {
+	return {
+		description: "print a hello world type statement",
+		arguments: ["whomToGreet"],
+		argumentDescriptions: [
+			"a name of an entity to be greeted"
+		]
+	}
+}
+
+function sh_test_duplicate_spawn() {
+	instance_create_layer(0, 0, "Instances", obj_shell);
 }
 
 function sh_theme_rtshell_dark() {

@@ -54,7 +54,6 @@ variable_global_set("sh_help", function(args) {
 		return output;
 	}
 });
-
 variable_global_set("meta_help", function() {
 	return {
 		arguments: ["<command name>"],
@@ -66,7 +65,9 @@ variable_global_set("meta_help", function() {
 	}
 });
 
-/// @desc Clears the console
+/*
+ * Clear the console
+ */
 variable_global_set("sh_clear", function(args) {
 	if (array_length(args) > 1 and args[1] == "all") {
 		array_resize(output, 0);
@@ -93,13 +94,9 @@ variable_global_set("meta_clear", function() {
 	}
 });
 
-/// @desc closes the console
-variable_global_set("sh_close", function() {
-	close();
-	return "";
-});
-
-/// @desc updates the console's width
+/*
+ * Set the console's width
+ */
 variable_global_set("sh_shell_set_width", function(args) {
 	if (array_length(args) > 1) {
 		if (string_digits(args[1]) != "") {
@@ -111,8 +108,19 @@ variable_global_set("sh_shell_set_width", function(args) {
 		return "No argument provided.";
 	}
 });
+variable_global_set("meta_shell_set_width", function() {
+	return {
+		description: "set the width of the console window",
+		arguments: ["width"],
+		argumentDescriptions: [
+			"The desired width of the console, in pixels."
+		]
+	}
+});
 
-/// @desc updates the console's height
+/*
+ * Set the console's height
+ */
 variable_global_set("sh_shell_set_height", function(args) {
 	if (array_length(args) > 1) {
 		if (string_digits(args[1]) != "") {
@@ -124,8 +132,19 @@ variable_global_set("sh_shell_set_height", function(args) {
 		return "No argument provided.";
 	}
 });
+variable_global_set("meta_shell_set_height", function() {
+	return {
+		description: "set the height of the console window",
+		arguments: ["height"],
+		argumentDescriptions: [
+			"The desired height of the console, in pixels."
+		]
+	}
+});
 
-/// @desc updates the vertical anchor point
+/*
+ * Set the console's vertical anchor
+ */
 variable_global_set("sh_shell_set_anchor_v", function(args) {
 	if (array_length(args) > 1) {
 		var newAnchor = args[1];
@@ -138,8 +157,22 @@ variable_global_set("sh_shell_set_anchor_v", function(args) {
 		return "No argument provided.";
 	}
 });
+variable_global_set("meta_shell_set_anchor_v", function() {
+	return {
+		description: "set the vertical anchor point of the console window",
+		arguments: ["anchor"],
+		suggestions: [
+			["top", "middle", "bottom"]
+		],
+		argumentDescriptions: [
+			"The desired vertical anchor point."
+		]
+	}
+});
 
-/// @desc updates the horizontal anchor point
+/*
+ * Set the console's horizontal anchor
+ */
 variable_global_set("sh_shell_set_anchor_h", function(args) {
 	if (array_length(args) > 1) {
 		var newAnchor = args[1];
@@ -150,5 +183,17 @@ variable_global_set("sh_shell_set_anchor_h", function(args) {
 		}
 	} else {
 		return "No argument provided.";
+	}
+});
+variable_global_set("meta_shell_set_anchor_h", function() {
+	return {
+		description: "set the horizontal anchor point of the console window",
+		arguments: ["anchor"],
+		suggestions: [
+			["left", "center", "right"]
+		],
+		argumentDescriptions: [
+			"The desired horizontal anchor point."
+		]
 	}
 });
