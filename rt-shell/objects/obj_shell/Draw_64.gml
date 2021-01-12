@@ -106,7 +106,7 @@ if (isOpen) {
 		draw_surface_part(scrollSurface, 0, scrollPosition, display_get_gui_width(), visibleHeight, 0, shellOriginY + consolePadding);
 		
 		// Draw scrollbar
-		if (surface_get_height(scrollSurface) > height - (2 * consolePadding)) {
+		if (surface_get_height(scrollSurface) > height - (2 * consolePadding) and surface_get_height(scrollSurface) > visibleHeight) {
 			var x1 = shellOriginX + width - anchorMargin - scrollbarWidth;
 			var y1 = shellOriginY + anchorMargin;
 			var x2 = x1 + scrollbarWidth;
@@ -115,15 +115,12 @@ if (isOpen) {
 			draw_set_color(fontColorSecondary);
 			draw_rectangle(x1, y1, x2, y2, false);
 			
-			var scrollbarHeight = 2 + (visibleHeight/surface_get_height(scrollSurface)) * visibleHeight;
-			var scrollbarProgress = 0;
-			if (surface_get_height(scrollSurface) > visibleHeight) {
-				scrollbarProgress = scrollPosition / (surface_get_height(scrollSurface) - visibleHeight);
-			}
+			var scrollbarHeight = (visibleHeight / surface_get_height(scrollSurface)) * visibleHeight;
+			var scrollbarProgress = scrollPosition / (surface_get_height(scrollSurface) - visibleHeight);
 			var scrollbarPosition = (visibleHeight - scrollbarHeight) * scrollbarProgress;
 			
 			y1 = y1 + scrollbarPosition;
-			y2 = y1 + scrollbarHeight;
+			y2 = y1 + scrollbarHeight + 2;
 			
 			draw_set_color(fontColor);
 			draw_rectangle(x1, y1, x2, y2, false);
@@ -176,8 +173,6 @@ if (isOpen) {
 							}
 							if (mouse_check_button_pressed(mb_left)) {
 								if (suggestionIndex == i + autocompleteScrollPosition) {
-									//consoleString = filteredSuggestions[suggestionIndex];
-									//cursorPos = string_length(consoleString) + 1;
 									self.confirmCurrentSuggestion();
 									self.updateFilteredSuggestions();
 									break;
