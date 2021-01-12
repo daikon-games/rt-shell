@@ -21,6 +21,13 @@ if (isOpen) {
 		scrollSurface = surface_create(display_get_gui_width(), scrollSurfaceHeight);
 	} else {
 		surface_resize(scrollSurface, display_get_gui_width(), scrollSurfaceHeight);
+		// Updating this here removes jitter as the scroll bar draws one frame in the old position
+		// and then jumps to the bottom. This fixes that
+		if (commandSubmitted) {
+			maxScrollPosition = max(0, surface_get_height(scrollSurface) - visibleHeight);
+			scrollPosition = maxScrollPosition;
+			commandSubmitted = false;
+		}
 	}
 	
 	surface_set_target(scrollSurface);

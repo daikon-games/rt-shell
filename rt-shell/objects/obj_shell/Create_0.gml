@@ -12,6 +12,7 @@ cursorPos = 1;
 consoleString = "";
 savedConsoleString = "";
 scrollPosition = 0;
+maxScrollPosition = 0;
 commandSubmitted = false; // Need to update scroll position one frame after a command is submitted
 
 historyPos = 0;

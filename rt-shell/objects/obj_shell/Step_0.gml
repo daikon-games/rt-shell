@@ -4,14 +4,7 @@ if (!isOpen) {
 	}
 } else {
 	var prevConsoleString = consoleString;
-	var maxScrollPosition = max(0, surface_get_height(scrollSurface) - visibleHeight);
-	
-	// Detect if a command was sent last frame, 
-	// update scroll position now that output is printed
-	if (commandSubmitted) {
-		scrollPosition = maxScrollPosition;
-		commandSubmitted = false;
-	}
+	maxScrollPosition = max(0, surface_get_height(scrollSurface) - visibleHeight);
 	
 	// Recalculate shell properties if certain variables have changed
 	if (shell_properties_hash() != shellPropertiesHash) {
@@ -58,6 +51,7 @@ if (!isOpen) {
 			consoleString = array_get(history, historyPos);
 			cursorPos = string_length(consoleString) + 1;
 		}
+		scrollPosition = maxScrollPosition;
 	} else if (self.keyComboPressed(historyDownModifiers, historyDownKey)) {
 		if (historyPos < array_length(history)) {
 			historyPos = min(array_length(history), historyPos + 1);
@@ -68,6 +62,7 @@ if (!isOpen) {
 			}
 			cursorPos = string_length(consoleString) + 1;
 		}
+		scrollPosition = maxScrollPosition;
 	} else if (keyboard_check_pressed(vk_enter)) {
 		if (isAutocompleteOpen) {
 			self.confirmCurrentSuggestion();
@@ -178,3 +173,5 @@ if (!isOpen) {
 		autocompleteScrollPosition = 0;
 	}
 }
+
+show_debug_message(surface_get_height(scrollSurface));
