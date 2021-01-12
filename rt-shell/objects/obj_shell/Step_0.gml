@@ -26,6 +26,7 @@ if (!isOpen) {
 		scrollPosition = maxScrollPosition;
 	} else if (keyboard_string != "") {
 		var t = keyboard_string;
+		if (!insertMode) { consoleString = string_delete(consoleString, cursorPos, string_length(t)); }
 		consoleString = string_insert(t, consoleString, cursorPos);
 		cursorPos += string_length(t);
 		keyboard_string = "";
@@ -129,6 +130,8 @@ if (!isOpen) {
 		if (isAutocompleteOpen) {
 			self.calculate_scroll_from_suggestion_index()
 		}
+	} else if (keyboard_check_pressed(vk_insert)) {
+		insertMode = !insertMode;
 	}
 	
 	// Handle scrolling
