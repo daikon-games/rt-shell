@@ -18,6 +18,7 @@ commandSubmitted = false; // Need to update scroll position one frame after a co
 historyPos = 0;
 history = [];
 output = [];
+outputHeight = 0;
 
 filteredSuggestions = [];
 inputArray = [];

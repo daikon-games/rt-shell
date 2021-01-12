@@ -4,7 +4,7 @@ if (!isOpen) {
 	}
 } else {
 	var prevConsoleString = consoleString;
-	maxScrollPosition = max(0, surface_get_height(scrollSurface) - visibleHeight);
+	maxScrollPosition = max(0, outputHeight - visibleHeight);
 	
 	// Recalculate shell properties if certain variables have changed
 	if (shell_properties_hash() != shellPropertiesHash) {
