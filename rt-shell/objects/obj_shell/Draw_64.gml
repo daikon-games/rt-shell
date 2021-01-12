@@ -9,18 +9,26 @@ if (isOpen) {
 	} else if (surface_get_width(shellSurface) != display_get_gui_width() || surface_get_height(shellSurface) != display_get_gui_height()) {
 		surface_resize(shellSurface, display_get_gui_width(), display_get_gui_height());
 	}
+	
+	var promptXOffset = consolePadding + string_width(prompt) + anchorMargin;
+	
 	var outputHeight = 0;
 	for (var i = 0; i < array_length(output); i++) {
-		outputHeight += string_height_ext(output[i], -1, visibleWidth);
+		outputHeight += string_height_ext(output[i], -1, visibleWidth - promptXOffset);
 	}
 	var scrollSurfaceHeight = max(outputHeight + lineHeight, visibleHeight);
 	if (!surface_exists(scrollSurface)) {
 		scrollSurface = surface_create(display_get_gui_width(), scrollSurfaceHeight);
 	} else {
 		surface_resize(scrollSurface, display_get_gui_width(), scrollSurfaceHeight);
+		// Updating this here removes jitter as the scroll bar draws one frame in the old position
+		// and then jumps to the bottom. This fixes that
+		if (commandSubmitted) {
+			maxScrollPosition = max(0, surface_get_height(scrollSurface) - visibleHeight);
+			scrollPosition = maxScrollPosition;
+			commandSubmitted = false;
+		}
 	}
-	
-	var promptXOffset = consolePadding + string_width(prompt) + anchorMargin;
 	
 	surface_set_target(scrollSurface);
 		draw_clear_alpha(c_black, 0.0);
@@ -63,14 +71,14 @@ if (isOpen) {
 		
 		// Draw current suggestion & argument hints
 		if (array_length(inputArray) > 0) {
-			var ff = (array_length(filteredSuggestions) > 0 and string_count(" ", consoleString) == 0) ? filteredSuggestions[suggestionIndex] : inputArray[0];
+			var ff = (array_length(filteredSuggestions) > 0 && string_count(" ", consoleString) == 0) ? filteredSuggestions[suggestionIndex] : inputArray[0];
 			var data = functionData[$ ff];
 			var spaceCount = string_count(" ", consoleString);
 			
 			var suggestion = spaceCount == 0 ? ff : "";
 			if (data != undefined) {
 				var args = "";
-				if (array_length(filteredSuggestions) > 0 and spaceCount > 0) {
+				if (array_length(filteredSuggestions) > 0 && spaceCount > 0) {
 					if (array_length(inputArray) > spaceCount) {
 						args += string_copy(filteredSuggestions[suggestionIndex], string_length(inputArray[array_length(inputArray) - 1]) + 1, string_length(filteredSuggestions[suggestionIndex]));
 					} else {
@@ -106,7 +114,7 @@ if (isOpen) {
 		draw_surface_part(scrollSurface, 0, scrollPosition, display_get_gui_width(), visibleHeight, 0, shellOriginY + consolePadding);
 		
 		// Draw scrollbar
-		if (surface_get_height(scrollSurface) > height - (2 * consolePadding)) {
+		if (surface_get_height(scrollSurface) > height - (2 * consolePadding) && surface_get_height(scrollSurface) > visibleHeight) {
 			var x1 = shellOriginX + width - anchorMargin - scrollbarWidth;
 			var y1 = shellOriginY + anchorMargin;
 			var x2 = x1 + scrollbarWidth;
@@ -115,15 +123,12 @@ if (isOpen) {
 			draw_set_color(fontColorSecondary);
 			draw_rectangle(x1, y1, x2, y2, false);
 			
-			var scrollbarHeight = 2 + (visibleHeight/surface_get_height(scrollSurface)) * visibleHeight;
-			var scrollbarProgress = 0;
-			if (surface_get_height(scrollSurface) > visibleHeight) {
-				scrollbarProgress = scrollPosition / (surface_get_height(scrollSurface) - visibleHeight);
-			}
+			var scrollbarHeight = (visibleHeight / surface_get_height(scrollSurface)) * visibleHeight;
+			var scrollbarProgress = scrollPosition / (surface_get_height(scrollSurface) - visibleHeight);
 			var scrollbarPosition = (visibleHeight - scrollbarHeight) * scrollbarProgress;
 			
 			y1 = y1 + scrollbarPosition;
-			y2 = y1 + scrollbarHeight;
+			y2 = y1 + scrollbarHeight + 2;
 			
 			draw_set_color(fontColor);
 			draw_rectangle(x1, y1, x2, y2, false);
@@ -131,7 +136,7 @@ if (isOpen) {
 		
 		// Draw autocomplete box
 		if (array_length(filteredSuggestions) > 0) {
-			if (enableAutocomplete and autocompleteMaxLines > 0) {
+			if (enableAutocomplete && autocompleteMaxLines > 0) {
 				isAutocompleteOpen = true;
 				var suggestionsAmount = min(autocompleteMaxLines, array_length(filteredSuggestions));
 				
@@ -168,16 +173,14 @@ if (isOpen) {
 				for (var i = 0; i < array_length(filteredSuggestions); i++) {
 					if (i < suggestionsAmount) {
 						// Enable mouse detection
-						if (point_in_rectangle(mouse_x - 1, mouse_y - 1, x1, y1 + (i * lineHeight), x2, y1 + (i * lineHeight) + lineHeight - 1)) {
-							if (mouse_x != mousePreviousX or mouse_y != mousePreviousY) {
+						if (point_in_rectangle(device_mouse_x_to_gui(0) - 1, device_mouse_y_to_gui(0) - 1, x1, y1 + (i * lineHeight), x2, y1 + (i * lineHeight) + lineHeight - 1)) {
+							if (device_mouse_x_to_gui(0) != mousePreviousX || device_mouse_y_to_gui(0) != mousePreviousY) {
 								suggestionIndex = i + autocompleteScrollPosition;
-								mousePreviousX = mouse_x;
-								mousePreviousY = mouse_y;
+								mousePreviousX = device_mouse_x_to_gui(0);
+								mousePreviousY = device_mouse_y_to_gui(0);
 							}
 							if (mouse_check_button_pressed(mb_left)) {
 								if (suggestionIndex == i + autocompleteScrollPosition) {
-									//consoleString = filteredSuggestions[suggestionIndex];
-									//cursorPos = string_length(consoleString) + 1;
 									self.confirmCurrentSuggestion();
 									self.updateFilteredSuggestions();
 									break;
@@ -204,6 +207,7 @@ if (isOpen) {
 		
 		draw_set_color(c_white);
 		draw_set_alpha(1);
+		draw_set_font(-1);
 	surface_reset_target();
 	
 	draw_surface(shellSurface, 0, 0);

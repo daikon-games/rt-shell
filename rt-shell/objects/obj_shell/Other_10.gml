@@ -69,7 +69,7 @@ variable_global_set("meta_help", function() {
  * Clear the console
  */
 variable_global_set("sh_clear", function(args) {
-	if (array_length(args) > 1 and args[1] == "all") {
+	if (array_length(args) > 1 && args[1] == "all") {
 		array_resize(output, 0);
 		return "";
 	} else {

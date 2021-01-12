@@ -4,14 +4,7 @@ if (!isOpen) {
 	}
 } else {
 	var prevConsoleString = consoleString;
-	var maxScrollPosition = max(0, surface_get_height(scrollSurface) - visibleHeight);
-	
-	// Detect if a command was sent last frame, 
-	// update scroll position now that output is printed
-	if (commandSubmitted) {
-		scrollPosition = maxScrollPosition;
-		commandSubmitted = false;
-	}
+	maxScrollPosition = max(0, surface_get_height(scrollSurface) - visibleHeight);
 	
 	// Recalculate shell properties if certain variables have changed
 	if (shell_properties_hash() != shellPropertiesHash) {
@@ -58,6 +51,7 @@ if (!isOpen) {
 			consoleString = array_get(history, historyPos);
 			cursorPos = string_length(consoleString) + 1;
 		}
+		scrollPosition = maxScrollPosition;
 	} else if (self.keyComboPressed(historyDownModifiers, historyDownKey)) {
 		if (historyPos < array_length(history)) {
 			historyPos = min(array_length(history), historyPos + 1);
@@ -68,6 +62,7 @@ if (!isOpen) {
 			}
 			cursorPos = string_length(consoleString) + 1;
 		}
+		scrollPosition = maxScrollPosition;
 	} else if (keyboard_check_pressed(vk_enter)) {
 		if (isAutocompleteOpen) {
 			self.confirmCurrentSuggestion();
@@ -142,7 +137,7 @@ if (!isOpen) {
 		var y1 = autocompleteOriginY;
 		var x2 = x1 + autocompleteMaxWidth + font_get_size(consoleFont);
 		var y2 = y1 + (string_height(prompt) * min(array_length(filteredSuggestions), autocompleteMaxLines));
-		if (point_in_rectangle(mouse_x, mouse_y, x1, y1, x2, y2)) {
+		if (point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x1, y1, x2, y2)) {
 			if (mouse_wheel_down()) {
 				autocompleteScrollPosition++;
 				autocompleteScrollPosition = clamp(array_length(filteredSuggestions) - autocompleteMaxLines, 0, autocompleteScrollPosition);
@@ -151,7 +146,7 @@ if (!isOpen) {
 				autocompleteScrollPosition--;
 				autocompleteScrollPosition = max(autocompleteScrollPosition, 0);
 			}
-		} else if (point_in_rectangle(mouse_x, mouse_y, shellOriginX, shellOriginY, shellOriginX + width, shellOriginY + height)) {
+		} else if (point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), shellOriginX, shellOriginY, shellOriginX + width, shellOriginY + height)) {
 			if (mouse_wheel_down()) {
 				scrollPosition += scrollSpeed;
 			}
@@ -160,7 +155,7 @@ if (!isOpen) {
 			}
 		}
 	} else {
-		if (point_in_rectangle(mouse_x, mouse_y, shellOriginX, shellOriginY, shellOriginX + width, shellOriginY + height)) {
+		if (point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), shellOriginX, shellOriginY, shellOriginX + width, shellOriginY + height)) {
 			if (mouse_wheel_down()) {
 				scrollPosition += scrollSpeed;
 			}
