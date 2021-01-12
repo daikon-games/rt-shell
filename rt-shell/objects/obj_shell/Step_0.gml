@@ -173,5 +173,3 @@ if (!isOpen) {
 		autocompleteScrollPosition = 0;
 	}
 }
-
-show_debug_message(surface_get_height(scrollSurface));

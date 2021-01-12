@@ -71,14 +71,14 @@ if (isOpen) {
 		
 		// Draw current suggestion & argument hints
 		if (array_length(inputArray) > 0) {
-			var ff = (array_length(filteredSuggestions) > 0 and string_count(" ", consoleString) == 0) ? filteredSuggestions[suggestionIndex] : inputArray[0];
+			var ff = (array_length(filteredSuggestions) > 0 && string_count(" ", consoleString) == 0) ? filteredSuggestions[suggestionIndex] : inputArray[0];
 			var data = functionData[$ ff];
 			var spaceCount = string_count(" ", consoleString);
 			
 			var suggestion = spaceCount == 0 ? ff : "";
 			if (data != undefined) {
 				var args = "";
-				if (array_length(filteredSuggestions) > 0 and spaceCount > 0) {
+				if (array_length(filteredSuggestions) > 0 && spaceCount > 0) {
 					if (array_length(inputArray) > spaceCount) {
 						args += string_copy(filteredSuggestions[suggestionIndex], string_length(inputArray[array_length(inputArray) - 1]) + 1, string_length(filteredSuggestions[suggestionIndex]));
 					} else {
@@ -114,7 +114,7 @@ if (isOpen) {
 		draw_surface_part(scrollSurface, 0, scrollPosition, display_get_gui_width(), visibleHeight, 0, shellOriginY + consolePadding);
 		
 		// Draw scrollbar
-		if (surface_get_height(scrollSurface) > height - (2 * consolePadding) and surface_get_height(scrollSurface) > visibleHeight) {
+		if (surface_get_height(scrollSurface) > height - (2 * consolePadding) && surface_get_height(scrollSurface) > visibleHeight) {
 			var x1 = shellOriginX + width - anchorMargin - scrollbarWidth;
 			var y1 = shellOriginY + anchorMargin;
 			var x2 = x1 + scrollbarWidth;
@@ -136,7 +136,7 @@ if (isOpen) {
 		
 		// Draw autocomplete box
 		if (array_length(filteredSuggestions) > 0) {
-			if (enableAutocomplete and autocompleteMaxLines > 0) {
+			if (enableAutocomplete && autocompleteMaxLines > 0) {
 				isAutocompleteOpen = true;
 				var suggestionsAmount = min(autocompleteMaxLines, array_length(filteredSuggestions));
 				
@@ -174,7 +174,7 @@ if (isOpen) {
 					if (i < suggestionsAmount) {
 						// Enable mouse detection
 						if (point_in_rectangle(device_mouse_x_to_gui(0) - 1, device_mouse_y_to_gui(0) - 1, x1, y1 + (i * lineHeight), x2, y1 + (i * lineHeight) + lineHeight - 1)) {
-							if (device_mouse_x_to_gui(0) != mousePreviousX or device_mouse_y_to_gui(0) != mousePreviousY) {
+							if (device_mouse_x_to_gui(0) != mousePreviousX || device_mouse_y_to_gui(0) != mousePreviousY) {
 								suggestionIndex = i + autocompleteScrollPosition;
 								mousePreviousX = device_mouse_x_to_gui(0);
 								mousePreviousY = device_mouse_y_to_gui(0);

@@ -94,7 +94,7 @@ function updateFilteredSuggestions() {
 	inputArray = self.string_split(inputString, " ");
 	
 	// Return if we have nothing to parse
-	if (string_length(inputString) == 0 or array_length(inputArray) == 0) { return; }
+	if (string_length(inputString) == 0 || array_length(inputArray) == 0) { return; }
 	
 	// Set font for string_width calculation
 	draw_set_font(consoleFont);
@@ -103,7 +103,7 @@ function updateFilteredSuggestions() {
 	var spaceCount = string_count(" ", inputString);
 	if (spaceCount == 0) {
 		for (var i = 0; i < array_length(availableFunctions); i++) {
-			if (string_pos(inputString, availableFunctions[i]) == 1 and inputString != availableFunctions[i]) {
+			if (string_pos(inputString, availableFunctions[i]) == 1 && inputString != availableFunctions[i]) {
 				array_push(filteredSuggestions, availableFunctions[i]);
 				autocompleteMaxWidth = max(autocompleteMaxWidth, string_width(availableFunctions[i]));
 			}
@@ -114,7 +114,7 @@ function updateFilteredSuggestions() {
 		var argumentIndex = spaceCount - 1;
 		var dataExists = variable_struct_exists(functionData, functionName);
 		var noExtraSpace = (string_char_at(inputString, string_last_pos(" ", inputString) - 1) != " ");
-		if (dataExists and noExtraSpace and spaceCount <= array_length(inputArray)) {
+		if (dataExists && noExtraSpace && spaceCount <= array_length(inputArray)) {
 			var suggestionData = functionData[$ inputArray[0]][$ "suggestions"];
 			if (argumentIndex < array_length(suggestionData)) {
 				var argumentSuggestions = suggestionData[argumentIndex];
@@ -122,7 +122,7 @@ function updateFilteredSuggestions() {
 				for (var i = 0; i < array_length(argumentSuggestions); i++) {
 					var prefixMatch = string_pos(currentArgument, string_lower(argumentSuggestions[i])) == 1;
 					var notCompleteMatch = string_lower(currentArgument) != string_lower(argumentSuggestions[i]);
-					if (string_last_pos(" ", inputString) == string_length(inputString) or (prefixMatch and notCompleteMatch)) {
+					if (string_last_pos(" ", inputString) == string_length(inputString) || (prefixMatch && notCompleteMatch)) {
 						array_push(filteredSuggestions, argumentSuggestions[i]);
 						autocompleteMaxWidth = max(autocompleteMaxWidth, string_width(argumentSuggestions[i]));
 					}
@@ -172,7 +172,7 @@ function keyComboPressed(modifier_array, key) {
 
 	if (keyboard_check_pressed(key)) {
 		if (array_length(modifier_array) == 0) {
-			if (keyboard_check(vk_shift) or keyboard_check(vk_control) or keyboard_check(vk_alt)) {
+			if (keyboard_check(vk_shift) || keyboard_check(vk_control) || keyboard_check(vk_alt)) {
 				return false;
 			}
 		}
