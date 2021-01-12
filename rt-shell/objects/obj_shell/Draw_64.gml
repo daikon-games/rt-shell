@@ -204,6 +204,7 @@ if (isOpen) {
 		
 		draw_set_color(c_white);
 		draw_set_alpha(1);
+		draw_set_font(-1);
 	surface_reset_target();
 	
 	draw_surface(shellSurface, 0, 0);
