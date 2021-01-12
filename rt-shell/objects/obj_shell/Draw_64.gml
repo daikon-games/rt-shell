@@ -9,9 +9,12 @@ if (isOpen) {
 	} else if (surface_get_width(shellSurface) != display_get_gui_width() || surface_get_height(shellSurface) != display_get_gui_height()) {
 		surface_resize(shellSurface, display_get_gui_width(), display_get_gui_height());
 	}
+	
+	var promptXOffset = consolePadding + string_width(prompt) + anchorMargin;
+	
 	var outputHeight = 0;
 	for (var i = 0; i < array_length(output); i++) {
-		outputHeight += string_height_ext(output[i], -1, visibleWidth);
+		outputHeight += string_height_ext(output[i], -1, visibleWidth - promptXOffset);
 	}
 	var scrollSurfaceHeight = max(outputHeight + lineHeight, visibleHeight);
 	if (!surface_exists(scrollSurface)) {
@@ -19,8 +22,6 @@ if (isOpen) {
 	} else {
 		surface_resize(scrollSurface, display_get_gui_width(), scrollSurfaceHeight);
 	}
-	
-	var promptXOffset = consolePadding + string_width(prompt) + anchorMargin;
 	
 	surface_set_target(scrollSurface);
 		draw_clear_alpha(c_black, 0.0);
