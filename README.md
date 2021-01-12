@@ -55,9 +55,9 @@ Adding metadata works much the same way as adding your custom commands in the fi
 Let's say that `sh_create_balloon` looked like this:
 ```gml
 function sh_create_balloon (args) {
-	var balloonAnimal = instance_create_layer(args[1], args[2], "balloon_layer", obj_balloon);
-	balloonAnimal.type = args[3];
-	balloonAnimal.color = args[4];
+	var balloon = instance_create_layer(args[1], args[2], "balloon_layer", obj_balloon);
+	balloon.type = args[3];
+	balloon.color = args[4];
 }
 ```
 
@@ -70,7 +70,7 @@ function meta_create_balloon() {
 		suggestions: [
 			[],
 			[],
-			["dog", "snake", "monkey"],
+			["normal", "animal_dog", "animal_snake"],
 			["pink", "blue", "brown", "green"]
 		],
 		argumentDescriptions: [

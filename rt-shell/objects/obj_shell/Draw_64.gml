@@ -168,11 +168,11 @@ if (isOpen) {
 				for (var i = 0; i < array_length(filteredSuggestions); i++) {
 					if (i < suggestionsAmount) {
 						// Enable mouse detection
-						if (point_in_rectangle(mouse_x - 1, mouse_y - 1, x1, y1 + (i * lineHeight), x2, y1 + (i * lineHeight) + lineHeight - 1)) {
-							if (mouse_x != mousePreviousX or mouse_y != mousePreviousY) {
+						if (point_in_rectangle(device_mouse_x_to_gui(0) - 1, device_mouse_y_to_gui(0) - 1, x1, y1 + (i * lineHeight), x2, y1 + (i * lineHeight) + lineHeight - 1)) {
+							if (device_mouse_x_to_gui(0) != mousePreviousX or device_mouse_y_to_gui(0) != mousePreviousY) {
 								suggestionIndex = i + autocompleteScrollPosition;
-								mousePreviousX = mouse_x;
-								mousePreviousY = mouse_y;
+								mousePreviousX = device_mouse_x_to_gui(0);
+								mousePreviousY = device_mouse_y_to_gui(0);
 							}
 							if (mouse_check_button_pressed(mb_left)) {
 								if (suggestionIndex == i + autocompleteScrollPosition) {

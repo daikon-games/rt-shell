@@ -6,9 +6,9 @@
 
 // Just for example
 function sh_create_balloon (args) {
-	//var balloonAnimal = instance_create_layer(args[1], args[2], "balloon_layer", obj_balloon_animal);
-	//balloonAnimal.type = args[3];
-	//balloonAnimal.color = args[4];
+	//var balloon = instance_create_layer(args[1], args[2], "balloon_layer", obj_balloon);
+	//balloon.type = args[3];
+	//balloon.color = args[4];
 }
 
 // meta_* functions must follow this return output
@@ -21,7 +21,7 @@ function meta_create_balloon() {
 		suggestions: [
 			[],
 			[],
-			["dog", "snake", "monkey"],
+			["normal", "animal_dog", "animal_snake"],
 			["pink", "blue", "brown", "green"]
 		]
 	}

@@ -25,8 +25,8 @@ autocompleteMaxWidth = 0;
 autocompleteScrollPosition = 0;
 autocompleteOriginX = 0;
 autocompleteOriginY = 0;
-mousePreviousX = mouse_x;
-mousePreviousY = mouse_y;
+mousePreviousX = device_mouse_x_to_gui(0);
+mousePreviousY = device_mouse_y_to_gui(0);
 
 shellPropertiesHash = "";
 
@@ -35,7 +35,7 @@ event_user(0);
 
 // If another instance of rt-shell already exists, destroy ourself
 // Must do after initializing surface and lists so our clean-up step succeeds
-if (instance_number(obj_shell) > 1) {
+if (instance_number(object_index) > 1) {
 	instance_destroy();
 }
 
@@ -94,6 +94,9 @@ function updateFilteredSuggestions() {
 	
 	// Return if we have nothing to parse
 	if (string_length(inputString) == 0 or array_length(inputArray) == 0) { return; }
+	
+	// Set font for string_width calculation
+	draw_set_font(consoleFont);
 	
 	// Parse through functions
 	var spaceCount = string_count(" ", inputString);
