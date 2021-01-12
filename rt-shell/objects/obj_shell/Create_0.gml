@@ -213,8 +213,8 @@ function keyboardCheckDelay(input) {
 // need recalculation if they changed
 function shell_properties_hash() {
 	return md5_string_unicode(string(width) + "~" + string(height) + "~" + string(anchorMargin) 
-			+ "~" + string(consolePadding) + "~" + string(scrollbarWidth) + "~" + 
-			string(screenAnchorPointH) + "~" + string(screenAnchorPointV));
+			+ "~" + string(consolePaddingH) + "~" + string(scrollbarWidth) + "~" + 
+			string(consolePaddingV) + "~" + string(screenAnchorPointH) + "~" + string(screenAnchorPointV));
 }
 
 // Recalculates origin, mainly for changing themes and intializing
@@ -222,13 +222,13 @@ function recalculate_shell_properties() {
 	var screenCenterX = display_get_gui_width() / 2;
 	var screenCenterY = display_get_gui_height() / 2;
 	draw_set_font(consoleFont);
-	var lineHeight = string_height("M");
+	var emHeight = string_height("M");
 	
 	// Clamp size of shell to available screen dimensions
 	var maxWidth = display_get_gui_width() - (anchorMargin * 2);
 	var maxHeight = display_get_gui_height() - (anchorMargin * 2);
 	width = clamp(width, 50, maxWidth);
-	height = clamp(height, lineHeight + (2 * consolePadding), maxHeight);
+	height = clamp(height, emHeight, maxHeight);
 	
 	var halfWidth = width / 2;
 	var halfHeight = height / 2;
@@ -257,8 +257,8 @@ function recalculate_shell_properties() {
 	}
 	
 	// Calculate the width of the visible text area, taking into account all margins
-	visibleWidth = width - (2 * anchorMargin) - scrollbarWidth - (2 * consolePadding);
-	visibleHeight = height - anchorMargin - consolePadding;
+	visibleWidth = width - (2 * anchorMargin) - scrollbarWidth - (2 * consolePaddingH);
+	visibleHeight = height - (2 * consolePaddingV);
 	
 	// Save a hash of the shell properties, so we can detect if we need to recalculate
 	shellPropertiesHash = shell_properties_hash();

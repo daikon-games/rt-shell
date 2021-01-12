@@ -128,6 +128,9 @@ function sh_theme_rtshell_dark() {
 	obj_shell.fontColorSecondary = make_color_rgb(140, 118, 123);
 	obj_shell.cornerRadius = 12;
 	obj_shell.anchorMargin = 4;
+	obj_shell.consolePaddingH = 6;
+	obj_shell.consolePaddingV = 4;
+	obj_shell.autocompletePadding = 2;
 	obj_shell.promptColor = make_color_rgb(237, 0, 54);
 	obj_shell.prompt = "$";
 }
@@ -139,6 +142,9 @@ function sh_theme_rtshell_light() {
 	obj_shell.fontColorSecondary = make_color_rgb(120, 120, 128);
 	obj_shell.cornerRadius = 12;
 	obj_shell.anchorMargin = 4;
+	obj_shell.consolePaddingH = 6;
+	obj_shell.consolePaddingV = 4;
+	obj_shell.autocompletePadding = 2;
 	obj_shell.promptColor = make_color_rgb(29, 29, 196);
 	obj_shell.prompt = "$";
 }
@@ -150,6 +156,9 @@ function sh_theme_ocean_blue() {
 	obj_shell.fontColorSecondary = make_color_rgb(116, 127, 140);
 	obj_shell.cornerRadius = 0;
 	obj_shell.anchorMargin = 0;
+	obj_shell.consolePaddingH = 2;
+	obj_shell.consolePaddingV = 2;
+	obj_shell.autocompletePadding = 2;
 	obj_shell.promptColor = make_color_rgb(57, 113, 237);
 	obj_shell.prompt = "%";
 }
@@ -161,6 +170,9 @@ function sh_theme_dracula() {
 	obj_shell.fontColorSecondary = make_color_rgb(98, 114, 164);
 	obj_shell.cornerRadius = 8;
 	obj_shell.anchorMargin = 4;
+	obj_shell.consolePaddingH = 6;
+	obj_shell.consolePaddingV = 2;
+	obj_shell.autocompletePadding = 0;
 	obj_shell.promptColor = make_color_rgb(80, 250, 123);
 	obj_shell.prompt = "->";
 }
@@ -172,6 +184,9 @@ function sh_theme_solarized_light() {
 	obj_shell.fontColorSecondary = make_color_rgb(147, 161, 161);
 	obj_shell.cornerRadius = 2;
 	obj_shell.anchorMargin = 4;
+	obj_shell.consolePaddingH = 2;
+	obj_shell.consolePaddingV = 2;
+	obj_shell.autocompletePadding = 0;
 	obj_shell.promptColor = make_color_rgb(42, 161, 152);
 	obj_shell.prompt = "~";
 }
@@ -183,6 +198,9 @@ function sh_theme_solarized_dark() {
 	obj_shell.fontColorSecondary = make_color_rgb(88, 110, 117);
 	obj_shell.cornerRadius = 2;
 	obj_shell.anchorMargin = 4;
+	obj_shell.consolePaddingH = 2;
+	obj_shell.consolePaddingV = 2;
+	obj_shell.autocompletePadding = 0;
 	obj_shell.promptColor = make_color_rgb(42, 161, 152);
 	obj_shell.prompt = "~";
 }
