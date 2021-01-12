@@ -1,8 +1,8 @@
 if (isOpen) {
 	draw_set_font(consoleFont);
-	// pre-calculate one "em" of height
-	var lineHeight = string_height("M");
-	var lineWidth = string_width("M");
+	// pre-calculate one "em" of width & height
+	var emWidth = string_width("M");
+	var emHeight = string_height("M");
 	
 	if (!surface_exists(shellSurface)) {
 		shellSurface = surface_create(display_get_gui_width(), display_get_gui_height());
@@ -17,7 +17,7 @@ if (isOpen) {
 	for (var i = 0; i < array_length(output); i++) {
 		outputHeight += string_height_ext(output[i], -1, visibleWidth - promptXOffset);
 	}
-	var scrollSurfaceHeight = max(outputHeight + lineHeight, visibleHeight);
+	var scrollSurfaceHeight = max(outputHeight + emHeight, visibleHeight);
 	if (!surface_exists(scrollSurface)) {
 		scrollSurface = surface_create(display_get_gui_width(), scrollSurfaceHeight);
 	} else {
@@ -37,8 +37,8 @@ if (isOpen) {
 		
 		// Add some blank space if our output is too short so things appear to come from 
 		// the bottom of the panel
-		if (outputHeight < visibleHeight - lineHeight) {
-			yOffset += visibleHeight - outputHeight - lineHeight;
+		if (outputHeight < visibleHeight - emHeight) {
+			yOffset += visibleHeight - outputHeight - emHeight;
 		}
 		
 		// Draw output history
@@ -67,12 +67,12 @@ if (isOpen) {
 		var cursorPosX = shellOriginX + promptXOffset + string_width(string_copy(consoleString + " ", 1, cursorPos - 1));
 		if (insertMode) {
 			if (delayFrames > 1 || current_time % 1000 < 600) {
-				draw_line_width(cursorPosX, yOffset, cursorPosX, yOffset + lineHeight, 1);
+				draw_line_width(cursorPosX, yOffset, cursorPosX, yOffset + emHeight, 1);
 			} else if (keyboard_check(vk_anykey)) {
-				draw_line_width(cursorPosX, yOffset, cursorPosX, yOffset + lineHeight, 1);
+				draw_line_width(cursorPosX, yOffset, cursorPosX, yOffset + emHeight, 1);
 			}
 		} else {
-			draw_line_width(cursorPosX + (lineWidth / 2) - 1, yOffset, cursorPosX + (lineWidth / 2) - 1, yOffset + lineHeight, lineWidth);
+			draw_line_width(cursorPosX + (emWidth / 2) - 1, yOffset, cursorPosX + (emWidth / 2) - 1, yOffset + emHeight, emWidth);
 			draw_set_color(promptColor);
 			draw_text(cursorPosX, yOffset, string_copy(consoleString, cursorPos, 1));
 		}
@@ -150,9 +150,9 @@ if (isOpen) {
 				
 				var suggestionOffsetX = string_width(string_copy(consoleString, 1, string_last_pos(" ", consoleString)));
 				var x1 = shellOriginX + promptXOffset - consolePadding + suggestionOffsetX;
-				var y1 = (screenAnchorPointV == "bottom") ? shellOriginY + height - (lineHeight * 1.5) - (suggestionsAmount * lineHeight) : shellOriginY + height;
+				var y1 = (screenAnchorPointV == "bottom") ? shellOriginY + height - (emHeight * 1.5) - (suggestionsAmount * emHeight) : shellOriginY + height;
 				var x2 = x1 + autocompleteMaxWidth + font_get_size(consoleFont);
-				var y2 = (screenAnchorPointV == "bottom") ? shellOriginY + height - (lineHeight * 1.5) : y1 + (suggestionsAmount * lineHeight);
+				var y2 = (screenAnchorPointV == "bottom") ? shellOriginY + height - (emHeight * 1.5) : y1 + (suggestionsAmount * emHeight);
 				
 				autocompleteOriginX = x1;
 				autocompleteOriginY = y1;
@@ -181,7 +181,7 @@ if (isOpen) {
 				for (var i = 0; i < array_length(filteredSuggestions); i++) {
 					if (i < suggestionsAmount) {
 						// Enable mouse detection
-						if (point_in_rectangle(device_mouse_x_to_gui(0) - 1, device_mouse_y_to_gui(0) - 1, x1, y1 + (i * lineHeight), x2, y1 + (i * lineHeight) + lineHeight - 1)) {
+						if (point_in_rectangle(device_mouse_x_to_gui(0) - 1, device_mouse_y_to_gui(0) - 1, x1, y1 + (i * emHeight), x2, y1 + (i * emHeight) + emHeight - 1)) {
 							if (device_mouse_x_to_gui(0) != mousePreviousX || device_mouse_y_to_gui(0) != mousePreviousY) {
 								suggestionIndex = i + autocompleteScrollPosition;
 								mousePreviousX = device_mouse_x_to_gui(0);
@@ -204,7 +204,7 @@ if (isOpen) {
 							draw_set_color(fontColorSecondary);
 						}
 						
-						draw_text(x1 + consolePadding, y1 + (i * lineHeight), filteredSuggestions[i + autocompleteScrollPosition]);
+						draw_text(x1 + consolePadding, y1 + (i * emHeight), filteredSuggestions[i + autocompleteScrollPosition]);
 					}
 				}
 			}
