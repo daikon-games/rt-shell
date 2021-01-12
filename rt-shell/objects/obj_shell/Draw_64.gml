@@ -2,6 +2,7 @@ if (isOpen) {
 	draw_set_font(consoleFont);
 	// pre-calculate one "em" of height
 	var lineHeight = string_height("M");
+	var lineWidth = string_width("M");
 	
 	if (!surface_exists(shellSurface)) {
 		shellSurface = surface_create(display_get_gui_width(), display_get_gui_height());
@@ -62,11 +63,18 @@ if (isOpen) {
 		draw_set_color(fontColor);
 		draw_text(shellOriginX + promptXOffset, yOffset, consoleString);
 		
-		// Draw a flashing text prompt
-		if (delayFrames > 1 || current_time % 1000 < 600) {
-			draw_text(shellOriginX + promptXOffset + string_width(string_copy(consoleString + " ", 1, cursorPos - 1)) - 3, yOffset, "|");
-		} else if (keyboard_check(vk_anykey)) {
-			draw_text(shellOriginX + promptXOffset + string_width(string_copy(consoleString + " ", 1, cursorPos - 1)) - 3, yOffset, "|");
+		// Draw text cursor
+		var cursorPosX = shellOriginX + promptXOffset + string_width(string_copy(consoleString + " ", 1, cursorPos - 1));
+		if (insertMode) {
+			if (delayFrames > 1 || current_time % 1000 < 600) {
+				draw_line_width(cursorPosX, yOffset, cursorPosX, yOffset + lineHeight, 1);
+			} else if (keyboard_check(vk_anykey)) {
+				draw_line_width(cursorPosX, yOffset, cursorPosX, yOffset + lineHeight, 1);
+			}
+		} else {
+			draw_line_width(cursorPosX + (lineWidth / 2) - 1, yOffset, cursorPosX + (lineWidth / 2) - 1, yOffset + lineHeight, lineWidth);
+			draw_set_color(promptColor);
+			draw_text(cursorPosX, yOffset, string_copy(consoleString, cursorPos, 1));
 		}
 		
 		// Draw current suggestion & argument hints
