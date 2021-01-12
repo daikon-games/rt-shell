@@ -13,32 +13,35 @@ if (isOpen) {
 	
 	var promptXOffset = consolePadding + string_width(prompt) + anchorMargin;
 	
-	var outputHeight = 0;
+	outputHeight = 0;
 	for (var i = 0; i < array_length(output); i++) {
 		outputHeight += string_height_ext(output[i], -1, visibleWidth - promptXOffset);
 	}
-	var scrollSurfaceHeight = max(outputHeight + emHeight, visibleHeight);
 	if (!surface_exists(scrollSurface)) {
-		scrollSurface = surface_create(display_get_gui_width(), scrollSurfaceHeight);
-	} else {
-		surface_resize(scrollSurface, display_get_gui_width(), scrollSurfaceHeight);
-		// Updating this here removes jitter as the scroll bar draws one frame in the old position
-		// and then jumps to the bottom. This fixes that
-		if (commandSubmitted) {
-			maxScrollPosition = max(0, surface_get_height(scrollSurface) - visibleHeight);
-			scrollPosition = maxScrollPosition;
-			commandSubmitted = false;
-		}
+		scrollSurface = surface_create(display_get_gui_width(), visibleHeight);
+	} else if (surface_get_width(scrollSurface) != display_get_gui_width() || 
+			   surface_get_height(scrollSurface) != visibleHeight) {
+		surface_resize(scrollSurface, display_get_gui_width(), visibleHeight);
+	}
+	
+	// Updating this here removes jitter as the scroll bar draws one frame in the old position
+	// and then jumps to the bottom. This fixes that
+	if (commandSubmitted) {
+		maxScrollPosition = max(0, outputHeight - visibleHeight);
+		scrollPosition = maxScrollPosition;
+		commandSubmitted = false;
 	}
 	
 	surface_set_target(scrollSurface);
 		draw_clear_alpha(c_black, 0.0);
-		var yOffset = 0;
+		var yOffset = -scrollPosition;
 		
 		// Add some blank space if our output is too short so things appear to come from 
 		// the bottom of the panel
 		if (outputHeight < visibleHeight - emHeight) {
 			yOffset += visibleHeight - outputHeight - emHeight;
+		} else {
+			yOffset -= emHeight;
 		}
 		
 		// Draw output history
@@ -119,10 +122,10 @@ if (isOpen) {
 		draw_roundrect_ext(shellOriginX, shellOriginY, shellOriginX + width, shellOriginY + height, cornerRadius, cornerRadius, false);
 		
 		// Draw the scroll surface
-		draw_surface_part(scrollSurface, 0, scrollPosition, display_get_gui_width(), visibleHeight, 0, shellOriginY + consolePadding);
+		draw_surface(scrollSurface, 0, shellOriginY + consolePadding);
 		
 		// Draw scrollbar
-		if (surface_get_height(scrollSurface) > height - (2 * consolePadding) && surface_get_height(scrollSurface) > visibleHeight) {
+		if (outputHeight > visibleHeight) {
 			var x1 = shellOriginX + width - anchorMargin - scrollbarWidth;
 			var y1 = shellOriginY + anchorMargin;
 			var x2 = x1 + scrollbarWidth;
@@ -131,8 +134,8 @@ if (isOpen) {
 			draw_set_color(fontColorSecondary);
 			draw_rectangle(x1, y1, x2, y2, false);
 			
-			var scrollbarHeight = (visibleHeight / surface_get_height(scrollSurface)) * visibleHeight;
-			var scrollbarProgress = scrollPosition / (surface_get_height(scrollSurface) - visibleHeight);
+			var scrollbarHeight = (visibleHeight / outputHeight) * visibleHeight;
+			var scrollbarProgress = scrollPosition / (outputHeight - visibleHeight);
 			var scrollbarPosition = (visibleHeight - scrollbarHeight) * scrollbarProgress;
 			
 			y1 = y1 + scrollbarPosition;

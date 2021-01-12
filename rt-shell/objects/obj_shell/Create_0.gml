@@ -19,6 +19,7 @@ insertMode = true;
 historyPos = 0;
 history = [];
 output = [];
+outputHeight = 0;
 
 filteredSuggestions = [];
 inputArray = [];
@@ -220,9 +221,17 @@ function shell_properties_hash() {
 function recalculate_shell_properties() {
 	var screenCenterX = display_get_gui_width() / 2;
 	var screenCenterY = display_get_gui_height() / 2;
+	draw_set_font(consoleFont);
+	var lineHeight = string_height("M");
+	
+	// Clamp size of shell to available screen dimensions
+	var maxWidth = display_get_gui_width() - (anchorMargin * 2);
+	var maxHeight = display_get_gui_height() - (anchorMargin * 2);
+	width = clamp(width, 50, maxWidth);
+	height = clamp(height, lineHeight + (2 * consolePadding), maxHeight);
+	
 	var halfWidth = width / 2;
 	var halfHeight = height / 2;
-	
 	switch (screenAnchorPointH) {
 		case "left":
 			shellOriginX = anchorMargin - 1;
@@ -246,10 +255,6 @@ function recalculate_shell_properties() {
 			shellOriginY = display_get_gui_height() - height - anchorMargin - 1;
 			break;
 	}
-	
-	// Resize width if larger than gui
-	if (width > display_get_gui_width()) { width = display_get_gui_width() - anchorMargin * 2; }
-	if (height > display_get_gui_height()) { height = display_get_gui_height() - anchorMargin * 2; }
 	
 	// Calculate the width of the visible text area, taking into account all margins
 	visibleWidth = width - (2 * anchorMargin) - scrollbarWidth - (2 * consolePadding);
