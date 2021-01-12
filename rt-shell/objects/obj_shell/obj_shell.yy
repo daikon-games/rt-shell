@@ -27,7 +27,7 @@
   "properties": [
     {"varType":4,"value":"500","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"width","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":4,"value":"96","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"height","tags":[],"resourceType":"GMObjectProperty",},
-    {"varType":6,"value":"\"bottom\"","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[
+    {"varType":6,"value":"\"top\"","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[
         "\"top\"",
         "\"middle\"",
         "\"bottom\"",
@@ -38,7 +38,8 @@
         "\"right\"",
       ],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"screenAnchorPointH","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":0,"value":"4","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"anchorMargin","tags":[],"resourceType":"GMObjectProperty",},
-    {"varType":0,"value":"6","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"consolePadding","tags":[],"resourceType":"GMObjectProperty",},
+    {"varType":0,"value":"4","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"consolePaddingV","tags":[],"resourceType":"GMObjectProperty",},
+    {"varType":0,"value":"6","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"consolePaddingH","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":2,"value":"$","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"prompt","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":4,"value":"make_color_rgb(237, 0, 54)","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"promptColor","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":4,"value":"c_black","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"consoleColor","tags":[],"resourceType":"GMObjectProperty",},
@@ -49,6 +50,7 @@
     {"varType":0,"value":"12","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"cornerRadius","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":1,"value":"5","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"scrollbarWidth","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":4,"value":"c_black","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"autocompleteBackgroundColor","tags":[],"resourceType":"GMObjectProperty",},
+    {"varType":0,"value":"2","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"autocompletePadding","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":4,"value":"ord(\"C\")","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"openKey","tags":[],"resourceType":"GMObjectProperty",},
     {"varType":6,"value":"vk_control, vk_shift","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[
         "vk_control",

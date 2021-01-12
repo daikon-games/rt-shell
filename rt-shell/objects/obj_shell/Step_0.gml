@@ -6,11 +6,6 @@ if (!isOpen) {
 	var prevConsoleString = consoleString;
 	maxScrollPosition = max(0, outputHeight - visibleHeight);
 	
-	// Recalculate shell properties if certain variables have changed
-	if (shell_properties_hash() != shellPropertiesHash) {
-		recalculate_shell_properties();
-	}
-	
 	if (keyboard_check_pressed(vk_escape)) {
 		if (isAutocompleteOpen) {
 			self.close_autocomplete();
@@ -138,8 +133,8 @@ if (!isOpen) {
 	if (isAutocompleteOpen) {
 		var x1 = autocompleteOriginX;
 		var y1 = autocompleteOriginY;
-		var x2 = x1 + autocompleteMaxWidth + font_get_size(consoleFont);
-		var y2 = y1 + (string_height(prompt) * min(array_length(filteredSuggestions), autocompleteMaxLines));
+		var x2 = x1 + autocompleteMaxWidth + font_get_size(consoleFont) + (autocompletePadding * 2) - scrollbarWidth;
+		var y2 = y1 + (string_height(prompt) * min(array_length(filteredSuggestions), autocompleteMaxLines)) + autocompletePadding;
 		if (point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), x1, y1, x2, y2)) {
 			if (mouse_wheel_down()) {
 				autocompleteScrollPosition++;
@@ -174,5 +169,10 @@ if (!isOpen) {
 		// autocomplete suggestions
 		self.updateFilteredSuggestions();
 		autocompleteScrollPosition = 0;
+	}
+	
+	// Recalculate shell properties if certain variables have changed
+	if (shell_properties_hash() != shellPropertiesHash) {
+		recalculate_shell_properties();
 	}
 }
