@@ -27,12 +27,10 @@ if (isOpen) {
 	// Updating this here removes jitter as the scroll bar draws one frame in the old position
 	// and then jumps to the bottom. This fixes that
 	if (commandSubmitted) {
-		maxScrollPosition = max(0, outputHeight - visibleHeight);
+		maxScrollPosition = max(0, outputHeight - visibleHeight + emHeight);
 		scrollPosition = maxScrollPosition;
 		commandSubmitted = false;
 	}
-	
-	
 	
 	surface_set_target(scrollSurface);
 		draw_clear_alpha(c_black, 0.0);
@@ -42,9 +40,8 @@ if (isOpen) {
 		// the bottom of the panel
 		if (outputHeight < visibleHeight - emHeight) {
 			yOffset += visibleHeight - outputHeight - emHeight;
-		} else {
-			yOffset -= emHeight;
 		}
+		
 		
 		// Draw output history
 		for (var i = 0; i < array_length(output); i++) {
@@ -127,7 +124,7 @@ if (isOpen) {
 		draw_surface(scrollSurface, 0, shellOriginY + 1 + consolePaddingV);
 		
 		// Draw scrollbar
-		if (outputHeight > visibleHeight) {
+		if (outputHeight > visibleHeight - emHeight) {
 			var x1 = shellOriginX + width - consolePaddingH - scrollbarWidth;
 			var y1 = shellOriginY + consolePaddingV + 1;
 			var x2 = x1 + scrollbarWidth;
@@ -138,8 +135,8 @@ if (isOpen) {
 			
 			var containerHeight = y2 - y1;
 			
-			var scrollProgress = scrollPosition / (outputHeight - visibleHeight);
-			var scrollbarHeight = (visibleHeight / outputHeight) * containerHeight;
+			var scrollProgress = scrollPosition / (outputHeight - visibleHeight + emHeight);
+			var scrollbarHeight = (visibleHeight / (outputHeight + emHeight)) * containerHeight;
 			var scrollbarPosition = (containerHeight - scrollbarHeight) * scrollProgress;
 			
 			y1 = y1 + scrollbarPosition;
