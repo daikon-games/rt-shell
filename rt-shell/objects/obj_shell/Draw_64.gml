@@ -28,7 +28,8 @@ if (isOpen) {
 	// and then jumps to the bottom. This fixes that
 	if (commandSubmitted) {
 		maxScrollPosition = max(0, outputHeight - visibleHeight + emHeight);
-		scrollPosition = maxScrollPosition;
+		if (scrollSmoothness == 0) { scrollPosition = maxScrollPosition; }
+		targetScrollPosition = maxScrollPosition;
 		commandSubmitted = false;
 	}
 	

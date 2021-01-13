@@ -4,7 +4,6 @@ if (!isOpen) {
 	}
 } else {
 	var prevConsoleString = consoleString;
-	//maxScrollPosition = max(0, outputHeight - visibleHeight);
 	
 	if (keyboard_check_pressed(vk_escape)) {
 		if (isAutocompleteOpen) {
@@ -15,20 +14,20 @@ if (!isOpen) {
 	} else if (self.keyboardCheckDelay(vk_backspace)) {
 		consoleString = string_delete(consoleString, cursorPos - 1, 1);
 		cursorPos = max(1, cursorPos - 1);
-		scrollPosition = maxScrollPosition;
+		targetScrollPosition = maxScrollPosition;
 	} else if (self.keyboardCheckDelay(vk_delete)) {
 		consoleString = string_delete(consoleString, cursorPos, 1);
-		scrollPosition = maxScrollPosition;
+		targetScrollPosition = maxScrollPosition;
 	} else if (keyboard_string != "") {
 		var t = keyboard_string;
 		if (!insertMode) { consoleString = string_delete(consoleString, cursorPos, string_length(t)); }
 		consoleString = string_insert(t, consoleString, cursorPos);
 		cursorPos += string_length(t);
 		keyboard_string = "";
-		scrollPosition = maxScrollPosition;
+		targetScrollPosition = maxScrollPosition;
 	} else if (self.keyboardCheckDelay(vk_left)) { 
 		cursorPos = max(1, cursorPos - 1);
-		scrollPosition = maxScrollPosition;
+		targetScrollPosition = maxScrollPosition;
 	} else if (self.keyboardCheckDelay(vk_right)) {
 		if (cursorPos == string_length(consoleString) + 1 &&
 			array_length(filteredSuggestions) != 0) {
@@ -37,7 +36,7 @@ if (!isOpen) {
 		} else {
 			cursorPos = min(string_length(consoleString) + 1, cursorPos + 1);
 		}
-		scrollPosition = maxScrollPosition;
+		targetScrollPosition = maxScrollPosition;
 	} else if (self.keyComboPressed(historyUpModifiers, historyUpKey)) {
 		if (historyPos == array_length(history)) {
 			savedConsoleString = consoleString;
@@ -47,7 +46,7 @@ if (!isOpen) {
 			consoleString = array_get(history, historyPos);
 			cursorPos = string_length(consoleString) + 1;
 		}
-		scrollPosition = maxScrollPosition;
+		targetScrollPosition = maxScrollPosition;
 	} else if (self.keyComboPressed(historyDownModifiers, historyDownKey)) {
 		if (historyPos < array_length(history)) {
 			historyPos = min(array_length(history), historyPos + 1);
@@ -58,7 +57,7 @@ if (!isOpen) {
 			}
 			cursorPos = string_length(consoleString) + 1;
 		}
-		scrollPosition = maxScrollPosition;
+		targetScrollPosition = maxScrollPosition;
 	} else if (keyboard_check_pressed(vk_enter)) {
 		if (isAutocompleteOpen) {
 			self.confirmCurrentSuggestion();
@@ -146,23 +145,30 @@ if (!isOpen) {
 			}
 		} else if (point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), shellOriginX, shellOriginY, shellOriginX + width, shellOriginY + height)) {
 			if (mouse_wheel_down()) {
-				scrollPosition += scrollSpeed;
+				targetScrollPosition = targetScrollPosition + scrollSpeed;
 			}
 			if (mouse_wheel_up()) {
-				scrollPosition -= scrollSpeed;
+				targetScrollPosition = targetScrollPosition - scrollSpeed;
 			}
 		}
 	} else {
 		if (point_in_rectangle(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0), shellOriginX, shellOriginY, shellOriginX + width, shellOriginY + height)) {
 			if (mouse_wheel_down()) {
-				scrollPosition += scrollSpeed;
+				targetScrollPosition = targetScrollPosition + scrollSpeed;
 			}
 			if (mouse_wheel_up()) {
-				scrollPosition -= scrollSpeed;
+				targetScrollPosition = targetScrollPosition - scrollSpeed;
 			}
 		}
 	}
-	scrollPosition = clamp(scrollPosition, 0, maxScrollPosition);
+	
+	// Updating scrolling
+	var lerpValue = (scrollSmoothness == 0) ? 1 : remap(scrollSmoothness, 1, 0, 0.08, 0.4);
+	scrollPosition = lerp(scrollPosition, targetScrollPosition, lerpValue);
+	scrollPosition = clamp(scrollPosition, 0, maxScrollPosition)
+	if (scrollPosition == 0 || scrollPosition == maxScrollPosition) {
+		targetScrollPosition = clamp(targetScrollPosition, 0, maxScrollPosition);
+	}
 	
 	if (consoleString != prevConsoleString) {
 		// If the text at the prompt has changed, update the list of possible
