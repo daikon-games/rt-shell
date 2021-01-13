@@ -74,7 +74,8 @@ variable_global_set("sh_clear", function(args) {
 		return "";
 	} else {
 		array_push(output, ">" + consoleString);
-		var _newLinesCount = floor(height / string_height(prompt)) - 1;
+		draw_set_font(consoleFont);
+		var _newLinesCount = floor(visibleHeight / string_height(prompt));
 		repeat(_newLinesCount) {
 			array_push(output, "\n");
 		}

@@ -146,6 +146,7 @@ You can see examples of various ways to customize the shell's appearance on the 
 | `keyRepeatInitialDelay` | The amount of time in frames to wait after pressing and holding a key before it begins to repeat. | 25 |
 | `keyRepeatDelay` | The amount of time in frames to wait between each repeat of a held key. | 4 |
 | `scrollSpeed` | The number of pixels at a time to scroll the console when moving the mouse wheel. | 16 |
+| `scrollSmoothness` | How smooth you want the scrolling to be when moving the mouse wheel. A number between 0 - 1. | 0.5 |
 
 ## Licensing
 

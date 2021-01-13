@@ -13,6 +13,7 @@ consoleString = "";
 savedConsoleString = "";
 scrollPosition = 0;
 maxScrollPosition = 0;
+targetScrollPosition = 0;
 commandSubmitted = false; // Need to update scroll position one frame after a command is submitted
 insertMode = true;
 
@@ -321,4 +322,14 @@ function array_contains(array, element) {
 		}
 	}
 	return false;
+}
+
+/// @param value
+/// @param min_input
+/// @param max_input
+/// @param min_output
+/// @param max_output
+function remap(value, min_input, max_input, min_output, max_output) {
+	var _t = (value - min_input) / (max_input - min_input);
+	return lerp(min_output, max_output, _t);
 }
