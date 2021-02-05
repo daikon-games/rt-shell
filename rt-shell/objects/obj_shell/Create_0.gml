@@ -34,6 +34,13 @@ mousePreviousY = device_mouse_y_to_gui(0);
 
 shellPropertiesHash = "";
 
+// for the bash-style "kill" copy/paste
+killedString = "";
+// whether we just performed a meta-action, as the keyboard_check_pressed for that key will still register on the next frame...
+metaDeleted = false;
+metaMovedLeft = false;
+metaMovedRight = false;
+
 // Initialize native shell scripts
 event_user(0);
 

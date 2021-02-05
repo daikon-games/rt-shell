@@ -7,6 +7,7 @@ rt-shell, or **r**un-**t**ime **shell** an easy-to-use, customizable, and extens
 * [Setup](#setup)
 * [Writing Your Own Shell Commands](#writing-your-own-shell-commands)
 * [Adding Command Metadata](#adding-command-metadata)
+* [Keyboard Shortcuts](#keyboard-shortcuts)
 * [Configuring rt-shell](#configuring-rt-shell)
 * [Licensing](#licensing)
 * [Attribution](#attribution)
@@ -18,7 +19,6 @@ Integrating rt-shell into your project is simple: just [download the latest rele
 Alternatively you can install rt-shell from the [Game Maker Marketplace](https://marketplace.yoyogames.com/assets/9485/rt-shell).
 
 The `obj_shell` object is a persistent object, so you only need to include or create it once, though it is smart enough to automatically handle excess instances. The default way to open the shell is `Ctrl + Shift + C`, and it can be closed by pressing `Esc`.
-
 
 ## Writing Your Own Shell Commands
 
@@ -99,6 +99,20 @@ Some things to keep in mind:
 3. If suggestions aren't needed for an argument (like for `x` or `y` above), just input a blank array `[]`
 4. `description` and `argumentDescriptions` are optional, they're only used for the `help` output
 
+## Keyboard Shortcuts
+
+In the shell, there are a number of useful keyboard shortcuts. These are all triggered using the Meta-key which by default is Control, but can be altered (see [Configuring rt-shell](#configuring-rt-shell))
+
+| Key Combo | Action |
+|-----------|--------|
+| Meta-key + A | Move cursor to the start of the line |
+| Meta-key + E | Move cursor to the end of the line |
+| Meta-key + Left Arrow | Move cursor left one word (separated by spaces) |
+| Meta-key + Right Arrow | Move cursor right one word (separated by spaces) |
+| Meta-key + Backspace | Delete from the cursor backwards to the preceding space |
+| Meta-key + K | Delete forward from the cursor to the end of the line, and store the deleted text on a clipboard (this is equivalent to GNU-style "kill", but our clipboard only stores one thing rather than a ring) |
+| Meta-key + Y | Insert previously "killed" text at the cursor position (this is equivalent to GNU-style "yank", but our clipboard only stores one thing rather than a ring ) |
+
 ## Configuring rt-shell
 
 The following variables on the `obj_shell` object can be configured. They are defined on the object's `Variable Definitions` panel in the IDE. It is recommended that you instantiate `obj_shell` programatically and then set these parameters on the created instance via code. This way you can upgrade to a newer version of rt-shell without having to re-configure your shell object!
@@ -143,6 +157,7 @@ You can see examples of various ways to customize the shell's appearance on the 
 | `historyUpModifiers` | A multi-select of special keys for use with `historyUpKey`. All the selected keys must be pressed in combination with `historyUpKey` to cycle the history up. | `None` |
 | `historyDownKey` | The key for cycling down through the command history. In the form of an expression. | `vk_down` |
 | `historyDownModifiers` | A multi-select of special keys for use with `historyUpKey`. All the selected keys must be pressed in combination with `historyUpKey` to cycle the history down. | `None` |
+| `metaKey` | Used to perform [keyboard shortcuts](#keyboard-shortcuts) | `vk_control` |
 | `keyRepeatInitialDelay` | The amount of time in frames to wait after pressing and holding a key before it begins to repeat. | 25 |
 | `keyRepeatDelay` | The amount of time in frames to wait between each repeat of a held key. | 4 |
 | `scrollSpeed` | The number of pixels at a time to scroll the console when moving the mouse wheel. | 16 |

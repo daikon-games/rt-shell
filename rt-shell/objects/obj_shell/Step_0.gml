@@ -5,41 +5,111 @@ if (!isOpen) {
 } else {
 	var prevConsoleString = consoleString;
 	
+	if (metaDeleted && keyboard_check_released(vk_backspace)) {
+		metaDeleted = false;
+	}
+	if (metaMovedLeft && keyboard_check_released(vk_left)) {
+		metaMovedLeft = false;
+	}
+	if (metaMovedRight && keyboard_check_released(vk_right)) {
+		metaMovedRight = false;
+	}
+	
 	if (keyboard_check_pressed(vk_escape)) {
 		if (isAutocompleteOpen) {
 			self.close_autocomplete();
 		} else {
 			self.close()
 		}
-	} else if (self.keyboardCheckDelay(vk_backspace)) {
-		consoleString = string_delete(consoleString, cursorPos - 1, 1);
-		cursorPos = max(1, cursorPos - 1);
+	} else if (self.keyComboPressed([metaKey], ord("A"))) {
+		// bash-style jump to beginning of line
+		cursorPos = 1;
 		targetScrollPosition = maxScrollPosition;
+	} else if (self.keyComboPressed([metaKey], ord("E"))) {
+		// bash-style jump to end of line
+		cursorPos = string_length(consoleString) + 1;
+		targetScrollPosition = maxScrollPosition;
+	} else if (self.keyComboPressed([metaKey], ord("K"))) {
+		// bash-style "kill" (aka delete all characters following cursor)
+		var leftSide = string_copy(consoleString, 0, cursorPos - 1);
+		var rightSide = string_copy(consoleString, cursorPos, string_length(consoleString) - cursorPos + 1);
+		killedString = rightSide;
+		consoleString = leftSide;
+		cursorPos = string_length(consoleString) + 1;
+		targetScrollPosition = maxScrollPosition;
+	} else if (self.keyComboPressed([metaKey], ord("Y"))) {
+		// bash-style "yank" (aka append the "killed" string at the prompt)
+		consoleString += killedString;
+		killedString = "";
+		cursorPos = string_length(consoleString) + 1;
+		targetScrollPosition = maxScrollPosition;
+	} else if (self.keyComboPressed([metaKey], vk_backspace) || (metaKey == vk_control && ord(keyboard_string) == 127)) {
+		// delete characters from the cursor position to the preceding space or start of the line
+		var precedingSpaceIndex = 1;
+		for (var i = cursorPos; i > 1; i--) {
+			if (string_char_at(consoleString, i) == " ") {
+				precedingSpaceIndex = i;
+				break;
+			}
+		}
+		consoleString = string_delete(consoleString, precedingSpaceIndex, cursorPos - precedingSpaceIndex);
+		cursorPos = precedingSpaceIndex;
+		targetScrollPosition = maxScrollPosition;
+		keyboard_string = "";
+		metaDeleted = true;
+	} else if (self.keyComboPressed([metaKey], vk_left)) {
+		// jump left to the preceding word
+		var precedingSpaceIndex = 1;
+		// don't want to check for space at or before the cursor position, so start 2 back
+		for (var i = cursorPos - 2; i > 1; i--) {
+			if (string_char_at(consoleString, i) == " ") {
+				precedingSpaceIndex = i;
+				break;
+			}
+		}
+		cursorPos = precedingSpaceIndex;
+		targetScrollPosition = maxScrollPosition;
+		metaMovedLeft = true;
+	} else if (self.keyComboPressed([metaKey], vk_right)) {
+		var nextSpaceIndex = string_length(consoleString) + 1;
+		// jump right to the following word
+		for (var i = cursorPos + 2; i <= string_length(consoleString) + 1; i++) {
+			if (string_char_at(consoleString, i) == " ") {
+				nextSpaceIndex = i;
+				break;
+			}
+		}
+		cursorPos = nextSpaceIndex;
+		targetScrollPosition = maxScrollPosition;
+		metaMovedRight = true;
+	} else if (self.keyboardCheckDelay(vk_backspace)) {
+		if (!metaDeleted) {
+			consoleString = string_delete(consoleString, cursorPos - 1, 1);
+			cursorPos = max(1, cursorPos - 1);
+			targetScrollPosition = maxScrollPosition;
+		}
 	} else if (self.keyboardCheckDelay(vk_delete)) {
 		consoleString = string_delete(consoleString, cursorPos, 1);
 		targetScrollPosition = maxScrollPosition;
-	} else if (keyboard_string != "") {
-		var t = keyboard_string;
-		if (!insertMode) { consoleString = string_delete(consoleString, cursorPos, string_length(t)); }
-		consoleString = string_insert(t, consoleString, cursorPos);
-		cursorPos += string_length(t);
-		keyboard_string = "";
-		targetScrollPosition = maxScrollPosition;
 	} else if (self.keyboardCheckDelay(vk_left)) { 
-		cursorPos = max(1, cursorPos - 1);
-		targetScrollPosition = maxScrollPosition;
-	} else if (self.keyboardCheckDelay(vk_right)) {
-		if (cursorPos == string_length(consoleString) + 1 &&
-			array_length(filteredSuggestions) != 0) {
-			var suggestion = filteredSuggestions[suggestionIndex];
-			var consoleWords = string_split(consoleString, " ");
-			var currentWordLength = string_length(consoleWords[array_length(consoleWords) - 1]);
-			consoleString += string_copy(suggestion, currentWordLength + 1, string_length(suggestion) - currentWordLength);
-			cursorPos = string_length(consoleString) + 1;
-		} else {
-			cursorPos = min(string_length(consoleString) + 1, cursorPos + 1);
+		if (!metaMovedLeft) {
+			cursorPos = max(1, cursorPos - 1);
+			targetScrollPosition = maxScrollPosition;
 		}
-		targetScrollPosition = maxScrollPosition;
+	} else if (self.keyboardCheckDelay(vk_right)) {
+		if (!metaMovedRight) {
+			if (cursorPos == string_length(consoleString) + 1 &&
+				array_length(filteredSuggestions) != 0) {
+				var suggestion = filteredSuggestions[suggestionIndex];
+				var consoleWords = string_split(consoleString, " ");
+				var currentWordLength = string_length(consoleWords[array_length(consoleWords) - 1]);
+				consoleString += string_copy(suggestion, currentWordLength + 1, string_length(suggestion) - currentWordLength);
+				cursorPos = string_length(consoleString) + 1;
+			} else {
+				cursorPos = min(string_length(consoleString) + 1, cursorPos + 1);
+			}
+			targetScrollPosition = maxScrollPosition;
+		}
 	} else if (self.keyComboPressed(historyUpModifiers, historyUpKey)) {
 		if (historyPos == array_length(history)) {
 			savedConsoleString = consoleString;
@@ -129,6 +199,13 @@ if (!isOpen) {
 		}
 	} else if (keyboard_check_pressed(vk_insert)) {
 		insertMode = !insertMode;
+	} else if (keyboard_string != "") {
+		var t = keyboard_string;
+		if (!insertMode) { consoleString = string_delete(consoleString, cursorPos, string_length(t)); }
+		consoleString = string_insert(t, consoleString, cursorPos);
+		cursorPos += string_length(t);
+		keyboard_string = "";
+		targetScrollPosition = maxScrollPosition;
 	}
 	
 	// Handle scrolling
