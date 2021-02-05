@@ -46,7 +46,8 @@ if (!isOpen) {
 	} else if (self.keyComboPressed([metaKey], vk_backspace) || (metaKey == vk_control && ord(keyboard_string) == 127)) {
 		// delete characters from the cursor position to the preceding space or start of the line
 		var precedingSpaceIndex = 1;
-		for (var i = cursorPos; i > 1; i--) {
+		// don't want to check for space at or before the cursor position, so start 2 back
+		for (var i = cursorPos - 2; i > 1; i--) {
 			if (string_char_at(consoleString, i) == " ") {
 				precedingSpaceIndex = i;
 				break;
