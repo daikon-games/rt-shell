@@ -295,7 +295,7 @@ function string_split(input, delimiter) {
 	var str2 = ""; //var to hold the current split we're working on building
 
 	for (var i = 1; i < (string_length(input) + 1); i++) {
-	    var currStr = string_copy(input, i, 1);
+	    var currStr = string_char_at(input, i);
 	    if (currStr == delimiter) {
 			if (str2 != "") { // Make sure we don't include the delimiter
 		        splits[slot] = str2; //add this split to the array of all splits
@@ -306,6 +306,10 @@ function string_split(input, delimiter) {
 	        str2 = str2 + currStr;
 	        splits[slot] = str2;
 	    }
+	}
+	// If we ended on our delimiter character, include an empty string as the final split
+	if (str2 == "") {
+		splits[slot] = str2;
 	}
 
 	return splits;

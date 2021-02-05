@@ -31,7 +31,11 @@ if (!isOpen) {
 	} else if (self.keyboardCheckDelay(vk_right)) {
 		if (cursorPos == string_length(consoleString) + 1 &&
 			array_length(filteredSuggestions) != 0) {
-			consoleString = filteredSuggestions[suggestionIndex];
+			var suggestion = filteredSuggestions[suggestionIndex];
+			var consoleWords = string_split(consoleString, " ");
+			show_debug_message (consoleWords);
+			var currentWordLength = string_length(consoleWords[array_length(consoleWords) - 1]);
+			consoleString += string_copy(suggestion, currentWordLength + 1, string_length(suggestion) - currentWordLength);
 			cursorPos = string_length(consoleString) + 1;
 		} else {
 			cursorPos = min(string_length(consoleString) + 1, cursorPos + 1);
