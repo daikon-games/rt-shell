@@ -124,8 +124,7 @@ function updateFilteredSuggestions() {
 				var currentArgument = inputArray[array_length(inputArray) - 1];
 				for (var i = 0; i < array_length(argumentSuggestions); i++) {
 					var prefixMatch = string_pos(currentArgument, string_lower(argumentSuggestions[i])) == 1;
-					var notCompleteMatch = string_lower(currentArgument) != string_lower(argumentSuggestions[i]);
-					if (string_last_pos(" ", inputString) == string_length(inputString) || (prefixMatch && notCompleteMatch)) {
+					if (string_last_pos(" ", inputString) == string_length(inputString) || prefixMatch) {
 						array_push(filteredSuggestions, argumentSuggestions[i]);
 						autocompleteMaxWidth = max(autocompleteMaxWidth, string_width(argumentSuggestions[i]));
 					}
@@ -284,7 +283,7 @@ function confirmCurrentSuggestion() {
 	for (var i = 0; i < spaceCount; i++) {
 		consoleString += inputArray[i] + " ";
 	}
-	consoleString += filteredSuggestions[suggestionIndex];
+	consoleString += filteredSuggestions[suggestionIndex] + " ";
 	cursorPos = string_length(consoleString) + 1;
 }
 

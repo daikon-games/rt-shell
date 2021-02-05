@@ -33,7 +33,6 @@ if (!isOpen) {
 			array_length(filteredSuggestions) != 0) {
 			var suggestion = filteredSuggestions[suggestionIndex];
 			var consoleWords = string_split(consoleString, " ");
-			show_debug_message (consoleWords);
 			var currentWordLength = string_length(consoleWords[array_length(consoleWords) - 1]);
 			consoleString += string_copy(suggestion, currentWordLength + 1, string_length(suggestion) - currentWordLength);
 			cursorPos = string_length(consoleString) + 1;
