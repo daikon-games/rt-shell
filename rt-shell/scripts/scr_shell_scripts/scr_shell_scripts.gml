@@ -121,86 +121,119 @@ function sh_test_error_handling() {
 	return undefined.property;
 }
 
-function sh_theme_rtshell_dark() {
-	obj_shell.consoleAlpha = 0.9;
-	obj_shell.consoleColor = c_black;
-	obj_shell.fontColor = make_color_rgb(255, 242, 245);
-	obj_shell.fontColorSecondary = make_color_rgb(140, 118, 123);
-	obj_shell.cornerRadius = 12;
-	obj_shell.anchorMargin = 4;
-	obj_shell.consolePaddingH = 6;
-	obj_shell.consolePaddingV = 4;
-	obj_shell.autocompletePadding = 2;
-	obj_shell.promptColor = make_color_rgb(237, 0, 54);
-	obj_shell.prompt = "$";
+function sh_shell_apply_theme(args) {
+	var themeName = args[1];
+	for (var i = 0; i < array_length(global.rtShellThemes); i++) {
+		var theme = global.rtShellThemes[i];
+		if (theme.name == themeName) {
+			theme.apply();
+			break;
+		}
+	}
+}
+function meta_shell_apply_theme() {
+	var themeNames = array_create(array_length(rtShellThemes));
+	for (var i = 0; i < array_length(rtShellThemes); i++) {
+		var theme = rtShellThemes[i];
+		array_push(themeNames, theme.name);
+	}
+	return {
+		description: "applies a theme to the shell",
+		arguments: ["themeName"],
+		argumentDescriptions: [
+			"the name of a theme to apply"
+		],
+		suggestions: [
+			themeNames
+		]
+	}
 }
 
-function sh_theme_rtshell_light() {
-	obj_shell.consoleAlpha = 0.9;
-	obj_shell.consoleColor = make_color_rgb(235, 235, 235);
-	obj_shell.fontColor = make_color_rgb(40, 40, 45);
-	obj_shell.fontColorSecondary = make_color_rgb(120, 120, 128);
-	obj_shell.cornerRadius = 12;
-	obj_shell.anchorMargin = 4;
-	obj_shell.consolePaddingH = 6;
-	obj_shell.consolePaddingV = 4;
-	obj_shell.autocompletePadding = 2;
-	obj_shell.promptColor = make_color_rgb(29, 29, 196);
-	obj_shell.prompt = "$";
+RtShellTheme = function(_name, _applyFunction) constructor {
+	name = _name;
+	applyFunction = _applyFunction;
+	
+	function apply() {
+		applyFunction();
+	}
 }
 
-function sh_theme_ocean_blue() {
-	obj_shell.consoleAlpha = 1;
-	obj_shell.consoleColor = make_color_rgb(29, 31, 33);
-	obj_shell.fontColor = make_color_rgb(197, 200, 198);
-	obj_shell.fontColorSecondary = make_color_rgb(116, 127, 140);
-	obj_shell.cornerRadius = 0;
-	obj_shell.anchorMargin = 0;
-	obj_shell.consolePaddingH = 2;
-	obj_shell.consolePaddingV = 2;
-	obj_shell.autocompletePadding = 2;
-	obj_shell.promptColor = make_color_rgb(57, 113, 237);
-	obj_shell.prompt = "%";
-}
-
-function sh_theme_dracula() {
-	obj_shell.consoleAlpha = 1;
-	obj_shell.consoleColor = make_color_rgb(40, 42, 54);
-	obj_shell.fontColor = make_color_rgb(248, 248, 242);
-	obj_shell.fontColorSecondary = make_color_rgb(98, 114, 164);
-	obj_shell.cornerRadius = 8;
-	obj_shell.anchorMargin = 4;
-	obj_shell.consolePaddingH = 6;
-	obj_shell.consolePaddingV = 2;
-	obj_shell.autocompletePadding = 0;
-	obj_shell.promptColor = make_color_rgb(80, 250, 123);
-	obj_shell.prompt = "->";
-}
-
-function sh_theme_solarized_light() {
-	obj_shell.consoleAlpha = 1;
-	obj_shell.consoleColor = make_color_rgb(253, 246, 227);
-	obj_shell.fontColor = make_color_rgb(101, 123, 131);
-	obj_shell.fontColorSecondary = make_color_rgb(147, 161, 161);
-	obj_shell.cornerRadius = 2;
-	obj_shell.anchorMargin = 4;
-	obj_shell.consolePaddingH = 2;
-	obj_shell.consolePaddingV = 2;
-	obj_shell.autocompletePadding = 0;
-	obj_shell.promptColor = make_color_rgb(42, 161, 152);
-	obj_shell.prompt = "~";
-}
-
-function sh_theme_solarized_dark() {
-	obj_shell.consoleAlpha = 1;
-	obj_shell.consoleColor = make_color_rgb(0, 43, 54);
-	obj_shell.fontColor = make_color_rgb(131, 148, 150);
-	obj_shell.fontColorSecondary = make_color_rgb(88, 110, 117);
-	obj_shell.cornerRadius = 2;
-	obj_shell.anchorMargin = 4;
-	obj_shell.consolePaddingH = 2;
-	obj_shell.consolePaddingV = 2;
-	obj_shell.autocompletePadding = 0;
-	obj_shell.promptColor = make_color_rgb(42, 161, 152);
-	obj_shell.prompt = "~";
-}
+rtShellThemes = [];
+array_push(rtShellThemes, new RtShellTheme("rtshell", function() {
+		obj_shell.consoleAlpha = 0.9;
+		obj_shell.consoleColor = c_black;
+		obj_shell.fontColor = make_color_rgb(255, 242, 245);
+		obj_shell.fontColorSecondary = make_color_rgb(140, 118, 123);
+		obj_shell.cornerRadius = 12;
+		obj_shell.anchorMargin = 4;
+		obj_shell.consolePaddingH = 6;
+		obj_shell.consolePaddingV = 4;
+		obj_shell.autocompletePadding = 2;
+		obj_shell.promptColor = make_color_rgb(237, 0, 54);
+		obj_shell.prompt = "$";
+	}));
+array_push(rtShellThemes, new RtShellTheme("rtshell_light", function() {
+		obj_shell.consoleAlpha = 0.9;
+		obj_shell.consoleColor = make_color_rgb(235, 235, 235);
+		obj_shell.fontColor = make_color_rgb(40, 40, 45);
+		obj_shell.fontColorSecondary = make_color_rgb(120, 120, 128);
+		obj_shell.cornerRadius = 12;
+		obj_shell.anchorMargin = 4;
+		obj_shell.consolePaddingH = 6;
+		obj_shell.consolePaddingV = 4;
+		obj_shell.autocompletePadding = 2;
+		obj_shell.promptColor = make_color_rgb(29, 29, 196);
+		obj_shell.prompt = "$";
+	}));
+array_push(rtShellThemes, new RtShellTheme("ocean_blue", function() {
+		obj_shell.consoleAlpha = 1;
+		obj_shell.consoleColor = make_color_rgb(29, 31, 33);
+		obj_shell.fontColor = make_color_rgb(197, 200, 198);
+		obj_shell.fontColorSecondary = make_color_rgb(116, 127, 140);
+		obj_shell.cornerRadius = 0;
+		obj_shell.anchorMargin = 0;
+		obj_shell.consolePaddingH = 2;
+		obj_shell.consolePaddingV = 2;
+		obj_shell.autocompletePadding = 2;
+		obj_shell.promptColor = make_color_rgb(57, 113, 237);
+		obj_shell.prompt = "%";
+	}));
+array_push(rtShellThemes, new RtShellTheme("dracula", function() {
+		obj_shell.consoleAlpha = 1;
+		obj_shell.consoleColor = make_color_rgb(40, 42, 54);
+		obj_shell.fontColor = make_color_rgb(248, 248, 242);
+		obj_shell.fontColorSecondary = make_color_rgb(98, 114, 164);
+		obj_shell.cornerRadius = 8;
+		obj_shell.anchorMargin = 4;
+		obj_shell.consolePaddingH = 6;
+		obj_shell.consolePaddingV = 2;
+		obj_shell.autocompletePadding = 0;
+		obj_shell.promptColor = make_color_rgb(80, 250, 123);
+		obj_shell.prompt = "->";
+	}));
+array_push(rtShellThemes, new RtShellTheme("solarized_light", function() {
+		obj_shell.consoleAlpha = 1;
+		obj_shell.consoleColor = make_color_rgb(253, 246, 227);
+		obj_shell.fontColor = make_color_rgb(101, 123, 131);
+		obj_shell.fontColorSecondary = make_color_rgb(147, 161, 161);
+		obj_shell.cornerRadius = 2;
+		obj_shell.anchorMargin = 4;
+		obj_shell.consolePaddingH = 2;
+		obj_shell.consolePaddingV = 2;
+		obj_shell.autocompletePadding = 0;
+		obj_shell.promptColor = make_color_rgb(42, 161, 152);
+		obj_shell.prompt = "~";
+	}));
+array_push(rtShellThemes, new RtShellTheme("solarized_dark", function() {
+		obj_shell.consoleAlpha = 1;
+		obj_shell.consoleColor = make_color_rgb(0, 43, 54);
+		obj_shell.fontColor = make_color_rgb(131, 148, 150);
+		obj_shell.fontColorSecondary = make_color_rgb(88, 110, 117);
+		obj_shell.cornerRadius = 2;
+		obj_shell.anchorMargin = 4;
+		obj_shell.consolePaddingH = 2;
+		obj_shell.consolePaddingV = 2;
+		obj_shell.autocompletePadding = 0;
+		obj_shell.promptColor = make_color_rgb(42, 161, 152);
+		obj_shell.prompt = "~";
+	}));
