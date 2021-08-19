@@ -1,14 +1,14 @@
 #region cross-compatbility
 function __getKBString() { 
 	if SHELL_COMPATIBILITY_INPUT
-	&& script_exists(input_string_get) {
+	&& asset_get_index("input_string_get") {
 		return input_string_get();
 	}
 	return keyboard_string ;
 };
 function __setKBString(_str = "") { 
 	if SHELL_COMPATIBILITY_INPUT
-	&& script_exists(input_string_set) {
+	&& asset_get_index("input_string_set") {
 		input_string_set(_str);
 	}
 	keyboard_string = _str;
