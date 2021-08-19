@@ -1,3 +1,20 @@
+#region cross-compatbility
+function __getKBString() { 
+	if SHELL_COMPATIBILITY_INPUT
+	&& script_exists(input_string_get) {
+		return input_string_get();
+	}
+	return keyboard_string ;
+};
+function __setKBString(_str = "") { 
+	if SHELL_COMPATIBILITY_INPUT
+	&& script_exists(input_string_set) {
+		input_string_set(_str);
+	}
+	keyboard_string = _str;
+}
+#endregion
+
 isOpen = false;
 isAutocompleteOpen = false;
 
@@ -53,7 +70,7 @@ if (instance_number(object_index) > 1) {
 /// Opens the shell
 function open() {
 	isOpen = true;
-	keyboard_string = "";
+	__setKBString();
 	if (!is_undefined(openFunction)) {
 		openFunction();
 	}

@@ -3,6 +3,7 @@
     {"id":{"name":"obj_shell","path":"objects/obj_shell/obj_shell.yy",},"order":0,},
     {"id":{"name":"scr_shell_scripts","path":"scripts/scr_shell_scripts/scr_shell_scripts.yy",},"order":1,},
     {"id":{"name":"obj_open_message","path":"objects/obj_open_message/obj_open_message.yy",},"order":2,},
+    {"id":{"name":"__SHELL_CONFIGURE","path":"scripts/__SHELL_CONFIGURE/__SHELL_CONFIGURE.yy",},"order":2,},
     {"id":{"name":"font_demo","path":"fonts/font_demo/font_demo.yy",},"order":1,},
     {"id":{"name":"font_console","path":"fonts/font_console/font_console.yy",},"order":0,},
     {"id":{"name":"obj_test_room","path":"objects/obj_test_room/obj_test_room.yy",},"order":1,},
@@ -40,7 +41,7 @@
   ],
   "IncludedFiles": [],
   "MetaData": {
-    "IDEVersion": "2.3.1.542",
+    "IDEVersion": "2.3.3.574",
   },
   "resourceVersion": "1.4",
   "name": "rt-shell",

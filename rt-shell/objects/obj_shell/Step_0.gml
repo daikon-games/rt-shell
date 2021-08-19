@@ -43,7 +43,7 @@ if (!isOpen) {
 		killedString = "";
 		cursorPos = string_length(consoleString) + 1;
 		targetScrollPosition = maxScrollPosition;
-	} else if (self.keyComboPressed([metaKey], vk_backspace) || (metaKey == vk_control && ord(keyboard_string) == 127)) {
+	} else if (self.keyComboPressed([metaKey], vk_backspace) || (metaKey == vk_control && ord(__getKBString()) == 127)) {
 		// delete characters from the cursor position to the preceding space or start of the line
 		var precedingSpaceIndex = 1;
 		// don't want to check for space at or before the cursor position, so start 2 back
@@ -56,7 +56,7 @@ if (!isOpen) {
 		consoleString = string_delete(consoleString, precedingSpaceIndex, cursorPos - precedingSpaceIndex);
 		cursorPos = precedingSpaceIndex;
 		targetScrollPosition = maxScrollPosition;
-		keyboard_string = "";
+		__setKBString();
 		metaDeleted = true;
 	} else if (self.keyComboPressed([metaKey], vk_left)) {
 		// jump left to the preceding word
@@ -200,12 +200,12 @@ if (!isOpen) {
 		}
 	} else if (keyboard_check_pressed(vk_insert)) {
 		insertMode = !insertMode;
-	} else if (keyboard_string != "") {
-		var t = keyboard_string;
+	} else if (__getKBString() != "") {
+		var t = __getKBString();
 		if (!insertMode) { consoleString = string_delete(consoleString, cursorPos, string_length(t)); }
 		consoleString = string_insert(t, consoleString, cursorPos);
 		cursorPos += string_length(t);
-		keyboard_string = "";
+		__setKBString();
 		targetScrollPosition = maxScrollPosition;
 	}
 	
