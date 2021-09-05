@@ -1,0 +1,2 @@
+# Ignore .yy files for language statistics 
+*.yy linguist-generated=true
