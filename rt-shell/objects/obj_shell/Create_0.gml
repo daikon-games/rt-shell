@@ -127,7 +127,11 @@ function updateFilteredSuggestions() {
 		if (dataExists && noExtraSpace && spaceCount <= array_length(inputArray)) {
 			var suggestionData = functionData[$ inputArray[0]][$ "suggestions"];
 			if (argumentIndex < array_length(suggestionData)) {
-				var argumentSuggestions = suggestionData[argumentIndex];
+				if (is_array(suggestionData[argumentIndex])) {
+					var argumentSuggestions = suggestionData[argumentIndex];
+				} else {
+					var argumentSuggestions = suggestionData[argumentIndex]();
+				}
 				var currentArgument = inputArray[array_length(inputArray) - 1];
 				for (var i = 0; i < array_length(argumentSuggestions); i++) {
 					var prefixMatch = string_pos(currentArgument, string_lower(argumentSuggestions[i])) == 1;
