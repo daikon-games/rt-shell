@@ -132,7 +132,7 @@ function sh_shell_apply_theme(args) {
 	}
 }
 function meta_shell_apply_theme() {
-	var themeNames = array_create(array_length(rtShellThemes));
+	var themeNames = [];
 	for (var i = 0; i < array_length(rtShellThemes); i++) {
 		var theme = rtShellThemes[i];
 		array_push(themeNames, theme.name);

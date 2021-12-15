@@ -126,13 +126,14 @@ function updateFilteredSuggestions() {
 		var noExtraSpace = (string_char_at(inputString, string_last_pos(" ", inputString) - 1) != " ");
 		if (dataExists && noExtraSpace && spaceCount <= array_length(inputArray)) {
 			var suggestionData = functionData[$ inputArray[0]][$ "suggestions"];
+			var argumentSuggestions = [];
 			if (argumentIndex < array_length(suggestionData)) {
 				if (is_array(suggestionData[argumentIndex])) {
 					// Suggestion data is a static array
-					var argumentSuggestions = suggestionData[argumentIndex];
+					argumentSuggestions = suggestionData[argumentIndex];
 				} else if (is_method(suggestionData[argumentIndex])) {
 					// #18: Suggestion data is a dynamic function that returns an array
-					var argumentSuggestions = suggestionData[argumentIndex]();
+					argumentSuggestions = suggestionData[argumentIndex]();
 				}
 				var currentArgument = inputArray[array_length(inputArray) - 1];
 				for (var i = 0; i < array_length(argumentSuggestions); i++) {
