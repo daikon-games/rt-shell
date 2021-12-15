@@ -26,8 +26,9 @@ if (isOpen) {
 	
 	// Updating this here removes jitter as the scroll bar draws one frame in the old position
 	// and then jumps to the bottom. This fixes that
-	if (commandSubmitted) {
-		maxScrollPosition = max(0, outputHeight - visibleHeight + emHeight);
+	var newMaxScroll =  max(0, outputHeight - visibleHeight + emHeight);
+	if (maxScrollPosition != newMaxScroll) {
+		maxScrollPosition = newMaxScroll;
 		if (scrollSmoothness == 0) { scrollPosition = maxScrollPosition; }
 		targetScrollPosition = maxScrollPosition;
 		commandSubmitted = false;
