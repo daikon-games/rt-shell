@@ -71,14 +71,19 @@ function meta_create_balloon() {
 			[],
 			[],
 			["normal", "animal_dog", "animal_snake"],
-			["pink", "blue", "brown", "green"]
+			function() {
+				var _colors = [];
+				// some code that fetches a dynamic list of available colors here
+				return _colors;
+			}
 		],
 		argumentDescriptions: [
 			"the X coordinate to create the balloon at",
 			"the Y coordinate to create the balloon at",
 			"the type of balloon to create",
 			"the color of the balloon"
-		]
+		],
+		hidden: false
 	}
 }
 ```
@@ -97,7 +102,9 @@ Some things to keep in mind:
 1. The function names must match after the `sh_` and `meta_` prefixes.
 2. The order of the array items in `arguments`, `suggestions`, and `argumentDescriptions` must line up
 3. If suggestions aren't needed for an argument (like for `x` or `y` above), just input a blank array `[]`
-4. `description` and `argumentDescriptions` are optional, they're only used for the `help` output
+4. Each of the items inside `suggestions` can be either a static array of possible suggestions, or a function that returns an array. If you use a function, it will be called at run-time, making the suggestions dynamic!
+5. `description` and `argumentDescriptions` are optional, they're only used for the `help` output
+6. `hidden` is optional, but if `hidden` is set to `true`, the function will not appear in the help output, or in autocomplete suggestions! This way you can add secret cheat codes. You will still be able to type `help hidden_function_name` and see help output, but only if you know that hidden function's name in the first place.
 
 ## Keyboard Shortcuts
 
@@ -112,6 +119,7 @@ In the shell, there are a number of useful keyboard shortcuts. These are all tri
 | Meta-key + Backspace | Delete from the cursor backwards to the preceding space |
 | Meta-key + K | Delete forward from the cursor to the end of the line, and store the deleted text on a clipboard (this is equivalent to GNU-style "kill", but our clipboard only stores one thing rather than a ring) |
 | Meta-key + Y | Insert previously "killed" text at the cursor position (this is equivalent to GNU-style "yank", but our clipboard only stores one thing rather than a ring ) |
+| Meta-key + C | Abort the current command. This will put the aborted command into the output history, but not execute it, and will return your shell to a blank input |
 
 ## Configuring rt-shell
 
