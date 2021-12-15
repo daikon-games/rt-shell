@@ -75,23 +75,41 @@ function close_autocomplete() {
 // Create a list of shell functions in the global namespace to
 // filter for autocompletion
 availableFunctions = [];
+allFunctions = [];
 functionData = {};
 var globalVariables = variable_instance_get_names(global);
+// Fetch the metadata first so we can utilize it in the available function storage
+for (var i = 0; i < array_length(globalVariables); i++) {
+	// Only looking for variables that start with meta_
+	if (string_pos("meta_", string_lower(globalVariables[i])) == 1) {
+		// Strip off the meta_ when we store them in our data struct
+		var name = string_delete(string_lower(globalVariables[i]), 1, 5);
+		functionData[$ name] = variable_instance_get(global, globalVariables[i])();
+	}
+}
+// Then fetch all the functions themselves
 for (var i = 0; i < array_length(globalVariables); i++) {
 	// Only looking for variables that start with sh_
 	if (string_pos("sh_", string_lower(globalVariables[i])) == 1) {
 		// Strip off the sh_ when we store them in our array
-		array_push(availableFunctions, string_delete(string_lower(globalVariables[i]), 1, 3));
+		var name = string_delete(string_lower(globalVariables[i]), 1, 3);
+		// #32 : don't display hidden functions in the autocomplete
+		var hidden = false;
+		var metadata = functionData[$ name];
+		if (!is_undefined(metadata)) {
+			show_debug_message(name + " has metadata");
+			if (variable_struct_exists(metadata, "hidden")) {
+			show_debug_message(name + " is hidden");
+				hidden = metadata.hidden;
+			}
+		}
+		if (!hidden) {
+			array_push(availableFunctions, name);
+		}
+		array_push(allFunctions, name);
 	}
 	// Sort available functions list alphabetically for help command
 	array_sort(availableFunctions, true);
-	
-	// Only looking for variables that start with meta_
-	if (string_pos("meta_", string_lower(globalVariables[i])) == 1) {
-		// Strip off the meta_ when we store them in our data struct
-		var name = string_delete(globalVariables[i], 1, 5);
-		functionData[$ name] = variable_instance_get(global, globalVariables[i])();
-	}
 }
 
 // Update the list of functions prefixed by the user's current input

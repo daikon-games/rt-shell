@@ -7,7 +7,7 @@ variable_global_set("sh_help", function(args) {
 	if (array_length(args) > 1) {
 		// Display specific help for an individual function
 		var helpFunction = args[1];
-		if (_array_contains(availableFunctions, helpFunction)) {
+		if (_array_contains(allFunctions, helpFunction)) {
 			if (variable_struct_exists(functionData, helpFunction)) {
 				var metadata = functionData[$ helpFunction];
 				var output = helpFunction;
@@ -37,19 +37,31 @@ variable_global_set("sh_help", function(args) {
 	} else {
 		// Show a listing of all available functions
 		var output = "List of available commands:\n";
+		var hiddenCount = 0;
 		for (var i = 0; i < array_length(availableFunctions); i++) {
 			var functionName = availableFunctions[i];
-			var terminator = "";
-			if (i % 2 == 0) {
-				var paddingWidth = (width/2) - (anchorMargin + string_width(functionName));
-				var spaceCount = paddingWidth/string_width(" ");
-				repeat (spaceCount) {
-					terminator += " ";
+			// #32 : don't display hidden functions in the function list
+			var hidden = false;
+			var metadata = functionData[$ functionName];
+			if (!is_undefined(metadata)) {
+				if (variable_struct_exists(metadata, "hidden")) {
+					hidden = metadata.hidden;
+					hiddenCount += 1;
 				}
-			} else {
-				terminator = "\n";
 			}
-			output += functionName + terminator;
+			if (!hidden) {
+				var terminator = "";
+				if ((i - hiddenCount) % 2 == 0) {
+					var paddingWidth = (width/2) - (anchorMargin + string_width(functionName));
+					var spaceCount = paddingWidth/string_width(" ");
+					repeat (spaceCount) {
+						terminator += " ";
+					}
+				} else {
+					terminator = "\n";
+				}
+				output += functionName + terminator;
+			}
 		}
 		return output;
 	}

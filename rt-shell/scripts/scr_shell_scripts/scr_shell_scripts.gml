@@ -121,6 +121,16 @@ function sh_test_error_handling() {
 	return undefined.property;
 }
 
+function sh_hidden_script() {
+	return "You found the hidden script!";
+}
+function meta_hidden_script() {
+	return {
+		hidden: true,
+		description: "A hidden script can still have metadata, you just have to know its name"
+	}
+}
+
 function sh_shell_apply_theme(args) {
 	var themeName = args[1];
 	for (var i = 0; i < array_length(global.rtShellThemes); i++) {
