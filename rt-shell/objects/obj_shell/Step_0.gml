@@ -43,6 +43,12 @@ if (!isOpen) {
 		killedString = "";
 		cursorPos = string_length(consoleString) + 1;
 		targetScrollPosition = maxScrollPosition;
+	} else if (self.keyComboPressed([metaKey], ord("C"))) {
+		// GNU-style "sigint" (aka abort the current message)
+		array_push(output, ">" + consoleString + "^C");
+		consoleString = "";
+		cursorPos = 1;
+		targetScrollPosition = maxScrollPosition;
 	} else if (self.keyComboPressed([metaKey], vk_backspace) || (metaKey == vk_control && ord(keyboard_string) == 127)) {
 		// delete characters from the cursor position to the preceding space or start of the line
 		var precedingSpaceIndex = 1;
