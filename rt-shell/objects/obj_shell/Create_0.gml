@@ -101,7 +101,7 @@ function updateFilteredSuggestions() {
 	autocompleteMaxWidth = 0;
 	suggestionIndex = 0;
 	var inputString = string_lower(consoleString);
-	inputArray = self.string_split(inputString, " ");
+	inputArray = self._string_split(inputString, " ");
 	
 	// Return if we have nothing to parse
 	if (string_length(inputString) == 0 || array_length(inputArray) == 0) { return; }
@@ -128,8 +128,10 @@ function updateFilteredSuggestions() {
 			var suggestionData = functionData[$ inputArray[0]][$ "suggestions"];
 			if (argumentIndex < array_length(suggestionData)) {
 				if (is_array(suggestionData[argumentIndex])) {
+					// Suggestion data is a static array
 					var argumentSuggestions = suggestionData[argumentIndex];
-				} else {
+				} else if (is_method(suggestionData[argumentIndex])) {
+					// #18: Suggestion data is a dynamic function that returns an array
 					var argumentSuggestions = suggestionData[argumentIndex]();
 				}
 				var currentArgument = inputArray[array_length(inputArray) - 1];
@@ -299,15 +301,15 @@ function confirmCurrentSuggestion() {
 }
 
 // Graciously borrowed from here: https://www.reddit.com/r/gamemaker/comments/3zxota/splitting_strings/
-function string_split(input, delimiter) {
+function _string_split(_input, _delimiter) {
 	var slot = 0;
 	var splits = []; //array to hold all splits
 	var str2 = ""; //var to hold the current split we're working on building
 
-	for (var i = 1; i < (string_length(input) + 1); i++) {
-	    var currStr = string_char_at(input, i);
-	    if (currStr == delimiter) {
-			if (str2 != "") { // Make sure we don't include the delimiter
+	for (var i = 1; i < (string_length(_input) + 1); i++) {
+	    var currStr = string_char_at(_input, i);
+	    if (currStr == _delimiter) {
+			if (str2 != "") { // Make sure we don't include the _delimiter
 		        splits[slot] = str2; //add this split to the array of all splits
 		        slot++;
 			}
@@ -329,7 +331,7 @@ function string_split(input, delimiter) {
  * Returns true if the array contains any instances that match the provided element
  * otherwise returns false
  */
-function array_contains(array, element) {
+function _array_contains(array, element) {
 	for (var i = 0; i < array_length(array); i++) {
 		if (array[i] == element) {
 			return true;
