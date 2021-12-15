@@ -97,9 +97,7 @@ for (var i = 0; i < array_length(globalVariables); i++) {
 		var hidden = false;
 		var metadata = functionData[$ name];
 		if (!is_undefined(metadata)) {
-			show_debug_message(name + " has metadata");
 			if (variable_struct_exists(metadata, "hidden")) {
-			show_debug_message(name + " is hidden");
 				hidden = metadata.hidden;
 			}
 		}
