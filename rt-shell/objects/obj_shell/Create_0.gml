@@ -68,7 +68,7 @@ function close() {
 }
 
 /// Closes autocomplete
-function close_autocomplete() {
+function _close_autocomplete() {
 	array_resize(filteredSuggestions, 0);
 }
 
@@ -112,7 +112,7 @@ for (var i = 0; i < array_length(globalVariables); i++) {
 
 // Update the list of functions prefixed by the user's current input
 // for use in autocompletion
-function updateFilteredSuggestions() {
+function _update_filtered_suggestions() {
 	array_resize(filteredSuggestions, 0);
 	autocompleteMaxWidth = 0;
 	suggestionIndex = 0;
@@ -168,7 +168,7 @@ function updateFilteredSuggestions() {
 
 // Find the prefix string that the list of suggestions has in common
 // used to update the consoleString when user is tab-completing
-function findCommonPrefix() {
+function _find_common_prefix() {
 	if (array_length(filteredSuggestions) == 0) {
 		return "";
 	}
@@ -195,7 +195,7 @@ function findCommonPrefix() {
 	return result;
 }
 
-function keyComboPressed(modifier_array, key) {
+function _key_combo_pressed(modifier_array, key) {
 	for (var i = 0; i < array_length(modifier_array); i++) {
 		if (!keyboard_check(modifier_array[i])) {
 			return false;
@@ -215,7 +215,7 @@ function keyComboPressed(modifier_array, key) {
 
 delayFrame = 0;
 delayFrames = 1;
-function keyboardCheckDelay(input) {
+function _keyboard_check_delay(input) {
 	if (keyboard_check_released(input)) {
 		delayFrame = 0;
 		delayFrames = 1;
@@ -241,14 +241,14 @@ function keyboardCheckDelay(input) {
 
 // Calculates a hash of the configurable variables that would cause shell properties to 
 // need recalculation if they changed
-function shell_properties_hash() {
+function _shell_properties_hash() {
 	return md5_string_unicode(string(width) + "~" + string(height) + "~" + string(anchorMargin) 
 			+ "~" + string(consolePaddingH) + "~" + string(scrollbarWidth) + "~" + 
 			string(consolePaddingV) + "~" + string(screenAnchorPointH) + "~" + string(screenAnchorPointV));
 }
 
 // Recalculates origin, mainly for changing themes and intializing
-function recalculate_shell_properties() {
+function _recalculate_shell_properties() {
 	var screenCenterX = display_get_gui_width() / 2;
 	var screenCenterY = display_get_gui_height() / 2;
 	draw_set_font(consoleFont);
@@ -291,11 +291,11 @@ function recalculate_shell_properties() {
 	visibleHeight = height - (2 * consolePaddingV);
 	
 	// Save a hash of the shell properties, so we can detect if we need to recalculate
-	shellPropertiesHash = shell_properties_hash();
+	shellPropertiesHash = self._shell_properties_hash();
 }
 
 // Recalculates the scroll offset/position based on the suggestion index within the autocomplete list
-function calculate_scroll_from_suggestion_index() {
+function _calculate_scroll_from_suggestion_index() {
 	if (suggestionIndex == 0)  {
 		autocompleteScrollPosition = 0;
 	} else {
@@ -307,7 +307,7 @@ function calculate_scroll_from_suggestion_index() {
 	}
 }
 
-function confirmCurrentSuggestion() {
+function _confirm_current_suggestion() {
 	var spaceCount = string_count(" ", consoleString);
 	consoleString = "";
 	for (var i = 0; i < spaceCount; i++) {
@@ -362,7 +362,7 @@ function _array_contains(array, element) {
 /// @param max_input
 /// @param min_output
 /// @param max_output
-function remap(value, min_input, max_input, min_output, max_output) {
+function _remap(value, min_input, max_input, min_output, max_output) {
 	var _t = (value - min_input) / (max_input - min_input);
 	return lerp(min_output, max_output, _t);
 }
