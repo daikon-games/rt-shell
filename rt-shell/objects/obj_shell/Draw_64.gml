@@ -6,7 +6,7 @@ if (isOpen) {
 	
 	if (!surface_exists(shellSurface)) {
 		shellSurface = surface_create(display_get_gui_width(), display_get_gui_height());
-		recalculate_shell_properties();
+		self._recalculate_shell_properties();
 	} else if (surface_get_width(shellSurface) != display_get_gui_width() || surface_get_height(shellSurface) != display_get_gui_height()) {
 		surface_resize(shellSurface, display_get_gui_width(), display_get_gui_height());
 	}
@@ -202,8 +202,8 @@ if (isOpen) {
 							}
 							if (mouse_check_button_pressed(mb_left)) {
 								if (suggestionIndex == i + autocompleteScrollPosition) {
-									self.confirmCurrentSuggestion();
-									self.updateFilteredSuggestions();
+									self._confirm_current_suggestion();
+									self._update_filtered_suggestions();
 									break;
 								} else {
 									suggestionIndex = i + autocompleteScrollPosition;
