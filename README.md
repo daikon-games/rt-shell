@@ -4,13 +4,18 @@
 rt-shell, or **r**un-**t**ime **shell** an easy-to-use, customizable, and extensible cheat/debug console for GameMaker Studio 2.3+.
 
 #### Table of Contents
-* [Setup](#setup)
-* [Writing Your Own Shell Commands](#writing-your-own-shell-commands)
-* [Adding Command Metadata](#adding-command-metadata)
-* [Keyboard Shortcuts](#keyboard-shortcuts)
-* [Configuring rt-shell](#configuring-rt-shell)
-* [Licensing](#licensing)
-* [Attribution](#attribution)
+- [rt-shell](#rt-shell)
+			- [Table of Contents](#table-of-contents)
+	- [Setup](#setup)
+	- [Writing Your Own Shell Commands](#writing-your-own-shell-commands)
+	- [Adding Command Metadata](#adding-command-metadata)
+	- [Keyboard Shortcuts](#keyboard-shortcuts)
+	- [Configuring rt-shell](#configuring-rt-shell)
+		- [Appearance Configuration](#appearance-configuration)
+		- [Other Configuration](#other-configuration)
+	- [Licensing](#licensing)
+	- [Attribution](#attribution)
+		- [Fonts](#fonts)
 
 ## Setup
 
@@ -44,7 +49,11 @@ function sh_say_greeting (args) {
 }
 ```
 
-Simple, right? With that function in place, you can call `say_greeting` from the shell as you saw in the screenshot above. I'm sure you can think of all sorts of commands that would come in handy for debugging and testing your game. How about a script that set's the player's max health, or money counter? A script that spawns an enemy or a treasure item? Experiment and have fun, happy developing!
+Simple, right? With that function in place, you can call `say_greeting` from the shell as you saw in the screenshot above.
+
+If you want to pass a string with spaces in it as a single argument, you can surround that argument with double quotes, like so: `say_greeting "Mr and Mrs Fox!"`, which would return `Hello Mr and Mrs Fox!`.
+
+I'm sure you can think of all sorts of commands that would come in handy for debugging and testing your game. How about a script that set's the player's max health, or money counter? A script that spawns an enemy or a treasure item? Experiment and have fun, happy developing!
 
 ## Adding Command Metadata
 
