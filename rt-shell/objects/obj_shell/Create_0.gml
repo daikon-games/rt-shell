@@ -318,17 +318,26 @@ function _confirm_current_suggestion() {
 }
 
 // Graciously borrowed from here: https://www.reddit.com/r/gamemaker/comments/3zxota/splitting_strings/
-function _string_split(_input, _delimiter) {
+function _string_split(_input, _delimiter, _capture_start="\"", _capture_end="\"") {
 	var slot = 0;
 	var splits = []; //array to hold all splits
 	var str2 = ""; //var to hold the current split we're working on building
+	var capture = false; // if capture is true, all characters are pulled into a single array element until it's false
 
 	for (var i = 1; i < (string_length(_input) + 1); i++) {
 	    var currStr = string_char_at(_input, i);
-	    if (currStr == _delimiter) {
+		
+		if (currStr == _capture_start)
+		{
+			capture = true;
+			continue;
+		}
+		
+	    if (currStr == _delimiter  && !capture || capture && currStr == _capture_end) {
 			if (str2 != "") { // Make sure we don't include the _delimiter
 		        splits[slot] = str2; //add this split to the array of all splits
 		        slot++;
+				capture = false;
 			}
 	        str2 = "";
 	    } else {
@@ -342,7 +351,7 @@ function _string_split(_input, _delimiter) {
 	}
 
 	return splits;
-}
+}S
 
 /*
  * Returns true if the array contains any instances that match the provided element
