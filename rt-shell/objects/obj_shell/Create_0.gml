@@ -195,6 +195,39 @@ function _find_common_prefix() {
 	return result;
 }
 
+function _string_split( _input, _delimiter )
+{
+	var inpstr = _input;
+	
+	var arr = [];
+	
+	while (string_length(inpstr) > 0)
+	{
+		var delim_pos = string_pos(_delimiter, inpstr);
+		
+		if (delim_pos == 0) delim_pos = string_length(inpstr)+1;
+		
+		var copy = string_copy( inpstr, 1, delim_pos-1 );
+		// "quoted string" string
+		if (string_pos("\"", copy) == 1)
+		{
+			var end_quote_pos = string_pos_ext("\"", inpstr, 2);
+			
+			if (end_quote_pos > 0)
+			{
+				copy = string_copy( inpstr, 2, end_quote_pos-2 );
+				delim_pos = end_quote_pos + 2;
+			}
+		}
+		
+		inpstr = string_delete( inpstr, 1, delim_pos );
+		
+		array_push(arr, copy);
+	}
+	
+	return arr;
+}
+
 function _key_combo_pressed(modifier_array, key) {
 	for (var i = 0; i < array_length(modifier_array); i++) {
 		if (!keyboard_check(modifier_array[i])) {
@@ -246,6 +279,7 @@ function _shell_properties_hash() {
 			+ "~" + string(consolePaddingH) + "~" + string(scrollbarWidth) + "~" + 
 			string(consolePaddingV) + "~" + string(screenAnchorPointH) + "~" + string(screenAnchorPointV));
 }
+
 
 // Recalculates origin, mainly for changing themes and intializing
 function _recalculate_shell_properties() {
@@ -317,6 +351,31 @@ function _confirm_current_suggestion() {
 	cursorPos = string_length(consoleString) + 1;
 }
 
+/*
+ * Returns true if the array contains any instances that match the provided element
+ * otherwise returns false
+ */
+function _array_contains(array, element) {
+	for (var i = 0; i < array_length(array); i++) {
+		if (array[i] == element) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/// @param value
+/// @param min_input
+/// @param max_input
+/// @param min_output
+/// @param max_output
+function _remap(value, min_input, max_input, min_output, max_output) {
+	var _t = (value - min_input) / (max_input - min_input);
+	return lerp(min_output, max_output, _t);
+}
+
+/*
+// OLD SPLIT
 // Graciously borrowed from here: https://www.reddit.com/r/gamemaker/comments/3zxota/splitting_strings/
 function _string_split(_input, _delimiter, _capture_start="\"", _capture_end="\"") {
 	var slot = 0;
@@ -351,27 +410,6 @@ function _string_split(_input, _delimiter, _capture_start="\"", _capture_end="\"
 	}
 
 	return splits;
-}S
-
-/*
- * Returns true if the array contains any instances that match the provided element
- * otherwise returns false
- */
-function _array_contains(array, element) {
-	for (var i = 0; i < array_length(array); i++) {
-		if (array[i] == element) {
-			return true;
-		}
-	}
-	return false;
 }
 
-/// @param value
-/// @param min_input
-/// @param max_input
-/// @param min_output
-/// @param max_output
-function _remap(value, min_input, max_input, min_output, max_output) {
-	var _t = (value - min_input) / (max_input - min_input);
-	return lerp(min_output, max_output, _t);
-}
+*/
