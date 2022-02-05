@@ -1,4 +1,5 @@
 if (isOpen) {
+	draw_set_alpha(1);
 	draw_set_font(consoleFont);
 	// pre-calculate one "em" of width & height
 	var emWidth = string_width("M");
@@ -6,7 +7,7 @@ if (isOpen) {
 	
 	if (!surface_exists(shellSurface)) {
 		shellSurface = surface_create(display_get_gui_width(), display_get_gui_height());
-		self._recalculate_shell_properties();
+		recalculate_shell_properties();
 	} else if (surface_get_width(shellSurface) != display_get_gui_width() || surface_get_height(shellSurface) != display_get_gui_height()) {
 		surface_resize(shellSurface, display_get_gui_width(), display_get_gui_height());
 	}
@@ -83,9 +84,9 @@ if (isOpen) {
 		
 		// Draw current suggestion & argument hints
 		if (array_length(inputArray) > 0) {
-			var ff = (array_length(filteredSuggestions) > 0 && string_count(" ", consoleString) == 0) ? filteredSuggestions[suggestionIndex] : inputArray[0];
+			var ff = (array_length(filteredSuggestions) > 0 && (array_length(_string_split(consoleString, " ").arguments)  - 1) == 0) ? filteredSuggestions[suggestionIndex] : inputArray[0];
 			var data = functionData[$ ff];
-			var spaceCount = string_count(" ", consoleString);
+			var spaceCount = (array_length(_string_split(consoleString, " ").arguments)  - 1);
 			
 			var suggestion = spaceCount == 0 ? ff : "";
 			if (data != undefined) {
@@ -202,8 +203,8 @@ if (isOpen) {
 							}
 							if (mouse_check_button_pressed(mb_left)) {
 								if (suggestionIndex == i + autocompleteScrollPosition) {
-									self._confirm_current_suggestion();
-									self._update_filtered_suggestions();
+									self.confirmCurrentSuggestion();
+									self.updateFilteredSuggestions();
 									break;
 								} else {
 									suggestionIndex = i + autocompleteScrollPosition;

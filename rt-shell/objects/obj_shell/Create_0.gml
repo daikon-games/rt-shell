@@ -54,6 +54,7 @@ if (instance_number(object_index) > 1) {
 function open() {
 	isOpen = true;
 	keyboard_string = "";
+	mngControllers.squelch();
 	if (!is_undefined(openFunction)) {
 		openFunction();
 	}
@@ -62,13 +63,14 @@ function open() {
 /// Closes the shell
 function close() {
 	isOpen = false;
+	mngControllers.unsquelch();
 	if (!is_undefined(closeFunction)) {
 		closeFunction();
 	}
 }
 
 /// Closes autocomplete
-function _close_autocomplete() {
+function close_autocomplete() {
 	array_resize(filteredSuggestions, 0);
 }
 
@@ -112,12 +114,13 @@ for (var i = 0; i < array_length(globalVariables); i++) {
 
 // Update the list of functions prefixed by the user's current input
 // for use in autocompletion
-function _update_filtered_suggestions() {
+function updateFilteredSuggestions() {
 	array_resize(filteredSuggestions, 0);
 	autocompleteMaxWidth = 0;
 	suggestionIndex = 0;
 	var inputString = string_lower(consoleString);
-	inputArray = self._string_split(inputString, " ");
+	inputArray = self._string_split(inputString, " ").arguments;
+	// Do something with params here
 	
 	// Return if we have nothing to parse
 	if (string_length(inputString) == 0 || array_length(inputArray) == 0) { return; }
@@ -126,7 +129,7 @@ function _update_filtered_suggestions() {
 	draw_set_font(consoleFont);
 	
 	// Parse through functions
-	var spaceCount = string_count(" ", inputString);
+	var spaceCount = array_length(_string_split(inputString, " ").arguments) - 1;
 	if (spaceCount == 0) {
 		for (var i = 0; i < array_length(availableFunctions); i++) {
 			if (string_pos(inputString, availableFunctions[i]) == 1 && inputString != availableFunctions[i]) {
@@ -168,7 +171,7 @@ function _update_filtered_suggestions() {
 
 // Find the prefix string that the list of suggestions has in common
 // used to update the consoleString when user is tab-completing
-function _find_common_prefix() {
+function findCommonPrefix() {
 	if (array_length(filteredSuggestions) == 0) {
 		return "";
 	}
@@ -177,7 +180,7 @@ function _find_common_prefix() {
 	var last = string_lower(filteredSuggestions[array_length(filteredSuggestions) - 1]);
 		
 	var result = "";
-	var spaceCount = string_count(" ", consoleString);
+	var spaceCount = array_length(_string_split(consoleString, " ").arguments) - 1;
 	if (spaceCount > 0) {
 		for (var i = 0; i < spaceCount; i++) {
 			result += inputArray[i] + " ";
@@ -195,40 +198,7 @@ function _find_common_prefix() {
 	return result;
 }
 
-function _string_split( _input, _delimiter )
-{
-	var inpstr = _input;
-	
-	var arr = [];
-	
-	while (string_length(inpstr) > 0)
-	{
-		var delim_pos = string_pos(_delimiter, inpstr);
-		
-		if (delim_pos == 0) delim_pos = string_length(inpstr)+1;
-		
-		var copy = string_copy( inpstr, 1, delim_pos-1 );
-		// "quoted string" string
-		if (string_pos("\"", copy) == 1)
-		{
-			var end_quote_pos = string_pos_ext("\"", inpstr, 2);
-			
-			if (end_quote_pos > 0)
-			{
-				copy = string_copy( inpstr, 2, end_quote_pos-2 );
-				delim_pos = end_quote_pos + 2;
-			}
-		}
-		
-		inpstr = string_delete( inpstr, 1, delim_pos );
-		
-		array_push(arr, copy);
-	}
-	
-	return arr;
-}
-
-function _key_combo_pressed(modifier_array, key) {
+function keyComboPressed(modifier_array, key) {
 	for (var i = 0; i < array_length(modifier_array); i++) {
 		if (!keyboard_check(modifier_array[i])) {
 			return false;
@@ -248,7 +218,7 @@ function _key_combo_pressed(modifier_array, key) {
 
 delayFrame = 0;
 delayFrames = 1;
-function _keyboard_check_delay(input) {
+function keyboardCheckDelay(input) {
 	if (keyboard_check_released(input)) {
 		delayFrame = 0;
 		delayFrames = 1;
@@ -274,15 +244,14 @@ function _keyboard_check_delay(input) {
 
 // Calculates a hash of the configurable variables that would cause shell properties to 
 // need recalculation if they changed
-function _shell_properties_hash() {
+function shell_properties_hash() {
 	return md5_string_unicode(string(width) + "~" + string(height) + "~" + string(anchorMargin) 
 			+ "~" + string(consolePaddingH) + "~" + string(scrollbarWidth) + "~" + 
 			string(consolePaddingV) + "~" + string(screenAnchorPointH) + "~" + string(screenAnchorPointV));
 }
 
-
 // Recalculates origin, mainly for changing themes and intializing
-function _recalculate_shell_properties() {
+function recalculate_shell_properties() {
 	var screenCenterX = display_get_gui_width() / 2;
 	var screenCenterY = display_get_gui_height() / 2;
 	draw_set_font(consoleFont);
@@ -325,11 +294,11 @@ function _recalculate_shell_properties() {
 	visibleHeight = height - (2 * consolePaddingV);
 	
 	// Save a hash of the shell properties, so we can detect if we need to recalculate
-	shellPropertiesHash = self._shell_properties_hash();
+	shellPropertiesHash = shell_properties_hash();
 }
 
 // Recalculates the scroll offset/position based on the suggestion index within the autocomplete list
-function _calculate_scroll_from_suggestion_index() {
+function calculate_scroll_from_suggestion_index() {
 	if (suggestionIndex == 0)  {
 		autocompleteScrollPosition = 0;
 	} else {
@@ -341,8 +310,9 @@ function _calculate_scroll_from_suggestion_index() {
 	}
 }
 
-function _confirm_current_suggestion() {
-	var spaceCount = string_count(" ", consoleString);
+function confirmCurrentSuggestion() {
+	var spaceCount = array_length(_string_split(consoleString, " ").arguments) - 1;
+	// display_boss_title "POO BUM" bum
 	consoleString = "";
 	for (var i = 0; i < spaceCount; i++) {
 		consoleString += inputArray[i] + " ";
@@ -350,6 +320,136 @@ function _confirm_current_suggestion() {
 	consoleString += filteredSuggestions[suggestionIndex] + " ";
 	cursorPos = string_length(consoleString) + 1;
 }
+
+function _string_split( _input, _delimiter )
+{
+	var inpstr = _input;
+	
+	var arr = [];
+	var params = {};
+	
+	while (string_length(inpstr) > 0)
+	{
+		var delim_pos = string_pos(_delimiter, inpstr);
+		
+		if (delim_pos == 0) delim_pos = string_length(inpstr)+1;
+		
+		var copy = string_copy( inpstr, 1, delim_pos-1 );
+		
+		var initial = string_char_at(copy, 1);
+		
+		switch (initial)
+		{
+			// Double quotes
+			case "\"":
+				var end_quote_pos = string_pos_ext("\"", inpstr, 2);
+			
+				if (end_quote_pos == 0) break;
+				
+				copy = string_copy( inpstr, 2, end_quote_pos-2 );
+				delim_pos = end_quote_pos + 1;
+			break;
+			
+			// Params
+			// function --key="value blah"; --another_key=value; stuff thing
+			case "-":
+				if (string_char_at(copy, 2) == "-")
+				{
+					var semicolon = string_pos(";", inpstr);
+					if (semicolon == 0) break;
+					var kvstr,kv,k,v;
+					
+					kvstr = string_copy( inpstr, 3, semicolon );
+					kvstr = string_replace( kvstr, "=", " " );
+					kv = _string_split( kvstr, " " ).arguments;
+					k = kv[0];
+					v = kv[1];
+					
+					params[$ k] = v;
+					
+					inpstr = string_delete( inpstr, 1, semicolon+1 );
+					
+					// Don't push into args array
+					continue;
+				}
+			break;
+			
+			// Array literal
+			case "[":
+				var end_bracket = string_pos("]", inpstr);
+				
+				if (end_bracket == 0) break;
+				
+				var contents = string_copy( inpstr, 2, end_bracket-1 );
+				
+				copy = _string_split( contents, "," ).arguments;
+			break;
+		}
+		
+		inpstr = string_delete( inpstr, 1, delim_pos );
+		
+		log(inpstr);
+		
+		array_push(arr, copy);
+	}
+	
+	return {
+		arguments: arr,
+		parameters: params
+	};
+}
+
+// Graciously borrowed from here: https://www.reddit.com/r/gamemaker/comments/3zxota/splitting_strings/
+/*
+function _string_split(_input, _delimiter, _capture_start="\"", _capture_end="\"") {
+	var slot = 0;
+	var splits = []; //array to hold all splits
+	var str2 = ""; //var to hold the current split we're working on building
+	var capture = false; // if capture is true, all characters are pulled into a single array element until it's false
+
+	for (var i = 1; i < (string_length(_input) + 1); i++) {
+	    var currStr = string_char_at(_input, i);
+		
+		if (currStr == _capture_start)
+		{
+			capture = true;
+			continue;
+		}
+		
+		if (capture)
+		{
+			if (currStr != _capture_end)
+			{
+				splits[slot] = str2; //add this split to the array of all splits
+		        slot++;
+				continue;
+			}else{
+				capture = false;
+				continue;
+			}
+		}
+		
+	    if (currStr == _delimiter) {
+	    	
+			if (str2 != "") { // Make sure we don't include the _delimiter
+		        splits[slot] = str2; //add this split to the array of all splits
+		        slot++;
+				capture = false;
+			}
+	        str2 = "";
+	    } else {
+	        str2 = str2 + currStr;
+	        splits[slot] = str2;
+	    }
+	}
+	// If we ended on our delimiter character, include an empty string as the final split
+	if (str2 == "") {
+		splits[slot] = str2;
+	}
+
+	return splits;
+}
+*/
 
 /*
  * Returns true if the array contains any instances that match the provided element
@@ -369,47 +469,7 @@ function _array_contains(array, element) {
 /// @param max_input
 /// @param min_output
 /// @param max_output
-function _remap(value, min_input, max_input, min_output, max_output) {
+function remap(value, min_input, max_input, min_output, max_output) {
 	var _t = (value - min_input) / (max_input - min_input);
 	return lerp(min_output, max_output, _t);
 }
-
-/*
-// OLD SPLIT
-// Graciously borrowed from here: https://www.reddit.com/r/gamemaker/comments/3zxota/splitting_strings/
-function _string_split(_input, _delimiter, _capture_start="\"", _capture_end="\"") {
-	var slot = 0;
-	var splits = []; //array to hold all splits
-	var str2 = ""; //var to hold the current split we're working on building
-	var capture = false; // if capture is true, all characters are pulled into a single array element until it's false
-
-	for (var i = 1; i < (string_length(_input) + 1); i++) {
-	    var currStr = string_char_at(_input, i);
-		
-		if (currStr == _capture_start)
-		{
-			capture = true;
-			continue;
-		}
-		
-	    if (currStr == _delimiter  && !capture || capture && currStr == _capture_end) {
-			if (str2 != "") { // Make sure we don't include the _delimiter
-		        splits[slot] = str2; //add this split to the array of all splits
-		        slot++;
-				capture = false;
-			}
-	        str2 = "";
-	    } else {
-	        str2 = str2 + currStr;
-	        splits[slot] = str2;
-	    }
-	}
-	// If we ended on our delimiter character, include an empty string as the final split
-	if (str2 == "") {
-		splits[slot] = str2;
-	}
-
-	return splits;
-}
-
-*/
