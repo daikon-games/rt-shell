@@ -143,6 +143,9 @@ if (!isOpen) {
 			self._confirm_current_suggestion();
 		} else {
 			var args = self._string_split(consoleString, " ");
+			// Collect args into a single argument if they are between double quotes
+			args = self._string_collect_quoted_args(args, " ");
+			show_debug_message(args);
 			if (array_length(args) > 0) {
 				var script = variable_global_get("sh_" + args[0]);
 				if (script != undefined) {

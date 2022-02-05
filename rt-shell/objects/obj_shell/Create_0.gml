@@ -317,31 +317,58 @@ function _confirm_current_suggestion() {
 	cursorPos = string_length(consoleString) + 1;
 }
 
-// Graciously borrowed from here: https://www.reddit.com/r/gamemaker/comments/3zxota/splitting_strings/
 function _string_split(_input, _delimiter) {
-	var slot = 0;
-	var splits = []; //array to hold all splits
-	var str2 = ""; //var to hold the current split we're working on building
+	var tempstr = _input;
+	var arr = [];
+	
+	while (string_length( tempstr ) > 0) {
+		var delim_pos = string_pos(_delimiter, tempstr);
+		
+		if (delim_pos == 0) delim_pos = string_length(tempstr)+1;
+		
+		var copy = string_copy( tempstr, 1, delim_pos-1 );
+		array_push(arr, copy);
+		
+		tempstr = string_delete(tempstr, 1, delim_pos);
+	}
+	
+	return arr;
+}
 
-	for (var i = 1; i < (string_length(_input) + 1); i++) {
-	    var currStr = string_char_at(_input, i);
-	    if (currStr == _delimiter) {
-			if (str2 != "") { // Make sure we don't include the _delimiter
-		        splits[slot] = str2; //add this split to the array of all splits
-		        slot++;
+function _string_collect_quoted_args(_array,_delimiter) {
+	var new_array = [];
+	var t = 0;
+	
+	for (var i=0;i<array_length(_array);i++) {
+		var entry = _array[i];
+		
+		new_array[@ t] = entry;
+		
+		// display_boss_title,title,"blah,blah",stuff
+		// blah
+		
+		if ( string_char_at(entry, 1) == "\"" ) {
+			// Grab the first one
+			new_array[@ t] = string_delete(_array[i], 1,1);
+			
+			// Collect arguments until we reach an end quote
+			for (var ii=i+1;ii<array_length(_array);ii++) {
+				var subentry = _array[ii]
+				if (string_char_at(subentry, string_length(subentry)) != "\"")
+				{
+					new_array[@ t] += _delimiter + subentry;
+				}else{
+					new_array[@ t] += _delimiter + string_delete(subentry, string_length(subentry),1);
+					i = ii;
+					break;
+				}
 			}
-	        str2 = "";
-	    } else {
-	        str2 = str2 + currStr;
-	        splits[slot] = str2;
-	    }
+		}
+		
+		t ++;
 	}
-	// If we ended on our delimiter character, include an empty string as the final split
-	if (str2 == "") {
-		splits[slot] = str2;
-	}
-
-	return splits;
+	
+	return new_array;
 }
 
 /*
