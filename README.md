@@ -32,7 +32,7 @@ Now let's write our function! We want it to take an argument as input, and print
 
 Our function needs to start with `sh_`, so let's call it `sh_say_greeting`. As you can see in the example screenshot above, you do not include the `sh_` when calling the function.
 
-rt-shell functions take an array called `args` as an argument, and any arguments passed to the function at the console are present in this array in GML. `args[0]` always contains the name of the function, as in typical shell programming, and `args[1]` and onwards are the real arguments passed in.
+rt-shell functions take an array called `args` as an argument, and any arguments passed to the function at the console are present in this array in GML. `args[0]` always contains the name of the function, as in typical shell programming, and `args[1]` and onwards are the real arguments passed in. Your input string is split into arguments on the space character, and you can use double-quotes to pass in an argument that contains spaces (i.e. `say_greeting "Daikon Games"`)
 
 rt-shell functions can optionally return a string, and if they do that string will be printed to the console.
 
