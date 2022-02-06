@@ -192,10 +192,6 @@ function _find_common_prefix() {
 		}
 	}
 	
-	show_debug_message(first);
-	show_debug_message(last);
-	show_debug_message(result);
-	
 	// string_char_at is 1-indexed.... sigh
 	for (var i = 1; i < string_length(first) + 1; i++) {
 		if (string_char_at(first, i) == string_char_at(last, i)) {
@@ -322,9 +318,7 @@ function _calculate_scroll_from_suggestion_index() {
 
 function _confirm_current_suggestion() {
 	var spaceCount = array_length( _string_convert_to_console_args(consoleString, " ") );
-	show_debug_message(string(spaceCount));
-	show_debug_message(consoleString);
-	show_debug_message(inputArray);
+	
 	consoleString = "";
 	if spaceCount > 1 {
 		for (var i = 0; i < spaceCount; i++) {
@@ -343,10 +337,17 @@ function _string_convert_to_console_args(_input, _delimiter) {
 	var args_params = _array_collect_params( arr, _delimiter );
 	arr = args_params[0];
 	arr = _array_collect_quoted_args( arr, _delimiter );
+	
+	
 
 	params = args_params[1];
 
 	return arr;
+}
+
+function _map_params_to_args(_input, _delimiter)
+{
+	
 }
 
 function _string_split(_input, _delimiter) {

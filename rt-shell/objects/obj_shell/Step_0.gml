@@ -144,8 +144,8 @@ if (!isOpen) {
 		} else {
 			var args = self._string_convert_to_console_args(consoleString, " ");
 			
-			show_debug_message(args);
-			show_debug_message(params);
+			//show_debug_message(args);
+			//show_debug_message(params);
 			if (array_length(args) > 0) {
 				var script = variable_global_get("sh_" + args[0]);
 				if (script != undefined) {
