@@ -33,6 +33,8 @@ mousePreviousX = device_mouse_x_to_gui(0);
 mousePreviousY = device_mouse_y_to_gui(0);
 
 shellPropertiesHash = "";
+arguments = [];
+params = [];
 
 // for the bash-style "kill" copy/paste
 killedString = "";
@@ -122,11 +124,14 @@ function _update_filtered_suggestions() {
 	// Return if we have nothing to parse
 	if (string_length(inputString) == 0 || array_length(inputArray) == 0) { return; }
 	
+	//show_debug_message(inputArray);
+	//show_debug_message(inputString);
+	
 	// Set font for string_width calculation
 	draw_set_font(consoleFont);
 	
 	// Parse through functions
-	var spaceCount = string_count(" ", inputString);
+	var spaceCount = array_length( inputArray ) - 1;
 	if (spaceCount == 0) {
 		for (var i = 0; i < array_length(availableFunctions); i++) {
 			if (string_pos(inputString, availableFunctions[i]) == 1 && inputString != availableFunctions[i]) {
@@ -137,7 +142,7 @@ function _update_filtered_suggestions() {
 	} else {
 		// Parse through argument suggestions
 		var functionName = inputArray[0];
-		var argumentIndex = spaceCount - 1;
+		var argumentIndex = spaceCount;
 		var dataExists = variable_struct_exists(functionData, functionName);
 		var noExtraSpace = (string_char_at(inputString, string_last_pos(" ", inputString) - 1) != " ");
 		if (dataExists && noExtraSpace && spaceCount <= array_length(inputArray)) {
@@ -177,12 +182,20 @@ function _find_common_prefix() {
 	var last = string_lower(filteredSuggestions[array_length(filteredSuggestions) - 1]);
 		
 	var result = "";
-	var spaceCount = string_count(" ", consoleString);
-	if (spaceCount > 0) {
+	var spaceCount = array_length( _string_convert_to_console_args(consoleString, " ") );
+	if (spaceCount > 1) {
 		for (var i = 0; i < spaceCount; i++) {
-			result += inputArray[i] + " ";
+			if (string_count(" ",inputArray[i]) > 0)
+				result += "\"" + inputArray[i] + "\" ";
+			else
+				result += inputArray[i] + " ";
 		}
 	}
+	
+	show_debug_message(first);
+	show_debug_message(last);
+	show_debug_message(result);
+	
 	// string_char_at is 1-indexed.... sigh
 	for (var i = 1; i < string_length(first) + 1; i++) {
 		if (string_char_at(first, i) == string_char_at(last, i)) {
@@ -308,17 +321,24 @@ function _calculate_scroll_from_suggestion_index() {
 }
 
 function _confirm_current_suggestion() {
-	var spaceCount = string_count(" ", consoleString);
+	var spaceCount = array_length( _string_convert_to_console_args(consoleString, " ") );
+	show_debug_message(string(spaceCount));
+	show_debug_message(consoleString);
+	show_debug_message(inputArray);
 	consoleString = "";
-	for (var i = 0; i < spaceCount; i++) {
-		consoleString += inputArray[i] + " ";
+	if spaceCount > 1 {
+		for (var i = 0; i < spaceCount; i++) {
+			if (string_count(" ",inputArray[i]) > 0)
+				consoleString += "\"" + inputArray[i] + "\" ";
+			else
+				consoleString += inputArray[i] + " ";
+		}
 	}
 	consoleString += filteredSuggestions[suggestionIndex] + " ";
 	cursorPos = string_length(consoleString) + 1;
 }
 
-function _string_convert_to_console_args(_input, _delimiter)
-{
+function _string_convert_to_console_args(_input, _delimiter) {
 	var arr = _string_split(_input, _delimiter);
 	var args_params = _array_collect_params( arr, _delimiter );
 	arr = args_params[0];
