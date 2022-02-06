@@ -83,9 +83,9 @@ if (isOpen) {
 		
 		// Draw current suggestion & argument hints
 		if (array_length(inputArray) > 0) {
-			var ff = (array_length(filteredSuggestions) > 0 && string_count(" ", consoleString) == 0) ? filteredSuggestions[suggestionIndex] : inputArray[0];
+			var ff = (array_length(filteredSuggestions) > 0 && array_length(inputArray) == 1) ? filteredSuggestions[suggestionIndex] : inputArray[0];
 			var data = functionData[$ ff];
-			var spaceCount = string_count(" ", consoleString);
+			var spaceCount = array_length(inputArray) - 1;
 			
 			var suggestion = spaceCount == 0 ? ff : "";
 			if (data != undefined) {

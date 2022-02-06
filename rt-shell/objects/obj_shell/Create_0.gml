@@ -117,7 +117,7 @@ function updateFilteredSuggestions() {
 	autocompleteMaxWidth = 0;
 	suggestionIndex = 0;
 	var inputString = string_lower(consoleString);
-	inputArray = self._string_split(inputString, " ");
+	inputArray = self._input_string_split(inputString);
 	
 	// Return if we have nothing to parse
 	if (string_length(inputString) == 0 || array_length(inputArray) == 0) { return; }
@@ -126,7 +126,7 @@ function updateFilteredSuggestions() {
 	draw_set_font(consoleFont);
 	
 	// Parse through functions
-	var spaceCount = string_count(" ", inputString);
+	var spaceCount = array_length(inputArray) - 1;
 	if (spaceCount == 0) {
 		for (var i = 0; i < array_length(availableFunctions); i++) {
 			if (string_pos(inputString, availableFunctions[i]) == 1 && inputString != availableFunctions[i]) {
@@ -317,27 +317,47 @@ function confirmCurrentSuggestion() {
 	cursorPos = string_length(consoleString) + 1;
 }
 
-// Graciously borrowed from here: https://www.reddit.com/r/gamemaker/comments/3zxota/splitting_strings/
-function _string_split(_input, _delimiter) {
+/// @function _input_string_split(_input)
+/// @description Splits a console input string on spaces (handling quoted arguments)
+/// @param _input The input string to split
+/// @returns An array containing the function name followed by each argument
+function _input_string_split(_input) {
 	var slot = 0;
 	var splits = []; //array to hold all splits
 	var str2 = ""; //var to hold the current split we're working on building
 
+	var inQuotes = false;
+	
 	for (var i = 1; i < (string_length(_input) + 1); i++) {
 	    var currStr = string_char_at(_input, i);
-	    if (currStr == _delimiter) {
-			if (str2 != "") { // Make sure we don't include the _delimiter
-		        splits[slot] = str2; //add this split to the array of all splits
-		        slot++;
+		// Ignore spaces as a delimiter if we are currently inside of quotes
+		if (!inQuotes) {
+			if (currStr == "\"") {
+				inQuotes = true;
+				continue;
 			}
-	        str2 = "";
-	    } else {
-	        str2 = str2 + currStr;
-	        splits[slot] = str2;
-	    }
+		    if (currStr == " ") {
+				if (str2 != "") { // Make sure we don't include the space
+			        splits[slot] = str2; //add this split to the array of all splits
+			        slot++;
+				}
+		        str2 = "";
+		    } else {
+		        str2 = str2 + currStr;
+		        splits[slot] = str2;
+		    }
+		} else {
+			if (currStr == "\"") {
+				inQuotes = false;
+				splits[slot] = str2;
+				continue;
+			}
+		    str2 = str2 + currStr;
+		}
 	}
 	// If we ended on our delimiter character, include an empty string as the final split
-	if (str2 == "") {
+	// If we ended without closing a quote, include what's been written in quotes so far as a complete argument
+	if (str2 == "" || inQuotes) {
 		splits[slot] = str2;
 	}
 

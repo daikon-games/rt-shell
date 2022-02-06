@@ -101,14 +101,19 @@ function meta_set_bg_color() {
 
 function sh_say_greeting(args) {
 	var whomToGreet = args[1];
-	return "Hello " + whomToGreet + "!";
+	var greeting = "Hello";
+	if (array_length(args) > 2) {
+		greeting = args[2];
+	}
+	return greeting + " " + whomToGreet + "!";
 }
 function meta_say_greeting() {
 	return {
 		description: "print a hello world type statement",
-		arguments: ["whomToGreet"],
+		arguments: ["whomToGreet", "[customGreeting]"],
 		argumentDescriptions: [
-			"a name of an entity to be greeted"
+			"a name of an entity to be greeted",
+			"optional customization of the greeting word"
 		]
 	}
 }
