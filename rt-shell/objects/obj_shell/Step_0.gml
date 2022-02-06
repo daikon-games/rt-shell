@@ -1,5 +1,5 @@
 if (!isOpen) {
-	if (self.keyComboPressed(openModifiers, openKey)) {
+	if (self._key_combo_pressed(openModifiers, openKey)) {
 		self.open();
 	}
 } else {
@@ -17,19 +17,19 @@ if (!isOpen) {
 	
 	if (keyboard_check_pressed(vk_escape)) {
 		if (isAutocompleteOpen) {
-			self.close_autocomplete();
+			self._close_autocomplete();
 		} else {
 			self.close()
 		}
-	} else if (self.keyComboPressed([metaKey], ord("A"))) {
+	} else if (self._key_combo_pressed([metaKey], ord("A"))) {
 		// bash-style jump to beginning of line
 		cursorPos = 1;
 		targetScrollPosition = maxScrollPosition;
-	} else if (self.keyComboPressed([metaKey], ord("E"))) {
+	} else if (self._key_combo_pressed([metaKey], ord("E"))) {
 		// bash-style jump to end of line
 		cursorPos = string_length(consoleString) + 1;
 		targetScrollPosition = maxScrollPosition;
-	} else if (self.keyComboPressed([metaKey], ord("K"))) {
+	} else if (self._key_combo_pressed([metaKey], ord("K"))) {
 		// bash-style "kill" (aka delete all characters following cursor)
 		var leftSide = string_copy(consoleString, 0, cursorPos - 1);
 		var rightSide = string_copy(consoleString, cursorPos, string_length(consoleString) - cursorPos + 1);
@@ -37,19 +37,19 @@ if (!isOpen) {
 		consoleString = leftSide;
 		cursorPos = string_length(consoleString) + 1;
 		targetScrollPosition = maxScrollPosition;
-	} else if (self.keyComboPressed([metaKey], ord("Y"))) {
+	} else if (self._key_combo_pressed([metaKey], ord("Y"))) {
 		// bash-style "yank" (aka append the "killed" string at the prompt)
 		consoleString += killedString;
 		killedString = "";
 		cursorPos = string_length(consoleString) + 1;
 		targetScrollPosition = maxScrollPosition;
-	} else if (self.keyComboPressed([metaKey], ord("C"))) {
+	} else if (self._key_combo_pressed([metaKey], ord("C"))) {
 		// GNU-style "sigint" (aka abort the current message)
 		array_push(output, ">" + consoleString + "^C");
 		consoleString = "";
 		cursorPos = 1;
 		targetScrollPosition = maxScrollPosition;
-	} else if (self.keyComboPressed([metaKey], vk_backspace) || (metaKey == vk_control && ord(keyboard_string) == 127)) {
+	} else if (self._key_combo_pressed([metaKey], vk_backspace) || (metaKey == vk_control && ord(keyboard_string) == 127)) {
 		// delete characters from the cursor position to the preceding space or start of the line
 		var precedingSpaceIndex = 1;
 		// don't want to check for space at or before the cursor position, so start 2 back
@@ -64,7 +64,7 @@ if (!isOpen) {
 		targetScrollPosition = maxScrollPosition;
 		keyboard_string = "";
 		metaDeleted = true;
-	} else if (self.keyComboPressed([metaKey], vk_left)) {
+	} else if (self._key_combo_pressed([metaKey], vk_left)) {
 		// jump left to the preceding word
 		var precedingSpaceIndex = 1;
 		// don't want to check for space at or before the cursor position, so start 2 back
@@ -77,7 +77,7 @@ if (!isOpen) {
 		cursorPos = precedingSpaceIndex;
 		targetScrollPosition = maxScrollPosition;
 		metaMovedLeft = true;
-	} else if (self.keyComboPressed([metaKey], vk_right)) {
+	} else if (self._key_combo_pressed([metaKey], vk_right)) {
 		var nextSpaceIndex = string_length(consoleString) + 1;
 		// jump right to the following word
 		for (var i = cursorPos + 2; i <= string_length(consoleString) + 1; i++) {
@@ -89,26 +89,26 @@ if (!isOpen) {
 		cursorPos = nextSpaceIndex;
 		targetScrollPosition = maxScrollPosition;
 		metaMovedRight = true;
-	} else if (self.keyboardCheckDelay(vk_backspace)) {
+	} else if (self._keyboard_check_delay(vk_backspace)) {
 		if (!metaDeleted) {
 			consoleString = string_delete(consoleString, cursorPos - 1, 1);
 			cursorPos = max(1, cursorPos - 1);
 			targetScrollPosition = maxScrollPosition;
 		}
-	} else if (self.keyboardCheckDelay(vk_delete)) {
+	} else if (self._keyboard_check_delay(vk_delete)) {
 		consoleString = string_delete(consoleString, cursorPos, 1);
 		targetScrollPosition = maxScrollPosition;
-	} else if (self.keyboardCheckDelay(vk_left)) { 
+	} else if (self._keyboard_check_delay(vk_left)) { 
 		if (!metaMovedLeft) {
 			cursorPos = max(1, cursorPos - 1);
 			targetScrollPosition = maxScrollPosition;
 		}
-	} else if (self.keyboardCheckDelay(vk_right)) {
+	} else if (self._keyboard_check_delay(vk_right)) {
 		if (!metaMovedRight) {
 			if (cursorPos == string_length(consoleString) + 1 &&
 				array_length(filteredSuggestions) != 0) {
 				var suggestion = filteredSuggestions[suggestionIndex];
-				var consoleWords = _input_string_split(consoleString);
+				var consoleWords = self._input_string_split(consoleString);
 				var currentWordLength = string_length(consoleWords[array_length(consoleWords) - 1]);
 				consoleString += string_copy(suggestion, currentWordLength + 1, string_length(suggestion) - currentWordLength);
 				cursorPos = string_length(consoleString) + 1;
@@ -117,7 +117,7 @@ if (!isOpen) {
 			}
 			targetScrollPosition = maxScrollPosition;
 		}
-	} else if (self.keyComboPressed(historyUpModifiers, historyUpKey)) {
+	} else if (self._key_combo_pressed(historyUpModifiers, historyUpKey)) {
 		if (historyPos == array_length(history)) {
 			savedConsoleString = consoleString;
 		}
@@ -127,7 +127,7 @@ if (!isOpen) {
 			cursorPos = string_length(consoleString) + 1;
 		}
 		targetScrollPosition = maxScrollPosition;
-	} else if (self.keyComboPressed(historyDownModifiers, historyDownKey)) {
+	} else if (self._key_combo_pressed(historyDownModifiers, historyDownKey)) {
 		if (historyPos < array_length(history)) {
 			historyPos = min(array_length(history), historyPos + 1);
 			if (historyPos == array_length(history)) {
@@ -140,7 +140,7 @@ if (!isOpen) {
 		targetScrollPosition = maxScrollPosition;
 	} else if (keyboard_check_pressed(vk_enter)) {
 		if (isAutocompleteOpen) {
-			self.confirmCurrentSuggestion();
+			self._confirm_current_suggestion();
 		} else {
 			var args = self._input_string_split(consoleString);
 			if (array_length(args) > 0) {
@@ -185,24 +185,24 @@ if (!isOpen) {
 			}
 		}
 		commandSubmitted = true;
-	} else if (self.keyComboPressed(cycleSuggestionsModifiers, cycleSuggestionsKey)) {
+	} else if (self._key_combo_pressed(cycleSuggestionsModifiers, cycleSuggestionsKey)) {
 		if (array_length(filteredSuggestions) != 0) {
 			// Auto-complete up to the common prefix of our suggestions
 			var uncompleted = consoleString;
-			consoleString = self.findCommonPrefix();
+			consoleString = self._find_common_prefix();
 			cursorPos = string_length(consoleString) + 1;
 			// If we're already autocompleted as far as we can go, rotate through suggestions
 			if (uncompleted == consoleString) {
 				suggestionIndex = (suggestionIndex + 1) % array_length(filteredSuggestions);
 				if (isAutocompleteOpen) {
-					self.calculate_scroll_from_suggestion_index()
+					self._calculate_scroll_from_suggestion_index()
 				}
 			}
 		}
-	} else if (self.keyComboPressed(cycleSuggestionsReverseModifiers, cycleSuggestionsReverseKey)) {
+	} else if (self._key_combo_pressed(cycleSuggestionsReverseModifiers, cycleSuggestionsReverseKey)) {
 		suggestionIndex = (suggestionIndex + array_length(filteredSuggestions) - 1) % array_length(filteredSuggestions);
 		if (isAutocompleteOpen) {
-			self.calculate_scroll_from_suggestion_index()
+			self._calculate_scroll_from_suggestion_index()
 		}
 	} else if (keyboard_check_pressed(vk_insert)) {
 		insertMode = !insertMode;
@@ -250,7 +250,7 @@ if (!isOpen) {
 	}
 	
 	// Updating scrolling
-	var lerpValue = (scrollSmoothness == 0) ? 1 : remap(scrollSmoothness, 1, 0, 0.08, 0.4);
+	var lerpValue = (scrollSmoothness == 0) ? 1 : self._remap(scrollSmoothness, 1, 0, 0.08, 0.4);
 	scrollPosition = lerp(scrollPosition, targetScrollPosition, lerpValue);
 	scrollPosition = clamp(scrollPosition, 0, maxScrollPosition)
 	if (scrollPosition == 0 || scrollPosition == maxScrollPosition) {
@@ -260,12 +260,12 @@ if (!isOpen) {
 	if (consoleString != prevConsoleString) {
 		// If the text at the prompt has changed, update the list of possible
 		// autocomplete suggestions
-		self.updateFilteredSuggestions();
+		self._update_filtered_suggestions();
 		autocompleteScrollPosition = 0;
 	}
 	
 	// Recalculate shell properties if certain variables have changed
-	if (shell_properties_hash() != shellPropertiesHash) {
-		recalculate_shell_properties();
+	if (self._shell_properties_hash() != shellPropertiesHash) {
+		self._recalculate_shell_properties();
 	}
 }
