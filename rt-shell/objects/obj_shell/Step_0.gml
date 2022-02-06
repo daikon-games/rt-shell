@@ -108,7 +108,7 @@ if (!isOpen) {
 			if (cursorPos == string_length(consoleString) + 1 &&
 				array_length(filteredSuggestions) != 0) {
 				var suggestion = filteredSuggestions[suggestionIndex];
-				var consoleWords = self._string_split(consoleString, " ");
+				var consoleWords = self._string_convert_to_console_args(consoleString, " ");
 				var currentWordLength = string_length(consoleWords[array_length(consoleWords) - 1]);
 				consoleString += string_copy(suggestion, currentWordLength + 1, string_length(suggestion) - currentWordLength);
 				cursorPos = string_length(consoleString) + 1;
@@ -142,10 +142,10 @@ if (!isOpen) {
 		if (isAutocompleteOpen) {
 			self._confirm_current_suggestion();
 		} else {
-			var args = self._string_split(consoleString, " ");
-			// Collect args into a single argument if they are between double quotes
-			args = self._string_collect_quoted_args(args, " ");
+			var args = self._string_convert_to_console_args(consoleString, " ");
+			
 			show_debug_message(args);
+			show_debug_message(params);
 			if (array_length(args) > 0) {
 				var script = variable_global_get("sh_" + args[0]);
 				if (script != undefined) {

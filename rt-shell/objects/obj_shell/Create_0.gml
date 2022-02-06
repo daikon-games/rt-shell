@@ -117,7 +117,7 @@ function _update_filtered_suggestions() {
 	autocompleteMaxWidth = 0;
 	suggestionIndex = 0;
 	var inputString = string_lower(consoleString);
-	inputArray = self._string_split(inputString, " ");
+	inputArray = self._string_convert_to_console_args(inputString, " ");
 	
 	// Return if we have nothing to parse
 	if (string_length(inputString) == 0 || array_length(inputArray) == 0) { return; }
@@ -317,6 +317,18 @@ function _confirm_current_suggestion() {
 	cursorPos = string_length(consoleString) + 1;
 }
 
+function _string_convert_to_console_args(_input, _delimiter)
+{
+	var arr = _string_split(_input, _delimiter);
+	var args_params = _array_collect_params( arr, _delimiter );
+	arr = args_params[0];
+	arr = _array_collect_quoted_args( arr, _delimiter );
+
+	params = args_params[1];
+
+	return arr;
+}
+
 function _string_split(_input, _delimiter) {
 	var tempstr = _input;
 	var arr = [];
@@ -335,7 +347,63 @@ function _string_split(_input, _delimiter) {
 	return arr;
 }
 
-function _string_collect_quoted_args(_array,_delimiter) {
+// create_balloon x=0 y=1 type=animal_dog speed=5
+function _array_collect_params(_array, _delimiter) {
+	var new_array = [];
+	var params = {};
+	var t = 0;
+	
+	for (var i=0;i<array_length(_array);i++)
+	{
+		var entry = _array[i];
+		var apply_entry = true;
+		
+		if (string_count("=", entry) >= 1)
+		{
+			var kv = _string_split( entry, "=" );
+			
+			if (array_length(kv) != 2) 
+			{
+				apply_entry = false;
+				break;
+			}
+			
+			var k = kv[0],
+				v = kv[1];
+				
+			// Check to see if v opens with a double quote
+			
+			if (string_char_at(v, 1) == "\"")
+			{
+				for (var ii=i;ii<array_length(_array);ii++)
+				{
+					var subentry = _array[i]
+					if (string_char_at(subentry, string_length(subentry)) != "\"")
+					{
+						v += _delimiter + subentry;	
+					}else{
+						v += _delimiter + subentry;
+						i = ii;
+						break;
+					}
+				}
+			}
+			
+			apply_entry = false;
+			
+			params[$ k] = v;
+		}
+		
+		if apply_entry {
+			new_array[@ t] = entry;
+			t ++;
+		}
+	}
+	
+	return [new_array, params];
+}
+
+function _array_collect_quoted_args(_array,_delimiter) {
 	var new_array = [];
 	var t = 0;
 	
