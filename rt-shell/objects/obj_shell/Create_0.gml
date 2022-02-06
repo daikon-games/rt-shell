@@ -338,17 +338,80 @@ function _string_convert_to_console_args(_input, _delimiter) {
 	var args_params = _array_collect_params( arr, _delimiter );
 	arr = args_params[0];
 	arr = _array_collect_quoted_args( arr, _delimiter );
-	
-	
 
 	params = args_params[1];
+	
+	if (params != undefined)
+		show_debug_message("BEFORE: "+string(params));
+	
+	_check_param_defaults( arr );
+	
+	_map_params_to_args( arr );
+	
+	if (params != undefined)
+		show_debug_message("AFTER: "+string(params));
 
 	return arr;
 }
 
-function _map_params_to_args(_input, _delimiter)
-{
+function _check_param_defaults(args) {
+	if (array_length(args) == 0) exit;
+	var funcName = args[0];
+	var func = functionData[$ funcName];
+	if (func == undefined) exit;
 	
+	var params_array = func.parameters;
+	
+	for (var i=0;i<array_length(params_array);i++)
+	{
+		var param_kv = _string_split(params_array[i], "=");
+		
+		var param = params[$ param_kv[0]];
+		
+		if (param == undefined && array_length(param_kv) > 1)
+		{
+			params[$ param_kv[0]] = param_kv[1];
+		}
+	}
+	
+	show_debug_message(params);
+	
+}
+
+function _map_params_to_args(args) {
+	var param_names = variable_struct_get_names( params );
+	
+	if (array_length(args) == 0) exit;
+	
+	var funcName = args[0];
+	
+	var func = functionData[$ funcName];
+		
+	if (func == undefined) exit;
+	
+	var args_array = func.arguments;
+	
+	// title subtitle
+	
+	if (args_array == undefined) exit;
+	
+	// title="Blah blah" subtitle="Blah blah blah"
+	
+	for (var i=0;i<array_length(param_names);i++)
+	{
+		var param_name  = param_names[i];
+		var param_value = params[$ param_name];
+		
+		for (var ii=0;ii<array_length(args_array);ii++)
+		{
+			if (args_array[ii] == param_name)
+			{
+				args[@ ii+1] = param_value;
+				variable_struct_remove( params, param_name );
+				break;
+			}
+		}
+	}
 }
 
 function _string_split(_input, _delimiter) {

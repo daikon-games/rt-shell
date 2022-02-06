@@ -106,25 +106,46 @@ function sh_params_test( args, params )
 
 function sh_say_greeting(args, params) {
 	var whomToGreet = args[1];
-	var paramStr = "";
-	var paramNames = variable_struct_get_names( params );
-	for (var i=0;i<array_length(paramNames);i++)
+	var sentiment = "! ";
+	
+	switch (params.sentiment)
 	{
-		var k,v;
-		k = paramNames[i];
-		v = params[$ k];
+		case "happy":
+			sentiment = "! :) ";
+		break;
 		
-		paramStr += " and "+k+" ("+v+")";
+		case "sad":
+			sentiment = "... :( ";
+		break;
+		
+		case "angry":
+			sentiment = "!!! >:( ";
+		break;
+		
+		case "beaming":
+			sentiment = "!!! :D ";
+		break;
+		
+		case "a bit too happy":
+			sentiment = "!!!!!!!!!!!!!!!! 8DDDDDDDDD ";
+		break;
 	}
-	paramStr += "!";
-	return "Hello " + whomToGreet + paramStr;
+	
+	show_debug_message(params);
+
+	return string_repeat("Hello " + whomToGreet + sentiment, params.count);
 }
+
 function meta_say_greeting() {
 	return {
 		description: "print a hello world type statement",
 		arguments: ["whomToGreet"],
 		argumentDescriptions: [
 			"a name of an entity to be greeted"
+		],
+		parameters: ["count=1","sentiment=normal"],
+		parameterDescriptions: [
+			"repeat the greeting this many times"
 		]
 	}
 }
