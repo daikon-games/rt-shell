@@ -329,6 +329,7 @@ function _confirm_current_suggestion() {
 		}
 	}
 	consoleString += filteredSuggestions[suggestionIndex] + " ";
+	
 	cursorPos = string_length(consoleString) + 1;
 }
 
@@ -396,14 +397,15 @@ function _array_collect_params(_array, _delimiter) {
 			
 			if (string_char_at(v, 1) == "\"")
 			{
-				for (var ii=i;ii<array_length(_array);ii++)
+				v = string_delete(v, 1, 1);
+				for (var ii=i+1;ii<array_length(_array);ii++)
 				{
-					var subentry = _array[i]
+					var subentry = _array[ii];
 					if (string_char_at(subentry, string_length(subentry)) != "\"")
 					{
-						v += _delimiter + subentry;	
-					}else{
 						v += _delimiter + subentry;
+					}else{
+						v += _delimiter + string_delete(subentry, string_length(subentry), 1);
 						i = ii;
 						break;
 					}

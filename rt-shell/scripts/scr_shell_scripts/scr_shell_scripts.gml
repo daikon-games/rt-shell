@@ -99,9 +99,25 @@ function meta_set_bg_color() {
 	}
 }
 
-function sh_say_greeting(args) {
+function sh_params_test( args, params )
+{
+	return params;
+}
+
+function sh_say_greeting(args, params) {
 	var whomToGreet = args[1];
-	return "Hello " + whomToGreet + "!";
+	var paramStr = "";
+	var paramNames = variable_struct_get_names( params );
+	for (var i=0;i<array_length(paramNames);i++)
+	{
+		var k,v;
+		k = paramNames[i];
+		v = params[$ k];
+		
+		paramStr += " and "+k+" ("+v+")";
+	}
+	paramStr += "!";
+	return "Hello " + whomToGreet + paramStr;
 }
 function meta_say_greeting() {
 	return {

@@ -151,7 +151,7 @@ if (!isOpen) {
 				if (script != undefined) {
 					var response;
 					try {
-						response = script_execute(asset_get_index(script_get_name(script)), args);
+						response = script_execute(asset_get_index(script_get_name(script)), args, params);
 					} catch (_exception) {
 						response = "-- ERROR: see debug output for details --";
 						show_debug_message("---- ERROR executing rt-shell command [" + args[0] + "] ----");
