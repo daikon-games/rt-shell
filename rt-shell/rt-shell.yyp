@@ -2,6 +2,10 @@
   "resources": [
     {"id":{"name":"obj_shell","path":"objects/obj_shell/obj_shell.yy",},"order":0,},
     {"id":{"name":"spr_suggest_bg","path":"sprites/spr_suggest_bg/spr_suggest_bg.yy",},"order":2,},
+    {"id":{"name":"spr_balloon_dog","path":"sprites/spr_balloon_dog/spr_balloon_dog.yy",},"order":4,},
+    {"id":{"name":"obj_balloon","path":"objects/obj_balloon/obj_balloon.yy",},"order":3,},
+    {"id":{"name":"spr_balloon_normal","path":"sprites/spr_balloon_normal/spr_balloon_normal.yy",},"order":3,},
+    {"id":{"name":"spr_balloon_snake","path":"sprites/spr_balloon_snake/spr_balloon_snake.yy",},"order":5,},
     {"id":{"name":"spr_console_bg","path":"sprites/spr_console_bg/spr_console_bg.yy",},"order":1,},
     {"id":{"name":"scr_shell_scripts","path":"scripts/scr_shell_scripts/scr_shell_scripts.yy",},"order":1,},
     {"id":{"name":"obj_open_message","path":"objects/obj_open_message/obj_open_message.yy",},"order":2,},
