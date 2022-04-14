@@ -252,3 +252,15 @@ array_push(rtShellThemes, new RtShellTheme("solarized_dark", function() {
 		obj_shell.promptColor = make_color_rgb(42, 161, 152);
 		obj_shell.prompt = "~";
 	}));
+array_push(rtShellThemes, new RtShellTheme("background_test", function() {
+		obj_shell.consoleBackground = spr_console_bg;
+		obj_shell.suggestionsBackground = spr_suggest_bg;
+		obj_shell.autocompletePadding = 6;
+		obj_shell.fontColor = make_color_rgb(248, 248, 242);
+		obj_shell.fontColorSecondary = make_color_rgb(98, 114, 164);
+		obj_shell.anchorMargin = 4;
+		obj_shell.consolePaddingH = 8;
+		obj_shell.consolePaddingV = 6;
+		obj_shell.promptColor = #c964be;
+		obj_shell.prompt = "->";
+	}));

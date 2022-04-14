@@ -1,6 +1,8 @@
 {
   "resources": [
     {"id":{"name":"obj_shell","path":"objects/obj_shell/obj_shell.yy",},"order":0,},
+    {"id":{"name":"spr_suggest_bg","path":"sprites/spr_suggest_bg/spr_suggest_bg.yy",},"order":2,},
+    {"id":{"name":"spr_console_bg","path":"sprites/spr_console_bg/spr_console_bg.yy",},"order":1,},
     {"id":{"name":"scr_shell_scripts","path":"scripts/scr_shell_scripts/scr_shell_scripts.yy",},"order":1,},
     {"id":{"name":"obj_open_message","path":"objects/obj_open_message/obj_open_message.yy",},"order":2,},
     {"id":{"name":"font_demo","path":"fonts/font_demo/font_demo.yy",},"order":1,},
@@ -16,7 +18,7 @@
     {"name":"Windows","path":"options/windows/options_windows.yy",},
     {"name":"operagx","path":"options/operagx/options_operagx.yy",},
   ],
-  "isDnDProject": false,
+  "defaultScriptType": 1,
   "isEcma": false,
   "configs": {
     "name": "Default",
@@ -36,13 +38,13 @@
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},
   ],
   "TextureGroups": [
-    {"isScaled":true,"autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,"resourceVersion":"1.3","name":"Default","resourceType":"GMTextureGroup",},
+    {"isScaled":true,"compressFormat":"bz2","autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,"resourceVersion":"1.3","name":"Default","resourceType":"GMTextureGroup",},
   ],
   "IncludedFiles": [],
   "MetaData": {
-    "IDEVersion": "2022.1.0.609",
+    "IDEVersion": "2022.3.0.625",
   },
-  "resourceVersion": "1.4",
+  "resourceVersion": "1.5",
   "name": "rt-shell",
   "tags": [],
   "resourceType": "GMProject",
