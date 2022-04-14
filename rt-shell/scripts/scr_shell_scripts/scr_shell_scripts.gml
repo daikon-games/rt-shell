@@ -136,6 +136,38 @@ function meta_hidden_script() {
 	}
 }
 
+function sh_deferred() {
+	return "I was deferred!";
+}
+function meta_deferred() {
+	return {
+		deferred: true,
+		description: "A deferred script will not run right away, but after the shell is closed"
+	}
+}
+
+function sh_deferred_set_bg_color(args) {
+	var red = args[1];
+	var green = args[2];
+	var blue = args[3];
+	
+	var backgroundId = layer_background_get_id(layer_get_id("Background"));
+	layer_background_blend(backgroundId, make_color_rgb(red, green, blue));
+}
+
+function meta_deferred_set_bg_color() {
+	return {
+		description: "set the color of the background after the shell closes",
+		arguments: ["red", "green", "blue"],
+		argumentDescriptions: [
+			"red value from 0 to 255",
+			"green value from 0 to 255",
+			"blue value from 0 to 255"
+		],
+		deferred: true
+	}
+}
+
 function sh_shell_apply_theme(args) {
 	var themeName = args[1];
 	for (var i = 0; i < array_length(global.rtShellThemes); i++) {

@@ -41,6 +41,9 @@ metaDeleted = false;
 metaMovedLeft = false;
 metaMovedRight = false;
 
+// Set up queue for deferred script calls
+deferredQueue = ds_queue_create();
+
 // Initialize native shell scripts
 event_user(0);
 
@@ -64,6 +67,13 @@ function close() {
 	isOpen = false;
 	if (!is_undefined(closeFunction)) {
 		closeFunction();
+	}
+	// Execute any deferred functions
+	// This should happen after the close function, as the canonical use-case is for 
+	// running scripts that must happen while the game is not paused
+	while (!ds_queue_empty(deferredQueue)) {
+		var args = ds_queue_dequeue(deferredQueue);
+		self._execute_script(args, true);
 	}
 }
 
@@ -315,6 +325,45 @@ function _confirm_current_suggestion() {
 	}
 	consoleString += filteredSuggestions[suggestionIndex] + " ";
 	cursorPos = string_length(consoleString) + 1;
+}
+
+function _execute_script(args, deferred = false) {
+	var script = variable_global_get("sh_" + args[0]);
+	if (!is_undefined(script)) {
+		var response;
+		try {
+			response = script_execute(asset_get_index(script_get_name(script)), args);
+		} catch (_exception) {
+			response = "-- ERROR: see debug output for details --";
+			show_debug_message("---- ERROR executing rt-shell command [" + args[0] + "] ----");
+			show_debug_message(_exception.message);
+			show_debug_message(_exception.longMessage);
+			show_debug_message(_exception.script);
+			show_debug_message(_exception.stacktrace);
+			show_debug_message("----------------------------");
+		}
+		if (!deferred) {
+			array_push(history, consoleString);
+			if (response != "") { array_push(output, ">" + consoleString); }
+		}
+		if (response != 0) {
+			array_push(output, response);
+		}		
+		
+		self._update_positions();
+	} else {
+		array_push(output, ">" + consoleString);
+		array_push(output, "No such command: " + consoleString);
+		array_push(history, consoleString);
+		self._update_positions();
+	}
+}
+
+function _update_positions() {
+	historyPos = array_length(history);
+	consoleString = "";
+	savedConsoleString = "";
+	cursorPos = 1;
 }
 
 /// @function _input_string_split(_input)

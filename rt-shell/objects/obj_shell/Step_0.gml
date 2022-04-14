@@ -144,38 +144,23 @@ if (!isOpen) {
 		} else {
 			var args = self._input_string_split(consoleString);
 			if (array_length(args) > 0) {
-				var script = variable_global_get("sh_" + args[0]);
-				if (script != undefined) {
-					var response;
-					try {
-						response = script_execute(asset_get_index(script_get_name(script)), args);
-					} catch (_exception) {
-						response = "-- ERROR: see debug output for details --";
-						show_debug_message("---- ERROR executing rt-shell command [" + args[0] + "] ----");
-						show_debug_message(_exception.message);
-						show_debug_message(_exception.longMessage);
-						show_debug_message(_exception.script);
-						show_debug_message(_exception.stacktrace);
-						show_debug_message("----------------------------");
+				var metadata = functionData[$ args[0]];
+				if (!is_undefined(metadata)) {
+					var deferred = false;
+					if (variable_struct_exists(metadata, "deferred")) {
+						deferred = metadata.deferred;
 					}
-					array_push(history, consoleString);
-					if (response != "") { array_push(output, ">" + consoleString); }
-					if (response != 0) {
-						array_push(output, response);
+					if (deferred) {
+						ds_queue_enqueue(deferredQueue, args);
+						array_push(history, consoleString);
+						array_push(output, ">" + consoleString);
+						array_push(output, "Execution deferred until shell is closed.");
+						self._update_positions();
+					} else {
+						_execute_script(args);
 					}
-					
-					historyPos = array_length(history);
-					consoleString = "";
-					savedConsoleString = "";
-					cursorPos = 1;
 				} else {
-					array_push(output, ">" + consoleString);
-					array_push(output, "No such command: " + consoleString);
-					array_push(history, consoleString);
-					historyPos = array_length(history);
-					consoleString = "";
-					savedConsoleString = "";
-					cursorPos = 1;
+					_execute_script(args);
 				}
 			} else {
 				array_push(output, ">");
