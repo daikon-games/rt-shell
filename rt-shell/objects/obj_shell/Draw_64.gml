@@ -158,7 +158,13 @@ if (isOpen) {
 				isAutocompleteOpen = true;
 				var suggestionsAmount = min(autocompleteMaxLines, array_length(filteredSuggestions));
 				
-				var x1 = shellOriginX + promptXOffset - autocompletePadding;
+				var stringParts = self._input_string_split(consoleString);
+				var suggestXOffset = 0;
+				for (var i = 0; i < array_length(stringParts) - 1; i++) {
+					suggestXOffset += string_width(stringParts[i]) + emWidth;
+				}
+				
+				var x1 = shellOriginX + promptXOffset + suggestXOffset - autocompletePadding;
 				var y1 = shellOriginY + height - (emHeight) - (suggestionsAmount * emHeight) - (autocompletePadding * 2) - consolePaddingV;
 				var x2 = x1 + autocompleteMaxWidth + (autocompletePadding * 2) + ((suggestionsAmount < array_length(filteredSuggestions)) ? scrollbarWidth : 0);
 				var y2 = y1 + (suggestionsAmount * emHeight) + (autocompletePadding * 2);
