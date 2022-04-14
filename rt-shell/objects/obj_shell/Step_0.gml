@@ -200,9 +200,11 @@ if (!isOpen) {
 			}
 		}
 	} else if (self._key_combo_pressed(cycleSuggestionsReverseModifiers, cycleSuggestionsReverseKey)) {
-		suggestionIndex = (suggestionIndex + array_length(filteredSuggestions) - 1) % array_length(filteredSuggestions);
-		if (isAutocompleteOpen) {
-			self._calculate_scroll_from_suggestion_index()
+		if (array_length(filteredSuggestions) != 0) {
+			suggestionIndex = (suggestionIndex + array_length(filteredSuggestions) - 1) % array_length(filteredSuggestions);
+			if (isAutocompleteOpen) {
+				self._calculate_scroll_from_suggestion_index()
+			}
 		}
 	} else if (keyboard_check_pressed(vk_insert)) {
 		insertMode = !insertMode;
