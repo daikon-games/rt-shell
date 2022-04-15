@@ -1,2 +1,4 @@
 surface_free(shellSurface);
-ds_queue_destroy(deferredQueue);
+if (ds_exists(deferredQueue, ds_type_queue)) {
+	ds_queue_destroy(deferredQueue);
+}
