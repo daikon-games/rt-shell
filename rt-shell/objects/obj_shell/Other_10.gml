@@ -83,6 +83,7 @@ variable_global_set("meta_help", function() {
 variable_global_set("sh_clear", function(args) {
 	if (array_length(args) > 1 && args[1] == "all") {
 		array_resize(output, 0);
+		array_resize(history, 0);
 		return "";
 	} else {
 		array_push(output, ">" + consoleString);
@@ -102,7 +103,7 @@ variable_global_set("meta_clear", function() {
 		],
 		description: "clear the console window",
 		argumentDescriptions: [
-			"If provided, previous console output will be deleted rather than hidden."
+			"If provided, previous console output and command history will be deleted."
 		]
 	}
 });

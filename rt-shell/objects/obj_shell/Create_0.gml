@@ -44,6 +44,10 @@ metaMovedRight = false;
 // Set up queue for deferred script calls
 deferredQueue = ds_queue_create();
 
+// Variables for the saved history feature
+savedHistoryFilePath = working_directory + "rt-shell-saved-history.data";
+loadedSavedHistory = false;
+
 // Initialize native shell scripts
 event_user(0);
 
@@ -74,6 +78,10 @@ function close() {
 	while (!ds_queue_empty(deferredQueue)) {
 		var args = ds_queue_dequeue(deferredQueue);
 		self._execute_script(args, true);
+	}
+	// Save the current history to disk, if enabled
+	if (saveHistory) {
+		self._save_history();
 	}
 }
 
@@ -364,6 +372,37 @@ function _update_positions() {
 	consoleString = "";
 	savedConsoleString = "";
 	cursorPos = 1;
+}
+
+function _save_history() {
+	var truncatedHistory = [];
+	var truncatedOutput = [];
+	
+	array_copy(truncatedHistory, 0, history, max(0, array_length(history) - savedHistoryMaxSize),
+		min(array_length(history), savedHistoryMaxSize));
+	
+	array_copy(truncatedOutput, 0, output, max(0, array_length(output) - savedHistoryMaxSize), 
+		min(array_length(output), savedHistoryMaxSize));
+
+	var toSave = {
+		history: truncatedHistory,
+		output: truncatedOutput
+	}
+	var openFile = file_text_open_write(savedHistoryFilePath);
+	file_text_write_string(openFile, json_stringify(toSave));
+	file_text_close(openFile);
+}
+
+function _load_history() {
+	var saveDataFile = file_find_first(savedHistoryFilePath, fa_directory);
+	if (saveDataFile != "") {
+		var openFile = file_text_open_read(savedHistoryFilePath);
+		var tempData = json_parse(file_text_read_string(openFile));
+		file_text_close(openFile);
+		history = tempData.history;
+		output = tempData.output;
+		historyPos = array_length(history);
+	}
 }
 
 /// @function _input_string_split(_input)

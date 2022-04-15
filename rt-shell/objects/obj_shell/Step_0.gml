@@ -1,3 +1,8 @@
+if (saveHistory && !loadedSavedHistory) {
+	self._load_history();
+	loadedSavedHistory = true;
+}
+
 if (!isOpen) {
 	if (self._key_combo_pressed(openModifiers, openKey)) {
 		self.open();
