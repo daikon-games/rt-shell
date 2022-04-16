@@ -55,9 +55,11 @@ Adding metadata works much the same way as adding your custom commands in the fi
 Let's say that `sh_create_balloon` looked like this:
 ```gml
 function sh_create_balloon (args) {
-	var balloon = instance_create_layer(args[1], args[2], "balloon_layer", obj_balloon);
-	balloon.type = args[3];
-	balloon.color = args[4];
+	var mX = args[1];
+	var mY = args[2];
+	var balloon = instance_create_layer(mX, mY, "DemoInstances", obj_balloon);
+	balloon.mType = args[3];
+	balloon.mColor = args[4];
 }
 ```
 
@@ -105,6 +107,7 @@ Some things to keep in mind:
 4. Each of the items inside `suggestions` can be either a static array of possible suggestions, or a function that returns an array. If you use a function, it will be called at run-time, making the suggestions dynamic!
 5. `description` and `argumentDescriptions` are optional, they're only used for the `help` output
 6. `hidden` is optional, but if `hidden` is set to `true`, the function will not appear in the help output, or in autocomplete suggestions! This way you can add secret cheat codes. You will still be able to type `help hidden_function_name` and see help output, but only if you know that hidden function's name in the first place.
+7. `deferred` is optional, but if `deferred` is set to `true`, the function will not execute directly when called. Instead it will be queued up, and all deferred functions in the queue will run in sequence when the shell is closed.
 
 ## Keyboard Shortcuts
 
@@ -134,7 +137,8 @@ The following variables on the `obj_shell` object can be configured. They are de
 | `screenAnchorPointV` | The vertical location on the screen to anchor the console to, as a string. Possible values are `"top"`, `"middle"`, or `"bottom"`. | `"bottom"` |
 | `screenAnchorPointH` | The horizontal location on the screen to anchor the console to, as a string. Possible values are `"left"`, `"center"`, or `"right"`. | `"center"` |
 | `anchorMargin` | The number of pixels away from the anchor point to draw the shell. In practice, the margin from the top or bottom of the screen, depending on how you have set `screenAnchorPoint` | 4 |
-| `consolePadding` | The number of pixels of padding to place around the edges of the shell window. | 6 |
+| `consolePaddingV` | The number of pixels of padding to place around the vertical edges of the shell window. | 4 |
+| `consolePaddingH` | The number of pixels of padding to place around the horizontal edges of the shell window. | 6 |
 | `prompt` | A character or string to print as a command prompt | $ |
 | `promptColor` | The font color to draw the prompt, as a GML expression | `make_color_rgb(237, 0, 54)` |
 | `consoleColor` | The background color of the console itself, as a GML expression | `c_black` |
@@ -145,6 +149,7 @@ The following variables on the `obj_shell` object can be configured. They are de
 | `cornerRadius` | The radius in pixels to round the corners of the shell. A value of 0 would result in perfectly squared corners | 12 |
 | `scrollBarWidth` | The width in pixels of the scrollbar. | 5 |
 | `autocompleteBackgroundColor` | The background color of the autocompletion box, as a GML expression | `c_black` |
+| `autocompletePadding` | The number of pixels of padding to place around the autocompletion box | 2 |
 
 You can see examples of various ways to customize the shell's appearance on the [Theme Gallery](THEMING.md) page!
 
