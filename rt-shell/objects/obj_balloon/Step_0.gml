@@ -1,4 +1,4 @@
-vspeed -= 0.05;
+vspeed -= floatPower;
 
 x = lerp(x, xTarget, 0.01);
 

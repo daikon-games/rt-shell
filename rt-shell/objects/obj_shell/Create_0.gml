@@ -48,6 +48,18 @@ deferredQueue = ds_queue_create();
 savedHistoryFilePath = working_directory + "rt-shell-saved-history.data";
 loadedSavedHistory = false;
 
+// Mouse-argument data types
+enum mouseArgumentType {
+	worldX,
+	worldY,
+	guiX,
+	guiY,
+	instanceId,
+	objectId
+}
+activeMouseArgType = undefined;
+activeMouseArgValue = "";
+
 // Initialize native shell scripts
 event_user(0);
 
@@ -134,6 +146,7 @@ function _update_filtered_suggestions() {
 	array_resize(filteredSuggestions, 0);
 	autocompleteMaxWidth = 0;
 	suggestionIndex = 0;
+	activeMouseArgType = undefined;
 	var inputString = string_lower(consoleString);
 	inputArray = self._input_string_split(inputString);
 	
@@ -168,6 +181,10 @@ function _update_filtered_suggestions() {
 				} else if (is_method(suggestionData[argumentIndex])) {
 					// #18: Suggestion data is a dynamic function that returns an array
 					argumentSuggestions = suggestionData[argumentIndex]();
+				} else if (is_int64(suggestionData[argumentIndex])) {
+					// int64 is the datatype of enum values, we can hopefully assume this means
+					// our argument suggestion is a mouseArgumentType
+					activeMouseArgType = suggestionData[argumentIndex];
 				}
 				var currentArgument = inputArray[array_length(inputArray) - 1];
 				for (var i = 0; i < array_length(argumentSuggestions); i++) {
@@ -333,6 +350,13 @@ function _confirm_current_suggestion() {
 	}
 	consoleString += filteredSuggestions[suggestionIndex] + " ";
 	cursorPos = string_length(consoleString) + 1;
+}
+
+function _confirm_current_mouse_argument_data() {
+	if (activeMouseArgValue != "") {
+		consoleString += string(activeMouseArgValue) + " ";
+		cursorPos = string_length(consoleString) + 1;
+	}
 }
 
 function _execute_script(args, deferred = false) {

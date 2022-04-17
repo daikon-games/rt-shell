@@ -88,6 +88,17 @@ if (isOpen) {
 			var spaceCount = array_length(inputArray) - 1;
 			
 			var suggestion = spaceCount == 0 ? ff : "";
+			if (!is_undefined(activeMouseArgType) && spaceCount > 0) {
+				// If we have active mouse argument data, show that as the suggestion
+				// unless the user has started typing in an argument themselves
+				if ((inputArray[array_length(inputArray) - 1]) == "") {
+					suggestion = string(activeMouseArgValue);
+					if (mouse_check_button_pressed(mb_left)) {
+						self._confirm_current_mouse_argument_data();
+						self._update_filtered_suggestions();
+					}
+				}
+			} 
 			if (data != undefined) {
 				var args = "";
 				if (array_length(filteredSuggestions) > 0 && spaceCount > 0) {

@@ -21,8 +21,8 @@ function meta_create_balloon() {
 	return {
 		arguments: ["x", "y", "type", "color"],
 		suggestions: [
-			[],
-			[],
+			mouseArgumentType.worldX,
+			mouseArgumentType.worldY,
 			["normal", "animal_dog", "animal_snake"],
 			["pink", "blue", "red", "green"]
 		]
@@ -194,6 +194,78 @@ function meta_shell_apply_theme() {
 		],
 		suggestions: [
 			themeNames
+		]
+	}
+}
+
+function sh_print_mouse_world_coordinates(args) {
+	var mX = args[1];
+	var mY = args[2];
+	return "X: " + mX + ", Y: " + mY;
+}
+function meta_print_mouse_world_coordinates() {
+	return {
+		description: "demonstrates mouse argument data by printing world-space coordinates coordinates",
+		arguments: ["x", "y"],
+		argumentDescriptions: [
+			"the X value to print",
+			"the Y value to print"
+		],
+		suggestions: [
+			mouseArgumentType.worldX,
+			mouseArgumentType.worldY
+		]
+	}
+}
+
+function sh_print_mouse_gui_coordinates(args) {
+	var mX = args[1];
+	var mY = args[2];
+	return "X: " + mX + ", Y: " + mY;
+}
+function meta_print_mouse_gui_coordinates() {
+	return {
+		description: "demonstrates mouse argument data by printing GUI-space coordinates coordinates",
+		arguments: ["x", "y"],
+		argumentDescriptions: [
+			"the X value to print",
+			"the Y value to print"
+		],
+		suggestions: [
+			mouseArgumentType.guiX,
+			mouseArgumentType.guiY
+		]
+	}
+}
+
+function sh_destroy_instance(args) {
+	instance_destroy(args[1]);
+}
+function meta_destroy_instance() {
+	return {
+		description: "demonstrates mouse argument data by destroying an instance by its ID",
+		arguments: ["instanceToDestroy"],
+		argumentDescriptions: [
+			"the instance to destroy"
+		],
+		suggestions: [
+			mouseArgumentType.instanceId
+		]
+	}
+}
+
+function sh_destroy_object(args) {
+	instance_destroy(args[1]);
+}
+function meta_destroy_object() {
+	return {
+		description: "demonstrates mouse argument data by destroying an object by its ID",
+		arguments: ["objectToDestroy"],
+		argumentDescriptions: [
+			"the object to destroy"
+		],
+		suggestions: [
+			mouseArgumentType.objectId
 		]
 	}
 }

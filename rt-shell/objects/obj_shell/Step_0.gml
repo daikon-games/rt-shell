@@ -261,3 +261,30 @@ if (!isOpen) {
 		self._recalculate_shell_properties();
 	}
 }
+
+// Handle mouse argument data
+if (!is_undefined(activeMouseArgType)) {
+	if (activeMouseArgType == mouseArgumentType.worldX) {
+		activeMouseArgValue = mouse_x;
+	} else if (activeMouseArgType == mouseArgumentType.worldY) {
+		activeMouseArgValue = mouse_y;
+	} else if (activeMouseArgType == mouseArgumentType.guiX) {
+		activeMouseArgValue = device_mouse_x_to_gui(0);
+	} else if (activeMouseArgType == mouseArgumentType.guiY) {
+		activeMouseArgValue = device_mouse_y_to_gui(0);
+	} else if (activeMouseArgType == mouseArgumentType.instanceId) {
+		var instAtCursor = instance_position(mouse_x, mouse_y, all);
+		if (instAtCursor != noone) {
+			activeMouseArgValue = instAtCursor;
+		} else {
+			activeMouseArgValue = "";
+		}
+	} else if (activeMouseArgType == mouseArgumentType.objectId) {
+		var instAtCursor = instance_position(mouse_x, mouse_y, all);
+		if (instAtCursor != noone) {
+			activeMouseArgValue = instAtCursor.object_index;
+		} else {
+			activeMouseArgValue = "";
+		}
+	}
+}
