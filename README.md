@@ -70,8 +70,8 @@ function meta_create_balloon() {
 		description: "create a balloon",
 		arguments: ["x", "y", "type", "color"],
 		suggestions: [
-			[],
-			[],
+			mouseArgumentType.worldX,
+			mouseArgumentType.worldY,
 			["normal", "animal_dog", "animal_snake"],
 			function() {
 				var _colors = [];
@@ -85,7 +85,8 @@ function meta_create_balloon() {
 			"the type of balloon to create",
 			"the color of the balloon"
 		],
-		hidden: false
+		hidden: false,
+		deferred: false
 	}
 }
 ```
@@ -103,11 +104,35 @@ Some things to keep in mind:
 
 1. The function names must match after the `sh_` and `meta_` prefixes.
 2. The order of the array items in `arguments`, `suggestions`, and `argumentDescriptions` must line up
-3. If suggestions aren't needed for an argument (like for `x` or `y` above), just input a blank array `[]`
+3. If suggestions aren't needed for an argument just input a blank array `[]` or `undefined`
 4. Each of the items inside `suggestions` can be either a static array of possible suggestions, or a function that returns an array. If you use a function, it will be called at run-time, making the suggestions dynamic!
 5. `description` and `argumentDescriptions` are optional, they're only used for the `help` output
 6. `hidden` is optional, but if `hidden` is set to `true`, the function will not appear in the help output, or in autocomplete suggestions! This way you can add secret cheat codes. You will still be able to type `help hidden_function_name` and see help output, but only if you know that hidden function's name in the first place.
 7. `deferred` is optional, but if `deferred` is set to `true`, the function will not execute directly when called. Instead it will be queued up, and all deferred functions in the queue will run in sequence when the shell is closed.
+
+Here is a full reference of the properties that can appear in the struct returned by `meta_` functions:
+
+| Field | Description |
+| ----- | ----------- |
+| description | The text that will be printed by `help` about this script |
+| arguments | An array containing the names of the arguments to this script, these will appear both in `help` and as input hints at the console |
+| argumentDescriptions | An array containing text describing each argument, to be printed by `help`. The order must match `arguments` |
+| suggestions | An array containing suggestions for each argument, that will appear while typing the arguments. The order must match `arguments`. Each value can be either a static array of possible values for the argument, a function which returns an array of possible values, or an enum value of the `mouseArgumentType` enum for mouse-cursor based completion (described below) |
+| hidden | Defaults to `false` if not provided. If `true`, the script will not appear in the help output, or in autocomplete suggestions! This way you can add secret cheat codes. You will still be able to type `help hidden_function_name` and see help output, but only if you know that hidden function's name in the first place. |
+| deferred | Defaults to `false` if not provided. If `true`, the script will not execute directly when called. Instead it will be queued up, and all deferred scripts in the queue will run in sequence when the shell is closed. |
+
+You may have noticed the `mouseArgumentType` enum as a possible value for the items in `suggestions`. If an argument's corresponding `suggestions` value is one of the following `mouseArgumentType` values, then at the console prompt while inputting that argument, a value will be hinted at based on the current position of the mouse cursor. If the left mouse button is pressed while hinting at a value, that value will be accepted and inserted into the console. The following values for that enum are possible:
+
+| Value | Description |
+| ----- | ----------- |
+| `mouseArgumentType.worldX` | The hint will be the current world-space X coordinate of the mouse cursor |
+| `mouseArgumentType.worldY` | The hint will be the current world-space Y coordinate of the mouse cursor |
+| `mouseArgumentType.guiX` | The hint will be the current GUI-space X coordinate of the mouse cursor |
+| `mouseArgumentType.guiY` | The hint will be the current GUI-space Y coordinate of the mouse cursor |
+| `instanceId` | The hint will be the _instance_ ID of the instance below the mouse cursor |
+| `objectId` | The hint will be the _object_ ID of the instance below the mouse cursor |
+
+By using these mouse argument types appropriately, you can make very user-friendly functions for yourself, like the ability to spawn an object at your mouse cursor by using the `worldX` and `worldY` values, as shown in the `create_balloon` example above, or performing actions on a specific instance by clicking on it. It's a powerful tool!
 
 ## Keyboard Shortcuts
 
@@ -150,6 +175,8 @@ The following variables on the `obj_shell` object can be configured. They are de
 | `scrollBarWidth` | The width in pixels of the scrollbar. | 5 |
 | `autocompleteBackgroundColor` | The background color of the autocompletion box, as a GML expression | `c_black` |
 | `autocompletePadding` | The number of pixels of padding to place around the autocompletion box | 2 |
+| `consoleBackground` | A sprite to use as the background of the shell. If set, this will override `consoleColor`. A 9-slice configured sprite is expected, as it will be drawn stretched to the size of the console. | noone |
+| `suggestionsBackground` | A sprite to use as the background of the autocompletion box. If set, this will override `autocompleteBackgroundColor`. A 9-slice configured sprite is expected, as it will be drawn stretched to the size of the autocompletion box. | noone |
 
 You can see examples of various ways to customize the shell's appearance on the [Theme Gallery](THEMING.md) page!
 
@@ -175,6 +202,8 @@ You can see examples of various ways to customize the shell's appearance on the 
 | `keyRepeatDelay` | The amount of time in frames to wait between each repeat of a held key. | 4 |
 | `scrollSpeed` | The number of pixels at a time to scroll the console when moving the mouse wheel. | 16 |
 | `scrollSmoothness` | How smooth you want the scrolling to be when moving the mouse wheel. A number between 0 - 1. | 0.5 |
+| `saveHistory` | If `true`, the console's command history and output (up to `savedHistoryMaxSize` entries) will be saved to a file on disk every time the shell is closed, and re-loaded when the shell is first created. This will let you keep a history between play sessions. | `false` |
+| `savedHistoryMaxSize` | The maximum number of history entries and console output rows to save to disk, if `saveHistory` is `true`. | 100 |
 
 ## Licensing
 
