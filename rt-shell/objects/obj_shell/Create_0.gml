@@ -47,6 +47,7 @@ deferredQueue = ds_queue_create();
 // Variables for the saved history feature
 savedHistoryFilePath = working_directory + "rt-shell-saved-history.data";
 loadedSavedHistory = false;
+loadedHistoryScrolled = false;
 
 // Mouse-argument data types
 enum mouseArgumentType {

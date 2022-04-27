@@ -1,6 +1,12 @@
-if (saveHistory && !loadedSavedHistory) {
-	self._load_history();
-	loadedSavedHistory = true;
+if (saveHistory) {
+	if (!loadedSavedHistory) {
+		self._load_history();
+		loadedSavedHistory = true;
+	} else if (!loadedHistoryScrolled && isOpen) {
+		targetScrollPosition = maxScrollPosition;
+		scrollPosition = maxScrollPosition;
+		loadedHistoryScrolled = true;
+	}
 }
 
 if (!isOpen) {
