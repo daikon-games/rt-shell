@@ -140,8 +140,8 @@ In the shell, there are a number of useful keyboard shortcuts. These are all tri
 
 | Key Combo | Action |
 |-----------|--------|
-| Meta-key + A | Move cursor to the start of the line |
-| Meta-key + E | Move cursor to the end of the line |
+| Meta-key + A or Home | Move cursor to the start of the line |
+| Meta-key + E or End | Move cursor to the end of the line |
 | Meta-key + Left Arrow | Move cursor left one word (separated by spaces) |
 | Meta-key + Right Arrow | Move cursor right one word (separated by spaces) |
 | Meta-key + Backspace | Delete from the cursor backwards to the preceding space |

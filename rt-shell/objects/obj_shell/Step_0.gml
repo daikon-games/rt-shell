@@ -32,12 +32,12 @@ if (!isOpen) {
 		} else {
 			self.close()
 		}
-	} else if (self._key_combo_pressed([metaKey], ord("A"))) {
-		// bash-style jump to beginning of line
+	} else if (self._key_combo_pressed([metaKey], ord("A")) || keyboard_check_pressed(vk_home)) {
+		// Jump to beginning of line
 		cursorPos = 1;
 		targetScrollPosition = maxScrollPosition;
-	} else if (self._key_combo_pressed([metaKey], ord("E"))) {
-		// bash-style jump to end of line
+	} else if (self._key_combo_pressed([metaKey], ord("E")) || keyboard_check_pressed(vk_end)) {
+		// Jump to end of line
 		cursorPos = string_length(consoleString) + 1;
 		targetScrollPosition = maxScrollPosition;
 	} else if (self._key_combo_pressed([metaKey], ord("K"))) {
