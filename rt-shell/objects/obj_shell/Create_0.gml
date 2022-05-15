@@ -379,9 +379,9 @@ function _execute_script(args, deferred = false) {
 			array_push(history, consoleString);
 			if (response != "") { array_push(output, ">" + consoleString); }
 		}
-		if (response != 0) {
+		if (is_string(response)) {
 			array_push(output, response);
-		}		
+		}
 		
 		self._update_positions();
 	} else {
