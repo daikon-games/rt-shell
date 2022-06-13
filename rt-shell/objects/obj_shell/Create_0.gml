@@ -148,7 +148,7 @@ function _update_filtered_suggestions() {
 	autocompleteMaxWidth = 0;
 	suggestionIndex = 0;
 	activeMouseArgType = undefined;
-	var inputString = string_lower(consoleString);
+	var inputString = string(consoleString);
 	inputArray = self._input_string_split(inputString);
 	
 	// Return if we have nothing to parse
@@ -198,7 +198,7 @@ function _update_filtered_suggestions() {
 			}
 		}
 	}
-	
+	autocompleteScrollPosition = 0;
 	array_sort(filteredSuggestions, true);
 }
 
@@ -209,8 +209,8 @@ function _find_common_prefix() {
 		return "";
 	}
 	
-	var first = string_lower(filteredSuggestions[0]);
-	var last = string_lower(filteredSuggestions[array_length(filteredSuggestions) - 1]);
+	var first = string(filteredSuggestions[0]);
+	var last = string(filteredSuggestions[array_length(filteredSuggestions) - 1]);
 		
 	var result = "";
 	var spaceCount = string_count(" ", consoleString);
