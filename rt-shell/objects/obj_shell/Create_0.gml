@@ -189,7 +189,7 @@ function _update_filtered_suggestions() {
 				}
 				var currentArgument = inputArray[array_length(inputArray) - 1];
 				for (var i = 0; i < array_length(argumentSuggestions); i++) {
-					var prefixMatch = string_pos(currentArgument, string_lower(argumentSuggestions[i])) == 1;
+					var prefixMatch = string_pos(string_lower(currentArgument), string_lower(argumentSuggestions[i])) == 1;
 					if (string_last_pos(" ", inputString) == string_length(inputString) || prefixMatch) {
 						array_push(filteredSuggestions, argumentSuggestions[i]);
 						autocompleteMaxWidth = max(autocompleteMaxWidth, string_width(argumentSuggestions[i]));
@@ -475,19 +475,6 @@ function _input_string_split(_input) {
 	}
 
 	return splits;
-}
-
-/*
- * Returns true if the array contains any instances that match the provided element
- * otherwise returns false
- */
-function _array_contains(array, element) {
-	for (var i = 0; i < array_length(array); i++) {
-		if (array[i] == element) {
-			return true;
-		}
-	}
-	return false;
 }
 
 /// @param value
