@@ -30,8 +30,8 @@
   "physicsShapePoints": [],
   "physicsStartAwake": true,
   "properties": [
-    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"width","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"500","varType":4,},
-    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"height","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"96","varType":4,},
+    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"width","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"500","varType":0,},
+    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"height","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"96","varType":0,},
     {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"screenAnchorPointV","filters":[],"listItems":[
         "\"top\"",
         "\"middle\"",
@@ -91,8 +91,8 @@
         "vk_alt",
       ],"multiselect":true,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"","varType":6,},
     {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"metaKey","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"vk_control","varType":4,},
-    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"keyRepeatInitialDelay","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"25","varType":0,},
-    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"keyRepeatDelay","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"4","varType":0,},
+    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"keyRepeatInitialDelay","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"25","varType":1,},
+    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"keyRepeatDelay","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"4","varType":1,},
     {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"scrollSpeed","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"16","varType":0,},
     {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"scrollSmoothness","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":true,"rangeMax":1.0,"rangeMin":0.0,"value":"0.5","varType":0,},
     {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"consoleBackground","filters":[],"listItems":[],"multiselect":false,"rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"value":"noone","varType":5,},
