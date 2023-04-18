@@ -1,0 +1,15 @@
+{
+  "FolderOrderSettings": [],
+  "ResourceOrderSettings": [
+    {"name":"spr_suggest_bg","order":2,"path":"sprites/spr_suggest_bg/spr_suggest_bg.yy",},
+    {"name":"spr_balloon_dog","order":4,"path":"sprites/spr_balloon_dog/spr_balloon_dog.yy",},
+    {"name":"obj_balloon","order":3,"path":"objects/obj_balloon/obj_balloon.yy",},
+    {"name":"spr_balloon_normal","order":3,"path":"sprites/spr_balloon_normal/spr_balloon_normal.yy",},
+    {"name":"spr_balloon_snake","order":5,"path":"sprites/spr_balloon_snake/spr_balloon_snake.yy",},
+    {"name":"spr_console_bg","order":1,"path":"sprites/spr_console_bg/spr_console_bg.yy",},
+    {"name":"scr_shell_scripts","order":1,"path":"scripts/scr_shell_scripts/scr_shell_scripts.yy",},
+    {"name":"obj_open_message","order":2,"path":"objects/obj_open_message/obj_open_message.yy",},
+    {"name":"font_demo","order":1,"path":"fonts/font_demo/font_demo.yy",},
+    {"name":"obj_test_room","order":1,"path":"objects/obj_test_room/obj_test_room.yy",},
+  ],
+}
