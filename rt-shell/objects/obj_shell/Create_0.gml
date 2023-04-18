@@ -477,19 +477,6 @@ function _input_string_split(_input) {
 	return splits;
 }
 
-/*
- * Returns true if the array contains any instances that match the provided element
- * otherwise returns false
- */
-function _array_contains(array, element) {
-	for (var i = 0; i < array_length(array); i++) {
-		if (array[i] == element) {
-			return true;
-		}
-	}
-	return false;
-}
-
 /// @param value
 /// @param min_input
 /// @param max_input
