@@ -1,3 +1,5 @@
+// feather disable all
+// feather ignore all
 /// @description Initialize Native Scripts
 
 /*

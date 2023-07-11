@@ -1,3 +1,5 @@
+// feather disable all
+// feather ignore all
 if (saveHistory) {
 	if (!loadedSavedHistory) {
 		self._load_history();

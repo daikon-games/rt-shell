@@ -1,3 +1,5 @@
+// feather disable all
+// feather ignore all
 if (isOpen) {
 	draw_set_font(consoleFont);
 	draw_set_halign(fa_left);
